@@ -6,11 +6,12 @@
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
+    <!-- header -->
     <div class="header">
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <span class="header-text">Trang chủ</span>
     </div>
-    <!-- Sidebar -->
+    <!-- sidebar -->
     <div class="sidebar">
         <ul>
             <li>
@@ -44,13 +45,17 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="login.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>
                 </a>
             </li>
         </ul>
     </div>
+    <!-- content -->
+    <article class="content">
+        <!--write something here-->
+    </article>
 </body>
 
 </html>

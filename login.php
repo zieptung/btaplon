@@ -20,7 +20,7 @@
             </div>
             <div class="input-group">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" name="matkhau" id="password" placeholder="Mật khẩu">
+                <input type="password" name="Matkhau" id="password" placeholder="Mật khẩu">
                 <i id="togglePassword" class="fa-solid fa-eye" onclick="togglePasswordVisibility()"></i>
                 <label for="matkhau">Mật khẩu</label>
             </div>

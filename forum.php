@@ -9,7 +9,7 @@
     <!-- header -->
     <div class="header">
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-        <span class="header-text">Trang chủ</span>
+        <span class="header-text">Diễn đàn</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">

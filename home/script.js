@@ -11,3 +11,18 @@ function togglePasswordVisibility() {
     togglePassword.classList.add("fa-eye-slash");
   }
 }
+const usernameInput = document.getElementById("Masv");
+const passwordInput = document.getElementById("password");
+const errorMessage = document.getElementById("error-message");
+
+usernameInput.addEventListener("focus", () => {
+  if (errorMessage) {
+    errorMessage.style.display = "none";
+  }
+});
+
+passwordInput.addEventListener("focus", () => {
+  if (errorMessage) {
+    errorMessage.style.display = "none";
+  }
+});

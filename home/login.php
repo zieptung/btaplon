@@ -11,15 +11,15 @@ if (!$conn) {
 }
 // Xử lý khi người dùng nhấn "Đăng nhập"
 if (isset($_POST["btnDangnhap"])) {
-   $username = $_POST['username'];
+   $Masv = $_POST['Masv'];
    $password = $_POST['password'];
 
    // Bảo vệ SQL Injection
-   $username = mysqli_real_escape_string($conn, $username);
+   $Masv = mysqli_real_escape_string($conn, $Masv);
    $password = mysqli_real_escape_string($conn, $password);
 
    // Kiểm tra tài khoản với password không mã hóa
-   $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
+   $sql = "SELECT * FROM sinhvien WHERE Masv = '$Masv' AND password = '$password'";
    $result = mysqli_query($conn, $sql);
 
    if (mysqli_num_rows($result) > 0) {
@@ -56,7 +56,7 @@ ob_end_flush(); // Xả bộ đệm đầu ra
       <form method="POST">
          <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" name="username" id="Masv" placeholder="Mã sinh viên" required>
+            <input type="text" name="Masv" id="Masv" placeholder="Mã sinh viên" required>
             <label for="Masv">Mã sinh viên</label>
          </div>
          <div class="input-group">
@@ -65,9 +65,8 @@ ob_end_flush(); // Xả bộ đệm đầu ra
             <i id="togglePassword" class="fa-solid fa-eye" onclick="togglePasswordVisibility()"></i>
             <label for="matkhau">Mật khẩu</label>
             <?php if (isset($_SESSION['error'])): ?>
-               <span class="error-message"
-                  id="error-message"><?php echo $_SESSION['error'];
-                  unset($_SESSION['error']); ?></span>
+               <span class="error-message" id="error-message"><?php echo $_SESSION['error'];
+               unset($_SESSION['error']); ?></span>
             <?php endif; ?>
          </div>
          <button type="submit" class="button" name="btnDangnhap" id="btnDangnhap" style="text-decoration: none;">Đăng

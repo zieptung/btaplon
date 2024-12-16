@@ -11,13 +11,12 @@
 
 <body>
     <div class="container">
-        <img src="Pictures/istockphoto-1306827906-170667a.jpg" alt="">
+        <img src="istockphoto-1306827906-170667a.jpg" alt="">
         <h1 class="form-title">Khôi phục mật khẩu</h1>
         <form method="post">
             <div class="input-group">
                 <i class="fa-solid fa-envelope"></i>
-                <input type="text" name="Matkhau" id="Matkhau" placeholder="Mật khẩu">
-                <label for="Matkhau">Nhập email của bạn</label>
+                <input type="text" name="Matkhau" id="Matkhau" placeholder="Nhập email của bạn">
             </div>
             <button type="submit" class="button" id="btnGui" style="text-decoration: none;">Gửi</button>
         </form>

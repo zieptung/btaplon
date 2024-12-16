@@ -1,44 +1,3 @@
-<?php
-session_start();
-ob_start(); // Bắt đầu bộ đệm đầu ra
-
-// Kết nối cơ sở dữ liệu bằng mysqli_connect()
-$conn = mysqli_connect('localhost', 'root', '', '74dcht21-qldiemsv');
-
-// Kiểm tra kết nối
-if (!$conn) {
-   die("Kết nối thất bại: " . mysqli_connect_error());
-}
-// Xử lý khi người dùng nhấn "Đăng nhập"
-if (isset($_POST["btnDangnhap"])) {
-   $Masv = $_POST['Masv'];
-   $password = $_POST['password'];
-
-   // Bảo vệ SQL Injection
-   $Masv = mysqli_real_escape_string($conn, $Masv);
-   $password = mysqli_real_escape_string($conn, $password);
-
-   // Kiểm tra tài khoản với password không mã hóa
-   $sql = "SELECT * FROM sinhvien WHERE Masv = '$Masv' AND password = '$password'";
-   $result = mysqli_query($conn, $sql);
-
-   if (mysqli_num_rows($result) > 0) {
-      // Đăng nhập thành công
-      header("Location: homepage.php");
-      exit;
-   } else {
-      // Đăng nhập thất bại
-      $_SESSION['error'] = "Tài khoản hoặc mật khẩu sai!";
-      header("Location: login.php");
-      exit;
-   }
-}
-
-// Đóng kết nối khi không sử dụng nữa
-mysqli_close($conn);
-ob_end_flush(); // Xả bộ đệm đầu ra
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -62,10 +21,6 @@ ob_end_flush(); // Xả bộ đệm đầu ra
             <i class="fa-solid fa-lock"></i>
             <input type="password" name="password" id="password" placeholder="Mật khẩu">
             <i id="togglePassword" class="fa-solid fa-eye" onclick="togglePasswordVisibility()"></i>
-            <?php if (isset($_SESSION['error'])): ?>
-               <span class="error-message" id="error-message"><?php echo $_SESSION['error'];
-               unset($_SESSION['error']); ?></span>
-            <?php endif; ?>
          </div>
          <button type="submit" class="button" name="btnDangnhap" id="btnDangnhap" style="text-decoration: none;">Đăng
             nhập</button>

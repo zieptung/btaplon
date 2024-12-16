@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "poppins", sans-serif;
+}
+
+body {
+  background: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+  height: 553px;
+}
+
+.container {
+  background: #fff;
+  width: 450px;
+  padding: 1.5rem;
+  margin: 200px auto;
+  border-radius: 10px;
+  box-shadow: 0 10px 35px #757575;
+}
+
+form {
+  margin: 0 2rem;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  color: inherit;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #757575;
+  padding-left: 1.5rem;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  padding: 1% 0;
+  position: relative;
+}
+
+.input-group>i {
+  position: absolute;
+  color: black;
+}
+
+input:focus {
+  background-color: transparent;
+  outline: transparent;
+  border-bottom: 2px solid #00adb5;
+}
+
+.button {
+  font-size: 1.1rem;
+  padding: 8px 0;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  width: 100%;
+  background: #00adb5;
+  color: white;
+  cursor: pointer;
+  transition: 0.9s;
+}
+
+.button:hover {
+  background: #eeeeee;
+}
+
+button {
+  color: #00adb5;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+button:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+.recover {
+  padding-top: 20px;
+  text-align: right;
+}
+
+.recover>a {
+  text-decoration: none;
+  color: black;
+  font-weight: 200;
+}
+
+.recover>a:hover {
+  color: #00adb5;
+}
+
+img {
+  width: 250px;
+  height: auto;
+  margin-left: 80px;
+}
+
+.fa-eye {
+  position: fixed;
+  right: 5px;
+  top: 0.5px;
+  padding-top: 5px;
+}
+
+.fa-eye-slash {
+  position: fixed;
+  right: 5px;
+  top: 0.5px;
+  padding-top: 5px;
+}
+
+.form {
+  background-color: #00adb5;
+  width: 300px;
+  height: 44px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 7px;
+}

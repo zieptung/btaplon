@@ -56,14 +56,12 @@ ob_end_flush(); // Xả bộ đệm đầu ra
       <form method="POST">
          <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" name="Masv" id="Masv" placeholder="Mã sinh viên" required>
-            <label for="Masv">Mã sinh viên</label>
+            <input type="text" name="Masv" id="Masv" placeholder="Mã sinh viên">
          </div>
          <div class="input-group">
             <i class="fa-solid fa-lock"></i>
-            <input type="password" name="password" id="password" placeholder="Mật khẩu" required>
+            <input type="password" name="password" id="password" placeholder="Mật khẩu">
             <i id="togglePassword" class="fa-solid fa-eye" onclick="togglePasswordVisibility()"></i>
-            <label for="matkhau">Mật khẩu</label>
             <?php if (isset($_SESSION['error'])): ?>
                <span class="error-message" id="error-message"><?php echo $_SESSION['error'];
                unset($_SESSION['error']); ?></span>

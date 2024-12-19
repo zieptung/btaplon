@@ -20,10 +20,12 @@ if (isset($_POST["btnDangnhap"])) {
    if (mysqli_num_rows($result) > 0) {
       // Đăng nhập thành công
       header("Location: homepage.php");
+      exit();
    } else {
       // Đăng nhập thất bại
-      $_SESSION['error'] = "Tài khoản hoặc mật khẩu sai!";
+      $_SESSION['error'] = "Mã sinh viên hoặc mật khẩu sai!";
       header("Location: login.php");
+      exit();
    }
 }
 // Đóng kết nối khi không sử dụng nữa
@@ -53,7 +55,8 @@ mysqli_close($conn);
             <input type="password" name="password" id="password" placeholder="Mật khẩu">
             <i id="togglePassword" class="fa-solid fa-eye" onclick="togglePasswordVisibility()"></i>
             <?php if (isset($_SESSION['error'])): ?>
-               <span class="error-message" id="error-message"><?php echo $_SESSION['error']; ?></span>
+               <span class="error-message" id="error-message"><?php echo $_SESSION['error'];
+               unset($_SESSION['error']); ?></span>
             <?php endif; ?>
          </div>
          <button type="submit" class="button" name="btnDangnhap" id="btnDangnhap" style="text-decoration: none;">Đăng

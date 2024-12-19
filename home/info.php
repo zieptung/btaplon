@@ -1,7 +1,3 @@
-<?php
-
-?>
-
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,10 +9,7 @@
     <!-- header -->
     <div class="header">
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-        <span class="header-text">Trang chủ</span>
-        <?php
-
-        ?>
+        <span class="header-text">Thông tin quản lý</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">

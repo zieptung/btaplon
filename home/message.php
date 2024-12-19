@@ -45,6 +45,12 @@
                 </a>
             </li>
             <li>
+                <a href="info.php">
+                    <span class="icon"><i class="fa-solid fa-user"></i></span>
+                    <span class="text">Thông tin quản lý</span>
+                </a>
+            </li>
+            <li>
                 <a href="login.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>

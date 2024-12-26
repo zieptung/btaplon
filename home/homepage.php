@@ -1,7 +1,3 @@
-<?php
-
-?>
-
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,7 +36,7 @@
                 </a>
             </li>
             <li>
-                <a href="infor.php">
+                <a href="infosv.php">
                     <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
                     <span class="text">Quản lý sinh viên</span>
                 </a>

@@ -17,7 +17,7 @@
             <li>
                 <a href="homepage.php" class="logo">
                     <span class="icon"><i class="fa-solid fa-house"></i></span>
-                    <span class="text">Trang chủ</span>
+                    <span class="text">Tin nhắn</span>
                 </a>
             </li>
             <li>
@@ -33,7 +33,7 @@
                 </a>
             </li>
             <li>
-                <a href="infor.php">
+                <a href="infosv.php">
                     <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
                     <span class="text">Thông tin sinh viên</span>
                 </a>

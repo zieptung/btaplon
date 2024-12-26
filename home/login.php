@@ -1,13 +1,6 @@
 <?php
 session_start();
-
-// Kết nối cơ sở dữ liệu bằng mysqli_connect()
-$conn = mysqli_connect('localhost', 'root', '', '74dcht21-qldiemsv');
-
-// Kiểm tra kết nối
-if (!$conn) {
-   die("Kết nối thất bại: " . mysqli_connect_error());
-}
+include_once "connectdb.php";
 // Xử lý khi người dùng nhấn "Đăng nhập"
 if (isset($_POST["btnDangnhap"])) {
    $Masv = $_POST['Masv'];
@@ -15,7 +8,7 @@ if (isset($_POST["btnDangnhap"])) {
 
    // Kiểm tra tài khoản với password không mã hóa
    $sql = "SELECT * FROM sinhvien WHERE Masv = '$Masv' AND password = '$password'";
-   $result = mysqli_query($conn, $sql);
+   $result = mysqli_query($con, $sql);
 
    if (mysqli_num_rows($result) > 0) {
       // Đăng nhập thành công
@@ -29,7 +22,7 @@ if (isset($_POST["btnDangnhap"])) {
    }
 }
 // Đóng kết nối khi không sử dụng nữa
-mysqli_close($conn);
+mysqli_close($con);
 ?>
 <!DOCTYPE html>
 <html lang="en">

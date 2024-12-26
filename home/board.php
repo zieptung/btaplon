@@ -33,7 +33,7 @@
                 </a>
             </li>
             <li>
-                <a href="infor.php">
+                <a href="infosv.php">
                     <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
                     <span class="text">Thông tin sinh viên</span>
                 </a>

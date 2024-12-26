@@ -9,7 +9,7 @@
     <!-- header -->
     <div class="header">
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-        <span class="header-text">Thông tin sinh viên</span>
+        <span class="header-text">Quản lý sinh viên</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">
@@ -33,9 +33,9 @@
                 </a>
             </li>
             <li>
-                <a href="infor.php">
+                <a href="infosv.php">
                     <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-                    <span class="text">Thông tin sinh viên</span>
+                    <span class="text">Quản lý sinh viên</span>
                 </a>
             </li>
             <li>

@@ -14,7 +14,7 @@
 
 .header-text {
     position: fixed;
-    right: 100px;
+    right: 370px;
     top: 40px;
     height: 60px;
     font-size: 22px;
@@ -26,7 +26,7 @@
 
 .header-icon {
     position: fixed;
-    right: 0;
+    right: 270px;
     top: 20px;
     color: #EEEEEE;
     height: 60px;

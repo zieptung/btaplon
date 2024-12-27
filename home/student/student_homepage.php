@@ -8,6 +8,7 @@
 <body>
     <!-- header -->
     <div class="header">
+        <span class="header-text">Trang chủ</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
         session_start();
@@ -21,8 +22,6 @@
             }
         }
         ?>
-    </div>
-    <span class="header-text">Trang chủ</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">
@@ -67,7 +66,7 @@
     </div>
     <!-- content -->
     <article class="content">
-        <!--write something here-->
+        <h1>Chào mừng bạn!</h1>
     </article>
 </body>
 

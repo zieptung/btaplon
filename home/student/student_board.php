@@ -8,6 +8,7 @@
 <body>
     <!-- header -->
     <div class="header">
+        <span class="header-text">Bảng điểm</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
         session_start();
@@ -21,8 +22,6 @@
             }
         }
         ?>
-    </div>
-    <span class="header-text">Bảng điểm</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">

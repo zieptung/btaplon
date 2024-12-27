@@ -19,7 +19,19 @@
 }
 
 .header-icon {
-    font-size: 25 px;
+    font-size: 30px;
+}
+
+.header-text {
+    position: fixed;
+    right: 590px;
+    top: 40px;
+    height: 60px;
+    font-size: 22px;
+    letter-spacing: 0.6px;
+    font-weight: 55 0;
+    text-transform: uppercase;
+    color: #EEEEEE;
 }
 
 body {
@@ -94,7 +106,7 @@ body {
 
 .content {
     background-color: #d6d3d3;
-    height: 650px;
+    height: 639px;
     margin-left: 290px;
     box-shadow: 0 0 3px black;
 }

@@ -21,7 +21,7 @@ if (isset($_POST["btnDangnhap"])) {
             break;
          default:
             // Sinh viên
-            header("Location: ./student/student_homepage.php");
+            header("Location: ./student/student_info.php");
             break;
       }
       $_SESSION['user_id'] = $row['ma'];

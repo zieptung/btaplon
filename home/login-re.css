@@ -39,6 +39,7 @@ input {
   border-bottom: 1px solid #757575;
   padding-left: 1.5rem;
   font-size: 15px;
+  margin-bottom: 20px;
 }
 
 .input-group {
@@ -46,7 +47,7 @@ input {
   position: relative;
 }
 
-.input-group > i {
+.input-group>i {
   position: absolute;
   color: black;
 }
@@ -55,26 +56,6 @@ input:focus {
   background-color: transparent;
   outline: transparent;
   border-bottom: 2px solid #00adb5;
-}
-
-input::placeholder {
-  color: transparent;
-}
-
-label {
-  color: #757575;
-  position: relative;
-  left: 1.2em;
-  top: -1.3em;
-  cursor: auto;
-  transition: 0.3s ease;
-}
-
-input:focus ~ label,
-input:not(:placeholder-shown) ~ label {
-  top: -2.7em;
-  color: #00adb5;
-  font-size: 15px;
 }
 
 .button {
@@ -112,13 +93,13 @@ button:hover {
   text-align: right;
 }
 
-.recover > a {
+.recover>a {
   text-decoration: none;
   color: black;
   font-weight: 200;
 }
 
-.recover > a:hover {
+.recover>a:hover {
   color: #00adb5;
 }
 
@@ -151,8 +132,11 @@ img {
   flex-direction: row;
   align-items: center;
 }
+
 .error-message {
   color: red;
   font-weight: bold;
-  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 7px;
 }

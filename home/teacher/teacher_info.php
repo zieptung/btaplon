@@ -1,3 +1,11 @@
+<?php
+include_once "connectdb.php";
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $query = "
+?>
+
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">

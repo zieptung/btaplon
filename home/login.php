@@ -67,7 +67,6 @@ mysqli_close($con);
                <?php if (isset($_SESSION['error'])): ?>
                <span class="error-message" id="error-message"><?php echo $_SESSION['error'];
                unset($_SESSION['error']); ?></span>
-               >>>>>>> Stashed changes
                <?php endif; ?>
          </div>
          <button type="submit" class="button" name="btnDangnhap" id="btnDangnhap" style="text-decoration: none;">Đăng

@@ -17,11 +17,11 @@ if (isset($_POST["btnDangnhap"])) {
       switch ($row['is_admin']) {
          case 1:
             // Giảng viên
-            header("Location: ./teacher/teacher_homepage.php");
+            header("Location: ./teacher/teacher_info.php");
             break;
          default:
             // Sinh viên
-            header("Location: ./student/student_info.php");
+            header("Location: ./student/student_homepage.php");
             break;
       }
       $_SESSION['user_id'] = $row['ma'];

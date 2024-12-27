@@ -9,49 +9,56 @@
     <!-- header -->
     <div class="header">
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-        <span class="header-text">Quản lý sinh viên</span>
+        <?php
+        session_start();
+        include_once "connectdb.php";
+        if (isset($_SESSION['user_id'])) {
+            $user_id = $_SESSION['user_id'];
+            $sql = "SELECT hoten FROM user WHERE ma = '$user_id'";
+            $result = mysqli_query($con, $sql);
+            if ($row = mysqli_fetch_assoc($result)) {
+                echo "<span class='header-username'>" . $row['hoten'] . "</span>";
+            }
+        }
+        ?>
+    </div>
+    <span class="header-text">Trang chủ</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">
         <ul>
             <li>
-                <a href="homepage.php" class="logo">
+                <a href="student_homepage.php" class="logo">
                     <span class="icon"><i class="fa-solid fa-house"></i></span>
                     <span class="text">Trang chủ</span>
                 </a>
             </li>
             <li>
-                <a href="message.php">
+                <a href="student_message.php">
                     <span class="icon"><i class="fa-solid fa-envelope"></i></span>
                     <span class="text">Tin nhắn</span>
                 </a>
             </li>
             <li>
-                <a href="forum.php">
+                <a href="student_forum.php">
                     <span class="icon"><i class="fa-solid fa-bell"></i></span>
                     <span class="text">Diễn đàn</span>
                 </a>
             </li>
             <li>
-                <a href="infosv.php">
-                    <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-                    <span class="text">Quản lý sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="board.php">
+                <a href="student_board.php">
                     <span class="icon"><i class="fa-solid fa-table"></i></span>
-                    <span class="text">Bảng điểm sinh viên</span>
+                    <span class="text">Bảng điểm</span>
                 </a>
             </li>
             <li>
-                <a href="info.php">
+                <a href="student_info.php">
                     <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin quản lý</span>
+                    <span class="text">Thông tin sinh viên</span>
                 </a>
             </li>
             <li>
-                <a href="login.php">
+                <a href="student_logout.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>
                 </a>

@@ -7,14 +7,16 @@
 
 .header {
     background-color: #222831;
-    padding: 50px;
+    padding: 40px;
     margin-left: 60px;
     box-shadow: 0 0 5px black;
+    color: #EEEEEE;
+    text-align: right;
 }
 
 .header-text {
     position: fixed;
-    right: 370px;
+    right: 650px;
     top: 40px;
     height: 60px;
     font-size: 22px;
@@ -26,7 +28,7 @@
 
 .header-icon {
     position: fixed;
-    right: 270px;
+    right: 200px;
     top: 20px;
     color: #EEEEEE;
     height: 60px;

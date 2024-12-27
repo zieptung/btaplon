@@ -3,19 +3,31 @@ session_start();
 include_once "connectdb.php";
 // Xử lý khi người dùng nhấn "Đăng nhập"
 if (isset($_POST["btnDangnhap"])) {
-   $Masv = $_POST['Masv'];
+   $ma = $_POST['ma'];
    $password = $_POST['password'];
 
    // Kiểm tra tài khoản với password không mã hóa
-   $sql = "SELECT * FROM sinhvien WHERE Masv = '$Masv' AND password = '$password'";
+   $sql = "SELECT * FROM user WHERE ma = '$ma' and password = '$password'";
    $result = mysqli_query($con, $sql);
 
    if (mysqli_num_rows($result) > 0) {
-      // Đăng nhập thành công
-      header("Location: homepage.php");
+      $row = mysqli_fetch_assoc($result);
+
+      // Kiểm tra quyền quản lý
+      switch ($row['is_admin']) {
+         case 1:
+            // Giảng viên
+            header("Location: ./teacher/teacher_homepage.php");
+            break;
+         default:
+            // Sinh viên
+            header("Location: ./student/student_homepage.php");
+            break;
+      }
+      $_SESSION['user_id'] = $row['ma'];
+      $_SESSION['is_admin'] = $row['is_admin'];
       exit();
    } else {
-      // Đăng nhập thất bại
       $_SESSION['error'] = "Mã sinh viên hoặc mật khẩu sai!";
       header("Location: login.php");
       exit();
@@ -41,7 +53,7 @@ mysqli_close($con);
       <form method="POST">
          <div class="input-group">
             <i class="fas fa-user"></i>
-            <input type="text" name="Masv" id="Masv" placeholder="Mã sinh viên">
+            <input type="text" name="ma" id="ma" placeholder="Mã sinh viên">
          </div>
          <div class="input-group">
             <i class="fa-solid fa-lock"></i>

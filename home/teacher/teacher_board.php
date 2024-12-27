@@ -2,7 +2,7 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
@@ -21,15 +21,14 @@
             }
         }
         ?>
-        <span class="header-text">Bảng điểm sinh viên</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">
         <ul>
             <li>
-                <a href="teacher_homepage.php" class="logo">
-                    <span class="icon"><i class="fa-solid fa-house"></i></span>
-                    <span class="text">Trang chủ</span>
+                <a href="teacher_info.php">
+                    <span class="icon"><i class="fa-solid fa-user"></i></span>
+                    <span class="text">Thông tin quản lý</span>
                 </a>
             </li>
             <li>
@@ -39,27 +38,21 @@
                 </a>
             </li>
             <li>
-                <a href="teacher_forum.php">
-                    <span class="icon"><i class="fa-solid fa-bell"></i></span>
-                    <span class="text">Diễn đàn</span>
+                <a href="teacher_infosv.php">
+                    <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                    <span class="text">Quản lý sinh viên</span>
                 </a>
             </li>
             <li>
-                <a href="teacher_infosv.php">
-                    <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-                    <span class="text">Thông tin sinh viên</span>
+                <a href="teacher_fix.php">
+                    <span class="icon"><i class="fa-solid fa-wrench"></i></span>
+                    <span class="text">Sửa điểm</span>
                 </a>
             </li>
             <li>
                 <a href="teacher_board.php">
                     <span class="icon"><i class="fa-solid fa-table"></i></span>
                     <span class="text">Bảng điểm sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_info.php">
-                    <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin quản lý</span>
                 </a>
             </li>
             <li>

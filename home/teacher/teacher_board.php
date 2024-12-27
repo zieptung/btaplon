@@ -29,7 +29,7 @@
             <li>
                 <a href="teacher_info.php">
                     <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin quản lý</span>
+                    <span class="text">Thông tin cá nhân</span>
                 </a>
             </li>
             <li>

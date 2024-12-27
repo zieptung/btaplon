@@ -2,12 +2,13 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-<link rel="stylesheet" href="homepage.css">
+<link rel="stylesheet" href="student_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
     <!-- header -->
     <div class="header">
+        <span class="header-text">Diễn đàn</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
         session_start();
@@ -21,8 +22,6 @@
             }
         }
         ?>
-    </div>
-    <span class="header-text">Diễn đàn</span>
     </div>
     <!-- sidebar -->
     <div class="sidebar">

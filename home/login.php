@@ -17,7 +17,7 @@ if (isset($_POST["btnDangnhap"])) {
       switch ($row['is_admin']) {
          case 1:
             // Giảng viên
-            header("Location: ./teacher/teacher_homepage.php");
+            header("Location: ./teacher/teacher_info.php");
             break;
          default:
             // Sinh viên

@@ -2,13 +2,13 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-<link rel="stylesheet" href="student_homepage.css">
+<link rel="stylesheet" href="teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
    <!-- header -->
    <div class="header">
-      <span class="header-text">Trang chủ</span>
+      <span class="header-text">Sửa điểm</span>
       <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
       <?php
         session_start();
@@ -27,37 +27,37 @@
    <div class="sidebar">
       <ul>
          <li>
-            <a href="student_homepage.php" class="logo">
-               <span class="icon"><i class="fa-solid fa-house"></i></span>
-               <span class="text">Trang chủ</span>
+            <a href="teacher_info.php">
+               <span class="icon"><i class="fa-solid fa-user"></i></span>
+               <span class="text">Thông tin quản lý</span>
             </a>
          </li>
          <li>
-            <a href="student_message.php">
+            <a href="teacher_message.php">
                <span class="icon"><i class="fa-solid fa-envelope"></i></span>
                <span class="text">Tin nhắn</span>
             </a>
          </li>
          <li>
-            <a href="student_forum.php">
-               <span class="icon"><i class="fa-solid fa-bell"></i></span>
-               <span class="text">Diễn đàn</span>
+            <a href="teacher_infosv.php">
+               <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+               <span class="text">Quản lý sinh viên</span>
             </a>
          </li>
          <li>
-            <a href="student_board.php">
+            <a href="teacher_fix.php">
+               <span class="icon"><i class="fa-solid fa-wrench"></i></span>
+               <span class="text">Sửa điểm</span>
+            </a>
+         </li>
+         <li>
+            <a href="teacher_board.php">
                <span class="icon"><i class="fa-solid fa-table"></i></span>
-               <span class="text">Bảng điểm</span>
+               <span class="text">Bảng điểm sinh viên</span>
             </a>
          </li>
          <li>
-            <a href="student_info.php">
-               <span class="icon"><i class="fa-solid fa-user"></i></span>
-               <span class="text">Thông tin sinh viên</span>
-            </a>
-         </li>
-         <li>
-            <a href="student_logout.php">
+            <a href="teacher_logout.php">
                <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                <span class="text">Đăng xuất</span>
             </a>
@@ -66,7 +66,7 @@
    </div>
    <!-- content -->
    <article class="content">
-      <h1>Chào mừng bạn!</h1>
+      <!--write something here-->
    </article>
 </body>
 

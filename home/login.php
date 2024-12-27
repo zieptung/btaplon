@@ -59,10 +59,16 @@ mysqli_close($con);
             <i class="fa-solid fa-lock"></i>
             <input type="password" name="password" id="password" placeholder="Mật khẩu">
             <i id="togglePassword" class="fa-solid fa-eye" onclick="togglePasswordVisibility()"></i>
-            <?php if (isset($_SESSION['error'])): ?>
+            <<<<<<< Updated upstream <label for="matkhau">Mật khẩu</label>
+               <?php if(isset($_SESSION['error'])): ?>
+               <span class="error-message"
+                  id="error-message"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></span>
+               =======
+               <?php if (isset($_SESSION['error'])): ?>
                <span class="error-message" id="error-message"><?php echo $_SESSION['error'];
                unset($_SESSION['error']); ?></span>
-            <?php endif; ?>
+               >>>>>>> Stashed changes
+               <?php endif; ?>
          </div>
          <button type="submit" class="button" name="btnDangnhap" id="btnDangnhap" style="text-decoration: none;">Đăng
             nhập</button>

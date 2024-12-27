@@ -18,13 +18,9 @@
     text-align: right;
 }
 
-.header-icon {
-    font-size: 30px;
-}
-
 .header-text {
     position: fixed;
-    right: 590px;
+    right: 650px;
     top: 40px;
     height: 60px;
     font-size: 22px;
@@ -34,13 +30,10 @@
     color: #EEEEEE;
 }
 
-<<<<<<<< HEAD:home/teacher/teacher_homepage.css
-========
 .header-icon {
     font-size: 30px;
 }
 
->>>>>>>> 897b9a6cc1021c4b44f66bb47bc518063888d79e:home/student/student_homepage.css
 body {
     background: #EEEEEE;
 }
@@ -50,11 +43,17 @@ body {
     top: 0;
     left: 0;
     height: 100%;
-    width: 290px;
+    width: 74px;
     background: #222831;
     padding-top: 10px;
+    transition: 0.6s ease;
     box-shadow: 0 0 5px black;
+    overflow-x: hidden;
+}
 
+.sidebar:hover {
+    width: 350px;
+    transition: 0.6s ease;
 }
 
 .sidebar>ul {
@@ -113,15 +112,10 @@ body {
 
 .content {
     background-color: #d6d3d3;
-<<<<<<<< HEAD:home/teacher/teacher_homepage.css
-    height: 639px;
-    margin-left: 290px;
-========
     height: 637px;
     margin-top: 2px;
     margin-left: 77px;
     border-radius: 5px;
->>>>>>>> 897b9a6cc1021c4b44f66bb47bc518063888d79e:home/student/student_homepage.css
     box-shadow: 0 0 3px black;
 }
 

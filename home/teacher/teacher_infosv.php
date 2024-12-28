@@ -8,6 +8,7 @@
 <body>
     <!-- header -->
     <div class="header">
+        <span class="header-text">Quản lý sinh viên</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
         session_start();
@@ -28,7 +29,7 @@
             <li>
                 <a href="teacher_info.php">
                     <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin quản lý</span>
+                    <span class="text">Thông tin cá nhân</span>
                 </a>
             </li>
             <li>

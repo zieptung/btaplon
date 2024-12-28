@@ -12,7 +12,7 @@ if (isset($_POST['btnTimkiem'])) {
 }
 $data = mysqli_query($con, $sql);
 if (isset($_POST['btnThemmoi'])) {
-    header('location: ./chức năng của qlsv/teacher_add_qlsv.php');
+    header('location: ./manager_sv/teacher_add_qlsv.php');
 }
 ?>
 <!DOCTYPE html>
@@ -136,9 +136,9 @@ if (isset($_POST['btnThemmoi'])) {
                                 <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>" class="btn btn-light"">Sửa</a>
                                 <a href=" ./manager_sv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
                             onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger" ">Xoá</a>
-                                                    </td>
-                                                </tr>
-                                                <?php
+                                                            </td>
+                                                        </tr>
+                                                        <?php
                     }
                 }
                 ?>

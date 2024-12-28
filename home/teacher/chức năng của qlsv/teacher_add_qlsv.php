@@ -1,19 +1,48 @@
+<?php
+include_once "../connectdb.php";
+$ma = $ht = $em = $pa = "";
+if (isset($_POST['btnLuu'])) {
+    $ma = $_POST['txtma'];
+    $ht = $_POST['txthoten'];
+    $em = $_POST['txtemail'];
+    $pa = $_POST['txtpassword'];
+
+    $check_sql = "SELECT * FROM user WHERE ma = '$ma'";
+    $check_result = mysqli_query($con, $check_sql);
+
+    if (mysqli_num_rows($check_result) > 0) {
+        echo "<script> alert('Mã sinh viên đã tồn tại!'); window.location.href = 'teacher_add_qlsv.php'; </script>";
+    } else {
+        $sql1 = "INSERT INTO user (ma, hoten, email, password) VALUES ('$ma', '$ht', '$em', '$pa')";
+        $kq = mysqli_query($con, $sql1);
+        if ($kq) {
+            echo "<script> alert('Thêm thành công!'); window.location.href = '../teacher_infosv.php'; </script>";
+        } else {
+            echo "<script> alert('Thêm thất bại!'); </script>";
+        }
+    }
+}
+
+if (isset($_POST['btnBack'])) {
+    header("location: ../teacher_infosv.php");
+}
+?>
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="teacher_homepage.css">
+<link rel="stylesheet" href="../teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
     <!-- header -->
     <div class="header">
-        <span class="header-text">Bảng điểm sinh viên</span>
+        <span class="header-text">Quản lý sinh viên</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
         session_start();
-        include_once "connectdb.php";
+        include_once "../connectdb.php";
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $sql = "SELECT hoten FROM user WHERE ma = '$user_id'";
@@ -58,7 +87,7 @@
                 </a>
             </li>
             <li>
-                <a href="teacher_logout.php">
+                <a href="../teacher_logout.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>
                 </a>
@@ -67,7 +96,25 @@
     </div>
     <!-- content -->
     <article class="content">
-        <!--write something here-->
+        <form method="post" action="">
+            <div class="form-group" style="width: 75%; margin-left: 150px; margin-top: 50px; margin-bottom: 10px;">
+                <label>Mã sinh viên</label>
+                <input type="text" class="form-control" placeholder="Mã sinh viên" name="txtma"
+                    value="<?php echo $ma ?>" style="margin-bottom: 20px;">
+                <label>Họ tên</label>
+                <input type="text" class="form-control" placeholder="Họ tên" name="txthoten" value="<?php echo $ht ?>"
+                    style="margin-bottom: 20px;">
+                <label>Email</label>
+                <input type="email" class="form-control" placeholder="Email" name="txtemail" value="<?php echo $em ?>"
+                    style="margin-bottom: 20px;">
+                <label>Mật khẩu</label>
+                <input type="text" class="form-control" placeholder="Mật khẩu" name="txtpassword"
+                    value="<?php echo $pa ?>" style="margin-bottom: 20px;">
+                <button type="submit" class="btn btn-primary" name="btnLuu"
+                    style="margin-left:300px; margin-top:10px">Lưu</button>
+                <button type="submit" class="btn btn-primary" name="btnBack"
+                    style="margin-left:150px; margin-top:10px">Trở
+                    về</button>
     </article>
 </body>
 

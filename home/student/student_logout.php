@@ -1,5 +1,5 @@
-<?php if (isset($_SESSION['Hoten']))
+<?php if (isset($_SESSION['hoten']))
 
-    unset($_SESSION['Hoten']);
+    unset($_SESSION['hoten']);
 header('location: ../login.php');
 ?>

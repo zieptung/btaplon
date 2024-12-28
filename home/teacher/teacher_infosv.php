@@ -133,13 +133,12 @@ if (isset($_POST['btnThemmoi'])) {
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['password'] ?></td>
                             <td>
-                                <a href="./chức năng của qlsv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>"
-                                    class="btn btn-light"">Sửa</a>
-                                <a href=" ./chức năng của qlsv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
+                                <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>" class="btn btn-light"">Sửa</a>
+                                <a href=" ./manager_sv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
                             onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger" ">Xoá</a>
-                                            </td>
-                                        </tr>
-                                        <?php
+                                                    </td>
+                                                </tr>
+                                                <?php
                     }
                 }
                 ?>

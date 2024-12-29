@@ -112,22 +112,10 @@ if(isset($_POST["btnnew"])){
     <article class="content">
     <form method="post" action="">
     <div class="form-group">
-            <label>Lớp học</label>
-            <select name="ddllophoc" id="" class="form-control">
-               <option value="">--Chọn lớp học--</option>
-               <option value="74DCHT21" <?php if($gt=='Nam') echo 'Selected' ?>>74DCHT21</option>
-               <option value="74DCHT21" <?php if($gt=='Nữ') echo 'Selected' ?>>74DCHT22</option>
-               <?php
-               if(isset($lop_hoc) && mysqli_num_rows($lop_hoc) > 0) {
-                  while($row = mysqli_fetch_assoc($lop_hoc)) {
-               ?>
-               <option value="<?php echo $row['malop'] ?>" <?php if($ml==$row['malop']) echo 'Selected'?>>
-                  <?php echo $row['tenlop'] ?></option>
-               <?php
-                  }
-               }
-               ?>
-            </select>
+            <div>
+                <label for="mamon"style="width: 250px; padding: 10px;">Mã môn</label>
+                <input type="text" class="form-control" id="mamon" name="txtmamon" value="<?php echo $mm ?>">
+            </div>
          </div>
         <div class="form-group"style="width: 250px; padding: 10px;">
             <label for="hoten">Tên môn</label>

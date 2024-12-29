@@ -53,31 +53,31 @@ if (isset($_POST['btnBack'])) {
     <div class="sidebar">
         <ul>
             <li>
-                <a href="teacher_info.php">
+                <a href="../teacher_info.php">
                     <span class="icon"><i class="fa-solid fa-user"></i></span>
                     <span class="text">Thông tin cá nhân</span>
                 </a>
             </li>
             <li>
-                <a href="teacher_message.php">
+                <a href="../teacher_message.php">
                     <span class="icon"><i class="fa-solid fa-envelope"></i></span>
                     <span class="text">Tin nhắn</span>
                 </a>
             </li>
             <li>
-                <a href="teacher_infosv.php">
+                <a href="../teacher_infosv.php">
                     <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
                     <span class="text">Quản lý sinh viên</span>
                 </a>
             </li>
             <li>
-                <a href="teacher_fix.php">
+                <a href="../teacher_fix.php">
                     <span class="icon"><i class="fa-solid fa-wrench"></i></span>
                     <span class="text">Thêm điểm sinh viên</span>
                 </a>
             </li>
             <li>
-                <a href="teacher_board.php">
+                <a href="../teacher_board.php">
                     <span class="icon"><i class="fa-solid fa-table"></i></span>
                     <span class="text">Bảng điểm sinh viên</span>
                 </a>

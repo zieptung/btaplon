@@ -1,5 +1,38 @@
 <?php
 include_once "connectdb.php";
+if (isset($_POST['btnGui'])) {
+    require "../Classes/PHPExcel.php";
+    $file = $_FILES['file']['tmp_name'];
+
+    $objReader = PHPExcel_IOFactory::createReaderForFile($file);
+    $objReader->setLoadSheetsOnly('Sheet1');
+    $objExcel = $objReader->load($file);
+    $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
+    $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
+    $stmt = $con->prepare("INSERT INTO user(ma, hoten, email, password, is_admin) VALUES (?, ?, ?, ?, ?)");
+    for ($row = 2; $row <= $highestRow; $row++) {
+        $ma = $sheetData[$row]['A'];
+        $hoten = $sheetData[$row]['B'];
+        $email = $sheetData[$row]['C'];
+        $password = $sheetData[$row]['D'];
+        $is_admin = $sheetData[$row]['E'];
+
+        // Check for duplicate entry
+        $checkSql = "SELECT * FROM user WHERE ma = ?";
+        $stmtCheck = $con->prepare($checkSql);
+        $stmtCheck->bind_param("s", $ma);
+        $stmtCheck->execute();
+        $result = $stmtCheck->get_result();
+        if ($result->num_rows == 0 && !empty($ma)) {
+            $stmt->bind_param("ssssi", $ma, $hoten, $email, $password, $is_admin);
+            $stmt->execute();
+        }
+        $stmtCheck->close();
+    }
+    echo "<script>alert('Thêm thành công')</script>";
+    $stmt->close();
+}
+
 $ma = "";
 $ht = "";
 $em = "";
@@ -12,9 +45,8 @@ if (isset($_POST['btnTimkiem'])) {
 }
 $data = mysqli_query($con, $sql);
 if (isset($_POST['btnThemmoi'])) {
-    header('location: ./manager_sv/teacher_add_qlsv.php');
+    header("location: ./manager_sv/teacher_add_qlsv.php");
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -64,7 +96,7 @@ if (isset($_POST['btnThemmoi'])) {
                 </a>
             </li>
             <li>
-                <a href="teacher_fix.php">
+                <a href="teacher_add.php">
                     <span class="icon"><i class="fa-solid fa-wrench"></i></span>
                     <span class="text">Thêm điểm sinh viên</span>
                 </a>
@@ -85,7 +117,7 @@ if (isset($_POST['btnThemmoi'])) {
     </div>
     <!-- content -->
     <article class="content">
-        <form method="POST" action="">
+        <form method="POST" action="" enctype="multipart/form-data">
             <div class="row">
                 <div class="col" style="margin:10px">
                     <label>Mã sinh viên</label>
@@ -104,13 +136,15 @@ if (isset($_POST['btnThemmoi'])) {
                 </div>
             </div>
             <button type="submit" class="btn btn-primary" name="btnTimkiem"
-                style="margin-left:305px; margin-top:10px; margin-bottom: 10px">Tìm
+                style="margin-left:419px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
                 kiếm</button>
             <button type="submit" class="btn btn-primary" name="btnThemmoi"
-                style="margin-left:150px; margin-top:10px; margin-bottom: 10px">Thêm
+                style="margin-left:100px; margin-top:10px; margin-bottom: 10px">Thêm
                 mới</button>
-            <button type="submit" class="btn btn-primary" name="btnGui"
-                style="margin-left:100px; margin-top:10px; margin-bottom: 10px">Gửi</button>
+            <div class="input-group mb-3" style="width: 300px; margin:10px; margin-left: 445px;">
+                <input type="file" class="form-control" aria-label="Gửi" name="file">
+                <button class="btn btn-outline-secondary" type="submit" name="btnGui">Gửi</button>
+            </div>
         </form>
         <table class="table table-bordered">
             <thead style="background-color: #4e73df; color: white; text-align: center;">
@@ -136,12 +170,14 @@ if (isset($_POST['btnThemmoi'])) {
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['password'] ?></td>
                             <td>
-                                <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>" class="btn btn-light"">Sửa</a>
+                                <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>"
+                                    class="btn btn-light""><i class=" fa-solid fa-wrench"></i></a>
                                 <a href=" ./manager_sv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
-                            onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger" ">Xoá</a>
-                                    </td>
-                                </tr>
-                            <?php
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i
+                                        class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        <?php
                     }
                 }
                 ?>

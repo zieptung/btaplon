@@ -139,9 +139,9 @@ if (isset($_POST['btnThemmoi'])) {
                                 <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>" class="btn btn-light"">Sửa</a>
                                 <a href=" ./manager_sv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
                             onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger" ">Xoá</a>
-                                                                                                                                            </td>
-                                                                                                                                        </tr>
-                                                                                                                                        <?php
+                                    </td>
+                                </tr>
+                            <?php
                     }
                 }
                 ?>

@@ -102,13 +102,3 @@ body {
     text-transform: uppercase;
 }
 
-.content {
-    background-color: #d6d3d3;
-    height: 628px;
-    margin-left: 290px;
-    box-shadow: 0 0 3px black;
-    overflow: scroll;
-}
-.content::-webkit-scrollbar {
-    display: none;
-}

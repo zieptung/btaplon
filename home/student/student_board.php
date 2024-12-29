@@ -6,11 +6,11 @@
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
-    <!-- header -->
-    <div class="header">
-        <span class="header-text">Bảng điểm</span>
-        <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-        <?php
+   <!-- header -->
+   <div class="header">
+      <span class="header-text">Bảng điểm</span>
+      <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
+      <?php
         session_start();
         include_once "connectdb.php";
         if (isset($_SESSION['user_id'])) {
@@ -22,52 +22,52 @@
             }
         }
         ?>
-    </div>
-    <!-- sidebar -->
-    <div class="sidebar">
-        <ul>
-            <li>
-                <a href="student_homepage.php" class="logo">
-                    <span class="icon"><i class="fa-solid fa-house"></i></span>
-                    <span class="text">Trang chủ</span>
-                </a>
-            </li>
-            <li>
-                <a href="student_message.php">
-                    <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-                    <span class="text">Tin nhắn</span>
-                </a>
-            </li>
-            <li>
-                <a href="student_forum.php">
-                    <span class="icon"><i class="fa-solid fa-bell"></i></span>
-                    <span class="text">Diễn đàn</span>
-                </a>
-            </li>
-            <li>
-                <a href="student_board.php">
-                    <span class="icon"><i class="fa-solid fa-table"></i></span>
-                    <span class="text">Bảng điểm</span>
-                </a>
-            </li>
-            <li>
-                <a href="student_info.php">
-                    <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="student_logout.php">
-                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-                    <span class="text">Đăng xuất</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- content -->
-    <article class="content">
-        <!--write something here-->
-    </article>
+   </div>
+   <!-- sidebar -->
+   <div class="sidebar">
+      <ul>
+         <li>
+            <a href="student_homepage.php" class="logo">
+               <span class="icon"><i class="fa-solid fa-house"></i></span>
+               <span class="text">Trang chủ</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_message.php">
+               <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+               <span class="text">Tin nhắn</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_forum.php">
+               <span class="icon"><i class="fa-solid fa-bell"></i></span>
+               <span class="text">Diễn đàn</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_board.php">
+               <span class="icon"><i class="fa-solid fa-table"></i></span>
+               <span class="text">Bảng điểm</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_info.php">
+               <span class="icon"><i class="fa-solid fa-user"></i></span>
+               <span class="text">Thông tin sinh viên</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_logout.php">
+               <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+               <span class="text">Đăng xuất</span>
+            </a>
+         </li>
+      </ul>
+   </div>
+   <!-- content -->
+   <article class="content">
+      <!--write something here-->
+   </article>
 </body>
 
 </html>

@@ -42,6 +42,9 @@ if (isset($_POST['btnTimkiem'])) {
     $ht = $_POST['txthoten'];
     $em = $_POST['txtemail'];
     $sql = "SELECT * FROM user WHERE ma LIKE '%$ma%' AND hoten LIKE '%$ht%' AND email LIKE '%$em%' AND is_admin = 0";
+    $ma = "";
+    $ht = "";
+    $em = "";
 }
 $data = mysqli_query($con, $sql);
 if (isset($_POST['btnThemmoi'])) {
@@ -146,8 +149,8 @@ if (isset($_POST['btnThemmoi'])) {
                 <button class="btn btn-outline-secondary" type="submit" name="btnGui">Gửi</button>
             </div>
         </form>
-        <table class="table table-bordered">
-            <thead style="background-color: #4e73df; color: white; text-align: center;">
+        <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
+            <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">
                 <tr>
                     <th>STT</th>
                     <th>Mã sinh viên</th>

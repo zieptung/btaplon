@@ -31,7 +31,9 @@ if (isset($_POST["btnLuu"])) {
         echo "<script>alert('Cập nhật thành công!'); window.location.href='../teacher_board.php';</script>";
     }
 }
-
+if (isset($_POST["btnBack"])) {
+    header("location:../teacher_board.php");
+}
 ?>
 
 <!DOCTYPE html>

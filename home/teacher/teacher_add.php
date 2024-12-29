@@ -1,5 +1,46 @@
 <?php
 include_once "connectdb.php";
+if (isset($_POST['btnGui'])) {
+    require "../Classes/PHPExcel.php";
+    if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
+        $file = $_FILES['file']['tmp_name'];
+
+        $objReader = PHPExcel_IOFactory::createReaderForFile($file);
+        $objReader->setLoadSheetsOnly('Sheet1');
+        $objExcel = $objReader->load($file);
+        $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
+        $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
+        $stmt = $con->prepare("INSERT INTO diem(mamon, hoten, tenmon, sotinchi, diemso, diemchu, diemcc, diemgk, diemck, loai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $mamon = $sheetData[$row]['A'];
+            $hoten = $sheetData[$row]['B'];
+            $tenmon = $sheetData[$row]['C'];
+            $sotinchi = $sheetData[$row]['D'];
+            $diemso = $sheetData[$row]['E'];
+            $diemchu = $sheetData[$row]['F'];
+            $diemcc = $sheetData[$row]['G'];
+            $diemgk = $sheetData[$row]['H'];
+            $diemck = $sheetData[$row]['I'];
+            $loai = $sheetData[$row]['J'];
+
+            // Check for duplicate entry
+            $checkSql = "SELECT * FROM diem WHERE mamon = ? AND hoten = ?";
+            $stmtCheck = $con->prepare($checkSql);
+            $stmtCheck->bind_param("ss", $mamon, $hoten);
+            $stmtCheck->execute();
+            $result = $stmtCheck->get_result();
+            if ($result->num_rows == 0 && !empty($mamon)) {
+                $stmt->bind_param("sssiisiiis", $mamon, $hoten, $tenmon, $sotinchi, $diemso, $diemchu, $diemcc, $diemgk, $diemck, $loai);
+                $stmt->execute();
+            }
+            $stmtCheck->close();
+        }
+    }
+    $stmt->close();
+    echo "<script>alert('Thêm thành công')</script>";
+}
+
+$id = '';
 $mm = '';
 $ht = '';
 $tm = '';
@@ -106,8 +147,12 @@ if (isset($_POST["btnLuu"])) {
         </ul>
     </div>
     <article class="content">
-        <form action="" method="POST">
-            <div class="form-group" style="width: 75%; margin-left: 150px; margin-top: 50px; margin-bottom: 10px;">
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-3" style="width: 300px; margin:10px; margin-left: 445px;">
+                <input type="file" class="form-control" aria-label="Gửi" name="file">
+                <button class="btn btn-outline-secondary" type="submit" name="btnGui">Gửi</button>
+            </div>
+            <div class="form-group" style="width: 75%; margin-left: 150px; margin-top: 0px; margin-bottom: 10px;">
                 <label>Mã học phần</label>
                 <select name="txtmamon" id="" class="form-control" style="margin-bottom: 20px;">
                     <option value="">---Chọn mã học phần---</option>
@@ -148,7 +193,7 @@ if (isset($_POST["btnLuu"])) {
                 <input type="number" class="form-control" placeholder="Điểm cuối kỳ" name="txtdiemck"
                     value="<?php echo $ck ?>" style="margin-bottom: 20px;">
                 <button type="submit" class="btn btn-primary" name="btnLuu"
-                    style="margin-left: 38%; margin-top: 10px; width: 200px">Lưu</button>
+                    style="margin-left: 38%; width: 200px">Lưu</button>
             </div>
         </form>
     </article>

@@ -99,7 +99,7 @@ if (isset($_POST['btnluu'])) {
                 </a>
             </li>
             <li>
-                <a href="teacher_fix.php">
+                <a href="teacher_add.php">
                     <span class="icon"><i class="fa-solid fa-wrench"></i></span>
                     <span class="text">Thêm điểm sinh viên</span>
                 </a>

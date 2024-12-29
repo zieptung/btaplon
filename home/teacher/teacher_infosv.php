@@ -14,6 +14,7 @@ $data = mysqli_query($con, $sql);
 if (isset($_POST['btnThemmoi'])) {
     header('location: ./manager_sv/teacher_add_qlsv.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -103,11 +104,13 @@ if (isset($_POST['btnThemmoi'])) {
                 </div>
             </div>
             <button type="submit" class="btn btn-primary" name="btnTimkiem"
-                style="margin-left:425px; margin-top:10px; margin-bottom: 10px">Tìm
+                style="margin-left:305px; margin-top:10px; margin-bottom: 10px">Tìm
                 kiếm</button>
             <button type="submit" class="btn btn-primary" name="btnThemmoi"
                 style="margin-left:150px; margin-top:10px; margin-bottom: 10px">Thêm
                 mới</button>
+            <button type="submit" class="btn btn-primary" name="btnGui"
+                style="margin-left:100px; margin-top:10px; margin-bottom: 10px">Gửi</button>
         </form>
         <table class="table table-bordered">
             <thead style="background-color: #4e73df; color: white; text-align: center;">
@@ -136,9 +139,9 @@ if (isset($_POST['btnThemmoi'])) {
                                 <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>" class="btn btn-light"">Sửa</a>
                                 <a href=" ./manager_sv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
                             onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger" ">Xoá</a>
-                                                            </td>
-                                                        </tr>
-                                                        <?php
+                                                                                                                                            </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <?php
                     }
                 }
                 ?>

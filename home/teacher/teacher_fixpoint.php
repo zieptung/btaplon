@@ -1,64 +1,95 @@
 <?php
-include_once "connectdb.php";
-$mm='';
-$tm='';
-$stc='';
-$bm='';
-$ds='';
-$dc='';
-$loai='';
-$cc='';
-$gk='';
-$ck='';  
-//tao cau lenh lay du lieu tu bang mon hoc dua vao mang $monhoc
-$sql="select * from mon_hoc";
-$monhoc=mysqli_query($con,$sql);
-//kiem tra xem co an vao nut submit chua
-if(isset($_POST["btnsubmit"])){
-    //lay du lieu tu form
-   $mm=$_POST['txtmamon'];
-   $tm=$_POST['txttenmon'];
-   $stc=$_POST['txtsotinchi'];
-   $bm=$_POST['txtbomon'];
-   $ds=$_POST['txtdiemso'];
-   $dc=$_POST['txtdiemchu'];
-   $loai=$_POST['txtloai'];
-   $cc=$_POST['txtdiemcc'];
-   $gk=$_POST['txtdiemgk'];
-   $ck=$_POST['txtdiemck'];
-   // Câu lệnh INSERT để thêm dữ liệu vào bảng monhoc
-    $sql = "INSERT INTO mon_hoc (mamon, tenmon, sotinchi, bomon, diemso, diemchu, loai, diemcc, diemgk, diemck)
-    VALUES ('$mm', '$tm', '$stc', '$bm', '$ds', '$dc', '$loai', '$cc', '$gk', '$ck')";
-    //thuc thi cau lenh
-    $kq = mysqli_query($con,$sql);
-    if($kq)
-    echo "<script>alert('Thêm mới thành công <3')</script>";
-   else
-   echo "<script>alert('Thêm mới thất bại :<')</script>";
-    //chuyen ve trang danh sach sinh vien
+include_once("connectdb.php");
+// Initialize variables
+$mm = '';
+$tm = '';
+$stc = '';
+$bm = '';
+$ds = '';
+$dc = '';
+$loai = '';
+$cc = '';
+$gk = '';
+$ck = '';
+$diemtong = '';
+
+// Get student data if ID is provided
+if (isset($_GET['mamon'])) {
+    $mm = $_GET['mamon'];
+    $sql = "SELECT * FROM mon_hoc WHERE mamon='$mm'";
+    $result = mysqli_query($con, $sql);
+    if ($row = mysqli_fetch_assoc($result)) {
+        $mm = $row['mamon'];
+        $tm = $row['tenmon'];
+        $stc = $row['sotinchi'];
+        $bm = $row['bomon'];
+        $ds = $row['diemso'];
+        $dc = $row['diemchu'];
+        $loai = $row['loai'];
+        $cc = $row['diemcc'];
+        $gk = $row['diemgk'];
+        $ck = $row['diemck'];
+        $diemtong = $row['diemtong'];
+    } else {
+        echo "<script>alert('Không tìm môn học!'); window.location='teacher_board.php';</script>";
+    }
 }
-if(isset($_POST["btnback"])){
-   header('location:teacher_board.php');
-   exit();
+
+// Cập nhật dữ liệu khi bấm "Xác nhận"
+if (isset($_POST["btnsubmit"])) {
+    // Get form data
+    $mm = $_POST["txtmamon"];
+    $tm = $_POST["txttenmon"];
+    $stc = $_POST["txtsotinchi"];
+    $bm = $_POST["txtbomon"];
+    $ds = $_POST["txtdiemso"];
+    $dc = $_POST["txtdiemchu"];
+    $loai = $_POST["txtloai"];
+    $cc = $_POST["txtdiemcc"];
+    $gk = $_POST["txtdiemgk"];
+    $ck = $_POST["txtdiemck"];
+    $diemtong = $_POST["txtdiemtong"];
+
+    // Update query
+    $sql = "UPDATE mon_hoc SET 
+        tenmon='$tm', 
+        sotinchi='$stc', 
+        bomon='$bm', 
+        diemso='$ds', 
+        diemchu='$dc', 
+        loai='$loai', 
+        diemcc='$cc', 
+        diemgk='$gk', 
+        diemck='$ck', 
+        diemtong='$diemtong'
+        WHERE mamon='$mm'";
+
+    $kq = mysqli_query($con, $sql);
+    if ($kq) {
+        echo "<script>alert('Cập nhật thành công!'); window.location='teacher_board.php';</script>";
+    } else {
+        echo "<script>alert('Cập nhật thất bại!');</script>";
+    }
+}
+
+// Trở lại bảng điểm khi bấm "Trở lại"
+if (isset($_POST["btnback"])) {
+    header('location:teacher_board.php');
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="teacher_homepage.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<title>Quản lý điểm sinh viên đại học</title>
-
+<title>Sửa Điểm</title>
 <body>
-    <!-- header -->
-    <div class="header">
-        <span class="header-text">Bảng điểm sinh viên</span>
-        <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-        <?php
+   <!-- header -->
+   <div class="header">
+      <?php
         session_start();
-       include_once "connectdb.php";
+        include_once "connectdb.php";
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $sql = "SELECT hoten FROM user WHERE ma = '$user_id'";
@@ -68,6 +99,7 @@ if(isset($_POST["btnback"])){
             }
         }
         ?>
+
     </div>
     <!-- sidebar -->
     <div class="sidebar">
@@ -75,7 +107,7 @@ if(isset($_POST["btnback"])){
             <li>
                 <a href="teacher_info.php">
                     <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin quản lý</span>
+                    <span class="text">Thông tin cá nhân</span>
                 </a>
             </li>
             <li>
@@ -110,6 +142,7 @@ if(isset($_POST["btnback"])){
             </li>
         </ul>
     </div>
+    <!-- content -->
     <article class="content">
     <form action="" method="POST">
          <div class="form-group">
@@ -151,8 +184,8 @@ if(isset($_POST["btnback"])){
             <button type="submit" class="btn btn-secondary mr-2" name="btnback">Trở lại</button>
             &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             <button type="submit" class="btn btn-primary" name="btnsubmit">Xác nhận</button>
-
-      </form>
     </article>
+
 </body>
+
 </html>

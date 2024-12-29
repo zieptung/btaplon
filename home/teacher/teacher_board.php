@@ -11,13 +11,13 @@ $cc='';
 $gk='';
 $ck='';
 $diemtong='';
-$sql='Select * from monhoc';
-$lophoc=mysqli_query($con,$sql);
-$data = $lophoc;
+$sql='Select * from mon_hoc';
+$lop_hoc=mysqli_query($con,$sql);
+$data = $lop_hoc;
 if(isset($_POST['timkiem'])){
     $mm=$_POST['txtmamon'];
     $tm=$_POST['txttenmon'];
-    $sql="SELECT * FROM monhoc WHERE mamon like'%$mm%' and tenmon like'%$tm%'";
+    $sql="SELECT * FROM mon_hoc WHERE mamon like'%$mm%' and tenmon like'%$tm%'";
     $data=mysqli_query($con,$sql);
 }
 if(isset($_POST['btnnew'])){
@@ -33,10 +33,10 @@ if(isset($_POST['btnnew'])){
     $ck = isset($_POST['txtdiemck']) ? $_POST['txtdiemck'] : '';
     $diemtong = isset($_POST['txtdiemtong']) ? $_POST['txtdiemtong'] : '';
     // Thực hiện câu lệnh SQL
-    $sql="INSERT INTO monhoc(mamon,tenmon,sotinchi,bomon,diemso,diemcc,loai,diemgk,diemck,diemtong) VALUES('$mm','$tm','$stc','$bm','$ds','$dc','$loai','$cc','$gk','$ck','$diemtong')";
+    $sql="INSERT INTO mon_hoc(mamon,tenmon,sotinchi,bomon,diemso,diemcc,loai,diemgk,diemck,diemtong) VALUES('$mm','$tm','$stc','$bm','$ds','$dc','$loai','$cc','$gk','$ck','$diemtong')";
 }
 if(isset($_POST["btnnew"])){
-    header('location:./teacher_them.php');
+    header('location:teacher_them.php');
  }
 ?>
 <!DOCTYPE html>
@@ -45,6 +45,7 @@ if(isset($_POST["btnnew"])){
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="teacher_homepage.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
@@ -109,16 +110,30 @@ if(isset($_POST["btnnew"])){
     <!-- content -->
     <article class="content">
     <form method="post" action="">
-         <div class="form-group">
-            <label for="masv">Mã môn</label>
-            <input type="text" class="form-control" id="mamon" name="txtmamon" value="<?php echo $mm ?>">
-        </div>
-        <div class="form-group">
+    <div class="form-group">
+            <label>Lớp học</label>
+            <select name="ddllophoc" id="" class="form-control">
+               <option value="">--Chọn lớp học--</option>
+               <option value="74DCHT21" <?php if($gt=='Nam') echo 'Selected' ?>>74DCHT21</option>
+               <option value="74DCHT21" <?php if($gt=='Nữ') echo 'Selected' ?>>74DCHT22</option>
+               <?php
+               if(isset($lop_hoc) && mysqli_num_rows($lop_hoc) > 0) {
+                  while($row = mysqli_fetch_assoc($lop_hoc)) {
+               ?>
+               <option value="<?php echo $row['malop'] ?>" <?php if($ml==$row['malop']) echo 'Selected'?>>
+                  <?php echo $row['tenlop'] ?></option>
+               <?php
+                  }
+               }
+               ?>
+            </select>
+         </div>
+        <div class="form-group"style="width: 250px; padding: 10px;">
             <label for="hoten">Tên môn</label>
             <input type="text" class="form-control" id="tenmon" name="txttenmon" value="<?php echo $tm ?>">
         </div>
-        <button type="submit" class="btn btn-primary" name="btnnew">Thêm </button>
-         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        <button type="submit" class="btn btn-primary" name="btnnew"style=" margin:10px ">Thêm </button>
+         &emsp;&emsp;&emsp;
         <button type="submit" class="btn btn-primary" name="timkiem">Tìm kiếm</button>
         <table class="table table-striped">
         <thead>
@@ -156,12 +171,12 @@ if(isset($_POST["btnnew"])){
             <td><?php echo $row['diemgk'] ?></td>
             <td><?php echo $row['diemck'] ?></td>
             <td><?php echo $row['diemtong'] ?></td>
-            <!-- <td>
-               --link chinh sua va xoa -->
-               <!-- <a href="./suasv.php?masv=<?php echo $row['masv'] ?>">sửa</a>
+            <td>
+               <!-- --link chinh sua va xoa --> 
+               <a href="./teacher_fixpoint.php?mamon=<?php echo $row['mamon'] ?>"><i class="bi bi-pencil-square"></i></a>
                &nbsp;&nbsp;&nbsp;
-               <a href="./xoasv.php?masv=<?php echo $row['masv'] ?>">xóa</a> -->
-            <!-- <td> -->
+               <a href="./teacher_del.php?mamon=<?php echo $row['mamon'] ?>"><i class="bi bi-trash3-fill"></i></a> 
+            <td>
                
          </tr>
          <?php

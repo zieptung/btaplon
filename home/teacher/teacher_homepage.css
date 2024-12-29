@@ -109,4 +109,8 @@ body {
     height: 639px;
     margin-left: 290px;
     box-shadow: 0 0 3px black;
+    overflow: scroll;
+}
+.content::-webkit-scrollbar {
+    display: none;
 }

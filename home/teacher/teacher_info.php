@@ -28,7 +28,7 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
-if(isset($_POST['btnluu'])) {
+if (isset($_POST['btnluu'])) {
     $ns = $_POST['txtns'];
     $diachi = $_POST['txtdiachi'];
     $sdt = $_POST['txtsdt'];
@@ -62,11 +62,11 @@ if(isset($_POST['btnluu'])) {
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
-   <!-- header -->
-   <div class="header">
-      <span class="header-text">Thông tin cá nhân</span>
-      <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-      <?php
+    <!-- header -->
+    <div class="header">
+        <span class="header-text">Thông tin cá nhân</span>
+        <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
+        <?php
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $sql = "SELECT hoten FROM giang_vien WHERE ma = '$user_id'";
@@ -76,156 +76,158 @@ if(isset($_POST['btnluu'])) {
             }
         }
         ?>
-   </div>
-   <!-- sidebar -->
-   <div class="sidebar">
-      <ul>
-         <li>
-            <a href="teacher_info.php">
-               <span class="icon"><i class="fa-solid fa-user"></i></span>
-               <span class="text">Thông tin cá nhân</span>
-            </a>
-         </li>
-         <li>
-            <a href="teacher_message.php">
-               <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-               <span class="text">Tin nhắn</span>
-            </a>
-         </li>
-         <li>
-            <a href="teacher_infosv.php">
-               <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-               <span class="text">Quản lý sinh viên</span>
-            </a>
-         </li>
-         <li>
-            <a href="teacher_fix.php">
-               <span class="icon"><i class="fa-solid fa-wrench"></i></span>
-               <span class="text">Thêm điểm sinh viên</span>
-            </a>
-         </li>
-         <li>
-            <a href="teacher_board.php">
-               <span class="icon"><i class="fa-solid fa-table"></i></span>
-               <span class="text">Bảng điểm sinh viên</span>
-            </a>
-         </li>
-         <li>
-            <a href="teacher_logout.php">
-               <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-               <span class="text">Đăng xuất</span>
-            </a>
-         </li>
-      </ul>
-   </div>
-   <!-- content -->
-   <article class="content">
-      <div class="container mt-4">
-         <form method="POST" action="">
-            <div class="form-row">
-               <div class="input-group">
-                  <i class="fas fa-id-card"></i>
-                  <div class="form-field">
-                     <label class="label">Mã giảng viên</label>
-                     <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>" disabled>
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group">
-                  <i class="fas fa-user"></i>
-                  <div class="form-field">
-                     <label class="label">Họ và tên</label>
-                     <input class="info1" type="text" name="txthoten" value="<?php echo $hoten; ?>" disabled>
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group">
-                  <i class="fas fa-calendar"></i>
-                  <div class="form-field">
-                     <label class="label">Ngày sinh</label>
-                     <input class="info1" type="date" name="txtns" value="<?php echo $ns; ?>">
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group">
-                  <i class="fas fa-venus-mars"></i>
-                  <div class="form-field">
-                     <label class="label">Giới tính</label>
-                     <select class="info1" name="txtgioitinh">
-                        <option value="Nam" <?php if($gioitinh=="Nam") echo "selected"; ?>>Nam</option>
-                        <option value="Nữ" <?php if($gioitinh=="Nữ") echo "selected"; ?>>Nữ</option>
-                     </select>
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group full-width">
-                  <i class="fas fa-home"></i>
-                  <div class="form-field">
-                     <label class="label">Địa chỉ</label>
-                     <input class="info1" type="text" name="txtdiachi" value="<?php echo $diachi; ?>">
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group">
-                  <i class="fas fa-phone"></i>
-                  <div class="form-field">
-                     <label class="label">Số điện thoại</label>
-                     <input class="info1" type="tel" name="txtsdt" value="<?php echo $sdt; ?>">
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group">
-                  <i class="fas fa-envelope"></i>
-                  <div class="form-field">
-                     <label class="label">Email</label>
-                     <input class="info1" type="email" name="txtemail" value="<?php echo $email; ?>">
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group">
-                  <i class="fas fa-book"></i>
-                  <div class="form-field">
-                     <label class="label">Học vấn</label>
-                     <input class="info1" type="text" name="txthocvan" value="<?php echo $hocvan; ?>">
-                  </div>
-               </div>
-            </div>
-            <div class="form-row">
-               <div class="input-group full-width">
-                  <i class="fas fa-home"></i>
-                  <div class="form-field">
-                     <label class="label">Chức vụ</label>
-                     <input class="info1" type="text" name="txtchucvu" value="<?php echo $chucvu; ?>">
-                  </div>
-               </div>
-            </div>
-            <div class="form-group row mb-3">
-               <div class="col-md-6">
-                  <button type="submit" name="btnluu" class="button_slide slide_right hidden"><i
-                        class="fa-solid fa-floppy-disk"></i> Lưu</button>
-               </div>
-            </div>
-            <script>
-            document.addEventListener('DOMContentLoaded', function() {
-               const inputs = document.querySelectorAll('input, select');
-               const saveButton = document.querySelector('button[name="btnluu"]');
-               inputs.forEach(input => {
-                  input.addEventListener('input', function() {
-                     saveButton.classList.remove('hidden');
-                  });
-               });
-            });
-            </script>
-         </form>
-      </div>
-   </article>
+    </div>
+    <!-- sidebar -->
+    <div class="sidebar">
+        <ul>
+            <li>
+                <a href="teacher_info.php">
+                    <span class="icon"><i class="fa-solid fa-user"></i></span>
+                    <span class="text">Thông tin cá nhân</span>
+                </a>
+            </li>
+            <li>
+                <a href="teacher_message.php">
+                    <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+                    <span class="text">Tin nhắn</span>
+                </a>
+            </li>
+            <li>
+                <a href="teacher_infosv.php">
+                    <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                    <span class="text">Quản lý sinh viên</span>
+                </a>
+            </li>
+            <li>
+                <a href="teacher_add.php">
+                    <span class="icon"><i class="fa-solid fa-wrench"></i></span>
+                    <span class="text">Thêm điểm sinh viên</span>
+                </a>
+            </li>
+            <li>
+                <a href="teacher_board.php">
+                    <span class="icon"><i class="fa-solid fa-table"></i></span>
+                    <span class="text">Bảng điểm sinh viên</span>
+                </a>
+            </li>
+            <li>
+                <a href="teacher_logout.php">
+                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+                    <span class="text">Đăng xuất</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- content -->
+    <article class="content">
+        <div class="container mt-4">
+            <form method="POST" action="">
+                <div class="form-row">
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <div class="form-field">
+                            <label class="label">Mã giảng viên</label>
+                            <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <div class="form-field">
+                            <label class="label">Họ và tên</label>
+                            <input class="info1" type="text" name="txthoten" value="<?php echo $hoten; ?>" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <i class="fas fa-calendar"></i>
+                        <div class="form-field">
+                            <label class="label">Ngày sinh</label>
+                            <input class="info1" type="date" name="txtns" value="<?php echo $ns; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <i class="fas fa-venus-mars"></i>
+                        <div class="form-field">
+                            <label class="label">Giới tính</label>
+                            <select class="info1" name="txtgioitinh">
+                                <option value="Nam" <?php if ($gioitinh == "Nam")
+                                    echo "selected"; ?>>Nam</option>
+                                <option value="Nữ" <?php if ($gioitinh == "Nữ")
+                                    echo "selected"; ?>>Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group full-width">
+                        <i class="fas fa-home"></i>
+                        <div class="form-field">
+                            <label class="label">Địa chỉ</label>
+                            <input class="info1" type="text" name="txtdiachi" value="<?php echo $diachi; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <i class="fas fa-phone"></i>
+                        <div class="form-field">
+                            <label class="label">Số điện thoại</label>
+                            <input class="info1" type="tel" name="txtsdt" value="<?php echo $sdt; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <div class="form-field">
+                            <label class="label">Email</label>
+                            <input class="info1" type="email" name="txtemail" value="<?php echo $email; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <i class="fas fa-book"></i>
+                        <div class="form-field">
+                            <label class="label">Học vấn</label>
+                            <input class="info1" type="text" name="txthocvan" value="<?php echo $hocvan; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-group full-width">
+                        <i class="fas fa-home"></i>
+                        <div class="form-field">
+                            <label class="label">Chức vụ</label>
+                            <input class="info1" type="text" name="txtchucvu" value="<?php echo $chucvu; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <div class="col-md-6">
+                        <button type="submit" name="btnluu" class="button_slide slide_right hidden"><i
+                                class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                    </div>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const inputs = document.querySelectorAll('input, select');
+                        const saveButton = document.querySelector('button[name="btnluu"]');
+                        inputs.forEach(input => {
+                            input.addEventListener('input', function () {
+                                saveButton.classList.remove('hidden');
+                            });
+                        });
+                    });
+                </script>
+            </form>
+        </div>
+    </article>
 </body>
 
 </html>

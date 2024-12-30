@@ -26,6 +26,3 @@ passwordInput.addEventListener("focus", () => {
     errorMessage.style.display = "none";
   }
 });
-
-
-

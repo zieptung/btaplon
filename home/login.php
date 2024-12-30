@@ -3,34 +3,53 @@ session_start();
 include_once "connectdb.php";
 // Xử lý khi người dùng nhấn "Đăng nhập"
 if (isset($_POST["btnDangnhap"])) {
-    $ma = $_POST['ma'];
-    $password = $_POST['password'];
+    // Xác thực đầu vào
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $ma = $_POST['ma'];
+        $password = $_POST['password'];
 
-    // Kiểm tra tài khoản với password không mã hóa
-    $sql = "SELECT * FROM user WHERE ma = '$ma' and password = '$password'";
-    $result = mysqli_query($con, $sql);
+        // Xác thực thông tin đăng nhập
+        $sql = "SELECT * FROM user WHERE ma = ? AND password = ?";
+        $stmt = $con->prepare($sql);
+        $stmt->bind_param("ss", $ma, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
+        if ($row = $result->fetch_assoc()) {
+            // Đăng nhập thành công
+            $_SESSION['user_id'] = $row['ma'];
+            $_SESSION['is_admin'] = $row['is_admin'];
 
-        // Kiểm tra quyền quản lý
-        switch ($row['is_admin']) {
-            case 1:
-                // Giảng viên
+            // Lưu lại mã và họ tên
+            $ma = $row['ma'];
+            $hoten = $row['hoten'];
+
+            // Kiểm tra xem mã đã tồn tại trong bảng giang_vien chưa
+            $checkSql = "SELECT * FROM giang_vien WHERE ma = ?";
+            $stmtCheck = $con->prepare($checkSql);
+            $stmtCheck->bind_param("s", $ma);
+            $stmtCheck->execute();
+            $checkResult = $stmtCheck->get_result();
+
+            if ($checkResult->num_rows == 0) {
+                $insertSql = "INSERT INTO giang_vien (ma, hoten) VALUES (?, ?)";
+                $stmtInsert = $con->prepare($insertSql);
+                $stmtInsert->bind_param("sss", $ma, $hoten, $ns);
+                $stmtInsert->execute();
+            }
+
+            // Chuyển hướng dựa trên vai trò của người dùng
+            if ($row['is_admin'] == 1) {
                 header("Location: ./teacher/teacher_info.php");
-                break;
-            default:
-                // Sinh viên
+            } else {
                 header("Location: ./student/student_homepage.php");
-                break;
+            }
+            exit();
+        } else {
+            $_SESSION['error'] = "Mã sinh viên hoặc mật khẩu sai!";
+            header("Location: login.php");
+            exit();
         }
-        $_SESSION['user_id'] = $row['ma'];
-        $_SESSION['is_admin'] = $row['is_admin'];
-        exit();
-    } else {
-        $_SESSION['error'] = "Mã sinh viên hoặc mật khẩu sai!";
-        header("Location: login.php");
-        exit();
     }
 }
 // Đóng kết nối khi không sử dụng nữa

@@ -15,8 +15,6 @@ if (isset($_POST['btnLuu'])) {
     $kq = mysqli_query($con, $sql1);
     if ($kq) {
         echo "<script>alert('Sửa thành công!'); window.location.href='../teacher_infosv.php';</script>";
-    } else {
-        echo "<script>alert('Sửa thất bại!');</script>";
     }
 }
 if (isset($_POST['btnBack'])) {
@@ -28,6 +26,7 @@ if (isset($_POST['btnBack'])) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="../teacher_info.css">
 <link rel="stylesheet" href="../teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
@@ -98,22 +97,42 @@ if (isset($_POST['btnBack'])) {
                 if (isset($data) && mysqli_num_rows($data) > 0) {
                     while ($r = mysqli_fetch_array($data)) {
                         ?>
-                        <label>Mã sinh viên</label>
-                        <input type="text" class="form-control" placeholder="Mã sinh viên" name="txtma"
-                            value="<?php echo $r['ma'] ?>" style="margin-bottom: 20px;" readonly>
-                        <label>Họ tên</label>
-                        <input type="text" class="form-control" placeholder="Họ tên" name="txthoten"
-                            value="<?php echo $r['hoten'] ?>" style="margin-bottom: 20px;">
-                        <label>Email</label>
-                        <input type="email" class="form-control" placeholder="Email" name="txtemail"
-                            value="<?php echo $r['email'] ?>" style="margin-bottom: 20px;">
-                        <label>Mật khẩu</label>
-                        <input type="text" class="form-control" placeholder="Mật khẩu" name="txtpassword"
-                            value="<?php echo $r['password'] ?>" style="margin-bottom: 20px;">
-                        <button type="submit" class="btn btn-primary" name="btnLuu"
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Mã sinh viên</label>
+                                <input class="info1" type="text" value="<?php echo $r['ma']; ?>" placeholder="Mã sinh viên"
+                                    disabled>
+                                <input type="hidden" name="txtma" value="<?php echo $r['ma']; ?>">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Tên sinh viên</label>
+                                <input class="info1" type="text" name="txthoten" value="<?php echo $r['hoten']; ?>"
+                                    placeholder="Họ tên">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Email</label>
+                                <input class="info1" type="text" name="txtemail" value="<?php echo $r['email']; ?>"
+                                    placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Mật khẩu</label>
+                                <input class="info1" type="text" name="txtpassword" value="<?php echo $r['password']; ?>"
+                                    placeholder="Email">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success" name="btnLuu"
                             style="margin-left:300px; margin-top:10px">Lưu</button>
-                        <button type="submit" class="btn btn-primary" name="btnBack"
-                            style="margin-left:150px; margin-top:10px">Trở
+                        <button type="submit" class="btn btn-info" name="btnBack" style="margin-left:150px; margin-top:10px">Trở
                             về</button>
                         <?php
                     }

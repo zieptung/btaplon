@@ -5,6 +5,11 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="student_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
+<style>
+    .sidebar {
+        overflow: hidden;
+    }
+</style>
 
 <body>
     <!-- header -->

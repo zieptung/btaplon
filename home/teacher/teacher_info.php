@@ -201,7 +201,7 @@ if (isset($_POST['btnluu'])) {
                 </div>
                 <div class="form-row">
                     <div class="input-group full-width">
-                        <i class="fas fa-home"></i>
+                        <i class="fa-solid fa-briefcase"></i>
                         <div class="form-field">
                             <label class="label">Chức vụ</label>
                             <input class="info1" type="text" name="txtchucvu" value="<?php echo $chucvu; ?>">

@@ -1,36 +1,100 @@
 <?php
 include_once "connectdb.php";
+require "../Classes/PHPExcel.php";
 if (isset($_POST['btnGui'])) {
-    require "../Classes/PHPExcel.php";
     $file = $_FILES['file']['tmp_name'];
 
     $objReader = PHPExcel_IOFactory::createReaderForFile($file);
-    $objReader->setLoadSheetsOnly('Sheet1');
-    $objExcel = $objReader->load($file);
-    $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
-    $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
-    $stmt = $con->prepare("INSERT INTO user(ma, hoten, email, password, is_admin) VALUES (?, ?, ?, ?, ?)");
-    for ($row = 2; $row <= $highestRow; $row++) {
-        $ma = $sheetData[$row]['A'];
-        $hoten = $sheetData[$row]['B'];
-        $email = $sheetData[$row]['C'];
-        $password = $sheetData[$row]['D'];
-        $is_admin = $sheetData[$row]['E'];
+    $listWorkSheets = $objReader->listWorksheetNames($file);
+    foreach ($listWorkSheets as $sheetName) {
+        $objReader->setLoadSheetsOnly($sheetName);
+        $objExcel = $objReader->load($file);
+        $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
+        $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
+        $stmt = $con->prepare("INSERT INTO user(ma, hoten, email, password, is_admin) VALUES (?, ?, ?, ?, ?)");
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $ma = $sheetData[$row]['A'];
+            $hoten = $sheetData[$row]['B'];
+            $email = $sheetData[$row]['C'];
+            $password = $sheetData[$row]['D'];
+            $is_admin = $sheetData[$row]['E'];
 
-        // Check for duplicate entry
-        $checkSql = "SELECT * FROM user WHERE ma = ?";
-        $stmtCheck = $con->prepare($checkSql);
-        $stmtCheck->bind_param("s", $ma);
-        $stmtCheck->execute();
-        $result = $stmtCheck->get_result();
-        if ($result->num_rows == 0 && !empty($ma)) {
-            $stmt->bind_param("ssssi", $ma, $hoten, $email, $password, $is_admin);
-            $stmt->execute();
+            // Check for duplicate entry
+            $checkSql = "SELECT * FROM user WHERE ma = ?";
+            $stmtCheck = $con->prepare($checkSql);
+            $stmtCheck->bind_param("s", $ma);
+            $stmtCheck->execute();
+            $result = $stmtCheck->get_result();
+            if ($result->num_rows == 0 && !empty($ma)) {
+                $stmt->bind_param("ssssi", $ma, $hoten, $email, $password, $is_admin);
+                $stmt->execute();
+            }
+            $stmtCheck->close();
         }
-        $stmtCheck->close();
+        $stmt->close();
     }
     echo "<script>alert('Thêm thành công')</script>";
-    $stmt->close();
+}
+
+if (isset($_POST['btnXuat'])) {
+    $objExcel = new PHPExcel();
+    $objExcel->setActiveSheetIndex(0);
+    $sheet = $objExcel->getActiveSheet()->setTitle('haha');
+    $rowCount = 1;
+
+    //Tạo tiêu đề cho cột trong excel
+    $sheet->setCellValue("A1", 'Mã sinh viên');
+    $sheet->setCellValue("B1", 'Tên sinh viên');
+    $sheet->setCellValue("C1", 'Email');
+    $sheet->setCellValue("D1", 'Mật khẩu');
+    $sheet->setCellValue("E1", 'Quyền truy cập');
+
+    $sql = "SELECT ma, hoten, email, password, is_admin FROM user";
+    $result = mysqli_query($con, $sql);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rowCount++;
+        $sheet->setCellValue("A{$rowCount}", $row['ma']);
+        $sheet->setCellValue("B{$rowCount}", $row['hoten']);
+        $sheet->setCellValue("C{$rowCount}", $row['email']);
+        $sheet->setCellValue("D{$rowCount}", $row['password']);
+        $sheet->setCellValue("E{$rowCount}", $row['is_admin']);
+    }
+
+    //định dạng cột tiêu đề
+    $sheet->getColumnDimension('A')->setAutoSize(true);
+    $sheet->getColumnDimension('B')->setAutoSize(true);
+    $sheet->getColumnDimension('C')->setAutoSize(true);
+    $sheet->getColumnDimension('D')->setAutoSize(true);
+    $sheet->getColumnDimension('E')->setAutoSize(true);
+
+    //gán màu nền
+    $sheet->getStyle('A1:E1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
+
+    //căn giữa
+    $sheet->getStyle('A1:E1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+    //Kẻ bảng 
+    $styleAray = [
+        'borders' => [
+            'allborders' => [
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+            ]
+        ]
+    ];
+    $sheet->getStyle("A1:E{$rowCount}")->applyFromArray($styleAray);
+    $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
+    $fileName = 'ExportExcel.xlsx';
+    $objWriter->save($fileName);
+    ob_end_clean(); // Xóa bộ đệm đầu ra
+    header("Content-Disposition: attachment; filename=\"{$fileName}\"");
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Length: ' . filesize($fileName));
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: no-cache');
+    readfile($fileName);
+    unlink($fileName); // Xóa tệp sau khi tải xuống
+    exit;
 }
 
 $ma = "";
@@ -56,6 +120,7 @@ if (isset($_POST['btnThemmoi'])) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="teacher_info.css">
 <link rel="stylesheet" href="teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
@@ -123,30 +188,50 @@ if (isset($_POST['btnThemmoi'])) {
         <form method="POST" action="" enctype="multipart/form-data">
             <div class="row">
                 <div class="col" style="margin:10px">
-                    <label>Mã sinh viên</label>
-                    <input type="text" class="form-control" placeholder="Mã sinh viên" name="txtma"
-                        value="<?php echo $ma ?>">
+                    <div class="input-group full-width">
+                        <i class="fa-solid fa-user"></i>
+                        <div class="form-field">
+                            <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>"
+                                placeholder="Mã sinh viên">
+                        </div>
+                    </div>
                 </div>
                 <div class="col" style="margin:10px">
-                    <label>Họ tên</label>
-                    <input type="text" class="form-control" placeholder="Họ tên" name="txthoten"
-                        value="<?php echo $ht ?>">
+                    <div class="input-group full-width">
+                        <i class="fa-solid fa-signature"></i>
+                        <div class="form-field">
+                            <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>"
+                                placeholder="Họ tên">
+                        </div>
+                    </div>
                 </div>
                 <div class="col" style="margin:10px">
-                    <label>Email</label>
-                    <input type="text" class="form-control" placeholder="Email" name="txtemail"
-                        value="<?php echo $em ?>">
+                    <div class="input-group full-width">
+                        <i class="fa-solid fa-envelope"></i>
+                        <div class="form-field">
+                            <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>"
+                                placeholder="Email">
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary" name="btnTimkiem"
-                style="margin-left:419px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
-                kiếm</button>
-            <button type="submit" class="btn btn-primary" name="btnThemmoi"
-                style="margin-left:100px; margin-top:10px; margin-bottom: 10px">Thêm
-                mới</button>
-            <div class="input-group mb-3" style="width: 300px; margin:10px; margin-left: 445px;">
-                <input type="file" class="form-control" aria-label="Gửi" name="file">
-                <button class="btn btn-outline-secondary" type="submit" name="btnGui">Gửi</button>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-info" name="btnTimkiem"
+                        style="margin-left:160px; margin-top:20px; margin-bottom: 10px;">Tìm
+                        kiếm</button>
+                </div>
+                <div class="col">
+                    <div class="input-group" style="width: 400px; margin-top:10px; margin-bottom: 10px;">
+                        <input class="form-control" type="file" id="formFile" name="file">
+                        <button class="btn btn-outline-success" type="submit" name="btnGui">Gửi</button>
+                        <button class="btn btn-outline-info" type="submit" name="btnXuat">Xuất file</button>
+                    </div>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-info" name="btnThemmoi"
+                        style="margin-left:100px; margin-top:20px; margin-bottom: 10px">Thêm mới</button>
+                </div>
             </div>
         </form>
         <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">

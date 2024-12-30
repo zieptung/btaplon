@@ -1,6 +1,8 @@
 <?php
-$mm = $_GET['mamon'];
+$msv = $_GET['ma'];
 include_once "../connectdb.php";
+
+$mm = '';
 $ht = '';
 $tm = '';
 $stc = '';
@@ -10,12 +12,11 @@ $cc = '';
 $gk = '';
 $ck = '';
 
-$sql1 = "SELECT * from diem Where mamon='$mm'";
+$sql1 = "SELECT * from diem Where ma='$msv'";
 $data = mysqli_query($con, $sql1);
 
-$sql_mon_hoc = "SELECT mamon FROM mon_hoc";
-$mon_hoc = mysqli_query($con, $sql_mon_hoc);
 if (isset($_POST["btnLuu"])) {
+    $mm = $_POST['txtmamon'];
     $ht = $_POST['txthoten'];
     $tm = $_POST['txttenmon'];
     $stc = $_POST['txtstc'];
@@ -24,7 +25,7 @@ if (isset($_POST["btnLuu"])) {
     $cc = $_POST['txtdiemcc'];
     $gk = $_POST['txtdiemgk'];
     $ck = $_POST['txtdiemck'];
-    $sql = "UPDATE diem SET hoten='$ht', tenmon='$tm', sotinchi='$stc', diemso='$ds', diemchu='$dc', diemcc='$cc', diemgk='$gk', diemck='$ck' WHERE mamon='$mm'";
+    $sql = "UPDATE diem SET mamon='$mm',hoten='$ht', tenmon='$tm', sotinchi='$stc', diemso='$ds', diemchu='$dc', diemcc='$cc', diemgk='$gk', diemck='$ck' WHERE ma='$msv'";
 
     $kq = mysqli_query($con, $sql);
     if ($kq) {
@@ -41,6 +42,7 @@ if (isset($_POST["btnBack"])) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="../teacher_info.css">
 <link rel="stylesheet" href="../teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
@@ -110,37 +112,89 @@ if (isset($_POST["btnBack"])) {
                 while ($r = mysqli_fetch_array($data)) {
                     ?>
                     <div class="form-group" style="width: 75%; margin-left: 150px; margin-top: 50px; margin-bottom: 10px;">
-                        <label>Mã học phần</label>
-                        <input type="text" class="form-control" placeholder="Tên sinh viên" name="txthoten"
-                            value="<?php echo $r['mamon'] ?>" style="margin-bottom: 20px;" readonly>
-                        <label>Tên sinh viên</label>
-                        <input type="text" class="form-control" placeholder="Tên sinh viên" name="txthoten"
-                            value="<?php echo $r['hoten'] ?>" style="margin-bottom: 20px;">
-                        <label>Tên học phần</label>
-                        <input type="text" class="form-control" placeholder="Tên học phần" name="txttenmon"
-                            value="<?php echo $r['tenmon'] ?>" style="margin-bottom: 20px;" readonly>
-                        <label>Số tín chỉ</label>
-                        <input type="text" class="form-control" placeholder="Số tín chỉ" name="txtstc"
-                            value="<?php echo $r['sotinchi'] ?>" style="margin-bottom: 20px;" readonly>
-                        <label>Điểm số</label>
-                        <input type="numeber" class="form-control" placeholder="Điểm số" name="txtdiemso"
-                            value="<?php echo $r['diemso'] ?>" style="margin-bottom: 20px;">
-                        <label>Điểm chữ</label>
-                        <input type="text" class="form-control" placeholder="Điểm chữ" name="txtdiemchu"
-                            value="<?php echo $r['diemchu'] ?>" style="margin-bottom: 20px;">
-                        <label>Điểm chuyên cần</label>
-                        <input type="number" class="form-control" placeholder="Điểm chuyên cần" name="txtdiemcc"
-                            value="<?php echo $r['diemcc'] ?>" style="margin-bottom: 20px;">
-                        <label>Điểm giữa kỳ</label>
-                        <input type="number" class="form-control" placeholder="Điểm giữa kỳ" name="txtdiemgk"
-                            value="<?php echo $r['diemgk'] ?>" style="margin-bottom: 20px;">
-                        <label>Điểm cuối kỳ</label>
-                        <input type="number" class="form-control" placeholder="Điểm cuối kỳ" name="txtdiemck"
-                            value="<?php echo $r['diemck'] ?>" style="margin-bottom: 20px;">
-                        <button type="submit" class="btn btn-primary" name="btnLuu"
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Mã học phần</label>
+                                <input class="info1" type="text" name="txtmamon" value="<?php echo $r['mamon']; ?>"
+                                    placeholder="Mã học phần">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Tên sinh viên</label>
+                                <input class="info1" type="text" name="txthoten" value="<?php echo $r['hoten'] ?>"
+                                    placeholder="Tên sinh viên">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Mã sinh viên</label>
+                                <input class="info1" type="text" name="txtmsv" value="<?php echo $r['ma'] ?>"
+                                    placeholder="Mã sinh viên" readonly>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Tên học phần</label>
+                                <input class="info1" type="text" name="txttenmon" value="<?php echo $r['tenmon'] ?>"
+                                    placeholder="Tên học phần" readonly>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Số tín chỉ</label>
+                                <input class="info1" type="text" name="txtstc" value="<?php echo $r['sotinchi'] ?>"
+                                    placeholder="Số tín chỉ" readonly>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Điểm số</label>
+                                <input class="info1" type="text" name="txtdiemso" value="<?php echo $r['diemso'] ?>"
+                                    placeholder="Điểm số">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Điểm chữ</label>
+                                <input class="info1" type="text" name="txtdiemchu" value="<?php echo $r['diemchu'] ?>"
+                                    placeholder="Điểm chữ">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Điểm chuyên cần</label>
+                                <input class="info1" type="text" name="txtdiemcc" value="<?php echo $r['diemcc'] ?>"
+                                    placeholder="Điểm chuyên cần">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Điểm giữa kỳ</label>
+                                <input class="info1" type="text" name="txtdiemgk" value="<?php echo $r['diemgk'] ?>"
+                                    placeholder="Điểm giữa kỳ">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Điểm cuối kỳ</label>
+                                <input class="info1" type="text" name="txtdiemck" value="<?php echo $r['diemck'] ?>"
+                                    placeholder="Điểm cuối kỳ">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success" name="btnLuu"
                             style="margin-left: 38%; margin-top: 10px; width: 200px">Lưu</button>
-                        <button type="submit" class="btn btn-primary" name="btnBack"
-                            style="margin-left:150px; margin-top:10px">Trở
+                        <button type="submit" class="btn btn-info" name="btnBack" style="margin-left:150px; margin-top:10px">Trở
                             về</button>
                     </div>
                     <?php

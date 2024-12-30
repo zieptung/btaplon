@@ -5,6 +5,7 @@
     box-shadow: 0 0 3px black;
     overflow: scroll;
 }
+
 .content::-webkit-scrollbar {
     display: none;
 }
@@ -15,7 +16,7 @@
     padding: 25px;
     background: white;
     border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .form-row {
@@ -25,10 +26,10 @@
     margin-bottom: 20px;
 }
 
-.form-row:hover{
+.form-row:hover {
     border-radius: 20px;
     background-color: #fff;
-    transform:scale3d(1.05,1.05,1.05); 
+    transform: scale3d(1.05, 1.05, 1.05);
 }
 
 .input-group {
@@ -135,6 +136,6 @@
     box-shadow: inset 400px 0 0 0 #00adb5;
 }
 
-.hidden{
+.hidden {
     display: none;
 }

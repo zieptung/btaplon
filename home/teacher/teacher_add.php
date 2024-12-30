@@ -10,18 +10,19 @@ if (isset($_POST['btnGui'])) {
         $objExcel = $objReader->load($file);
         $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
         $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
-        $stmt = $con->prepare("INSERT INTO diem(mamon, hoten, tenmon, sotinchi, diemso, diemchu, diemcc, diemgk, diemck, loai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $con->prepare("INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemso, diemchu, diemcc, diemgk, diemck, loai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         for ($row = 2; $row <= $highestRow; $row++) {
             $mamon = $sheetData[$row]['A'];
             $hoten = $sheetData[$row]['B'];
-            $tenmon = $sheetData[$row]['C'];
-            $sotinchi = $sheetData[$row]['D'];
-            $diemso = $sheetData[$row]['E'];
-            $diemchu = $sheetData[$row]['F'];
-            $diemcc = $sheetData[$row]['G'];
-            $diemgk = $sheetData[$row]['H'];
-            $diemck = $sheetData[$row]['I'];
-            $loai = $sheetData[$row]['J'];
+            $msv = $sheetData[$row]['C'];
+            $tenmon = $sheetData[$row]['D'];
+            $sotinchi = $sheetData[$row]['E'];
+            $diemso = $sheetData[$row]['F'];
+            $diemchu = $sheetData[$row]['G'];
+            $diemcc = $sheetData[$row]['H'];
+            $diemgk = $sheetData[$row]['I'];
+            $diemck = $sheetData[$row]['J'];
+            $loai = $sheetData[$row]['K'];
 
             // Check for duplicate entry
             $checkSql = "SELECT * FROM diem WHERE mamon = ? AND hoten = ?";
@@ -30,16 +31,17 @@ if (isset($_POST['btnGui'])) {
             $stmtCheck->execute();
             $result = $stmtCheck->get_result();
             if ($result->num_rows == 0 && !empty($mamon)) {
-                $stmt->bind_param("sssiisiiis", $mamon, $hoten, $tenmon, $sotinchi, $diemso, $diemchu, $diemcc, $diemgk, $diemck, $loai);
+                $stmt->bind_param("ssssiisiiis", $mamon, $hoten, $msv, $tenmon, $sotinchi, $diemso, $diemchu, $diemcc, $diemgk, $diemck, $loai);
                 $stmt->execute();
             }
             $stmtCheck->close();
         }
     }
     $stmt->close();
-    echo "<script>alert('Thêm thành công')</script>";
+    echo "<script>alert('Thêm thành công!'); window.location.href='teacher_board.php';</script>";
 }
 
+$msv = '';
 $id = '';
 $mm = '';
 $ht = '';
@@ -60,6 +62,7 @@ $mon_hoc = mysqli_query($con, $sql1);
 if (isset($_POST["btnLuu"])) {
     $mm = $_POST['txtmamon'];
     $ht = $_POST['txthoten'];
+    $msv = $_POST['txtmsv'];
     $tm = $_POST['txttenmon'];
     $stc = $_POST['txtstc'];
     $ds = $_POST['txtdiemso'];
@@ -67,14 +70,13 @@ if (isset($_POST["btnLuu"])) {
     $cc = $_POST['txtdiemcc'];
     $gk = $_POST['txtdiemgk'];
     $ck = $_POST['txtdiemck'];
-    $sql = "INSERT INTO diem (mamon, hoten, tenmon, sotinchi, diemso, diemchu, diemcc, diemgk, diemck)
-    VALUES ('$mm', '$ht', '$tm', '$stc', '$ds', '$dc', '$cc', '$gk', '$ck')";
+    $sql = "INSERT INTO diem (mamon, hoten, ma, tenmon, sotinchi, diemso, diemchu, diemcc, diemgk, diemck)
+    VALUES ('$mm', '$ht', '$msv', '$tm', '$stc', '$ds', '$dc', '$cc', '$gk', '$ck')";
 
     $kq = mysqli_query($con, $sql);
-    if ($kq)
-        echo "<script>alert('Thêm mới thành công!')</script>";
-    else
-        echo "<script>alert('Thêm mới thất bại!')</script>";
+    if ($kq) {
+        echo "<script>alert('Thêm mới thành công!'); window.location.href='teacher_board.php';</script>";
+    }
 }
 
 ?>
@@ -84,6 +86,7 @@ if (isset($_POST["btnLuu"])) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="teacher_info.css">
 <link rel="stylesheet" href="teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
@@ -147,55 +150,132 @@ if (isset($_POST["btnLuu"])) {
         </ul>
     </div>
     <article class="content">
-        <form action="" method="POST" enctype="multipart/form-data">
-            <div class="input-group mb-3" style="width: 300px; margin:10px; margin-left: 445px;">
-                <input type="file" class="form-control" aria-label="Gửi" name="file">
-                <button class="btn btn-outline-secondary" type="submit" name="btnGui">Gửi</button>
-            </div>
-            <div class="form-group" style="width: 75%; margin-left: 150px; margin-top: 0px; margin-bottom: 10px;">
-                <label>Mã học phần</label>
-                <select name="txtmamon" id="" class="form-control" style="margin-bottom: 20px;">
-                    <option value="">---Chọn mã học phần---</option>
-                    <?php
-                    if (isset($mon_hoc) && mysqli_num_rows($mon_hoc) > 0) {
-                        while ($row = mysqli_fetch_assoc($mon_hoc)) {
-                            ?>
-                            <option value="<?php echo $row['mamon'] ?>">
-                                <?php echo $row['mamon'] ?>
-                            </option>
-                            <?php
-                        }
-                    }
-                    ?>
-                </select>
-                <label>Tên sinh viên</label>
-                <input type="text" class="form-control" placeholder="Tên sinh viên" name="txthoten"
-                    value="<?php echo $ht ?>" style="margin-bottom: 20px;">
-                <label>Tên học phần</label>
-                <input type="text" class="form-control" placeholder="Tên học phần" name="txttenmon"
-                    value="<?php echo $tm ?>" style="margin-bottom: 20px;">
-                <label>Số tín chỉ</label>
-                <input type="text" class="form-control" placeholder="Số tín chỉ" name="txtstc"
-                    value="<?php echo $stc ?>" style="margin-bottom: 20px;">
-                <label>Điểm số</label>
-                <input type="numeber" class="form-control" placeholder="Điểm số" name="txtdiemso"
-                    value="<?php echo $ds ?>" style="margin-bottom: 20px;">
-                <label>Điểm chữ</label>
-                <input type="text" class="form-control" placeholder="Điểm chữ" name="txtdiemchu"
-                    value="<?php echo $dc ?>" style="margin-bottom: 20px;">
-                <label>Điểm chuyên cần</label>
-                <input type="number" class="form-control" placeholder="Điểm chuyên cần" name="txtdiemcc"
-                    value="<?php echo $cc ?>" style="margin-bottom: 20px;">
-                <label>Điểm giữa kỳ</label>
-                <input type="number" class="form-control" placeholder="Điểm giữa kỳ" name="txtdiemgk"
-                    value="<?php echo $gk ?>" style="margin-bottom: 20px;">
-                <label>Điểm cuối kỳ</label>
-                <input type="number" class="form-control" placeholder="Điểm cuối kỳ" name="txtdiemck"
-                    value="<?php echo $ck ?>" style="margin-bottom: 20px;">
-                <button type="submit" class="btn btn-primary" name="btnLuu"
-                    style="margin-left: 38%; width: 200px">Lưu</button>
-            </div>
+        <div class="container mt-4">
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="col">
+                    <div class="input-group"
+                        style="width: 400px; margin-top:10px; margin-bottom: 10px; margin-left: 350px;">
+                        <input class="form-control" type="file" id="formFile" name="file">
+                        <button class="btn btn-outline-success" type="submit" name="btnGui">Gửi</button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Mã học phần</label>
+                            <select name="txtmamon" id="" class="info1">
+                                <option value="">---Chọn mã học phần---</option>
+                                <?php
+                                if (isset($mon_hoc) && mysqli_num_rows($mon_hoc) > 0) {
+                                    while ($row = mysqli_fetch_assoc($mon_hoc)) {
+                                        ?>
+                                        <option value="<?php echo $row['mamon'] ?>">
+                                            <?php echo $row['mamon'] ?>
+                                        </option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Tên sinh viên</label>
+                            <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>"
+                                placeholder="Họ và tên">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Mã sinh viên</label>
+                            <input class="info1" type="text" name="txtmsv" value="<?php echo $msv; ?>"
+                                placeholder="Mã sinh viên">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Tên học phần</label>
+                            <input class="info1" type="text" name="txttenmon" value="<?php echo $tm; ?>"
+                                placeholder="Tên học phần">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Số tín chỉ</label>
+                            <input class="info1" type="text" name="txtstc" value="<?php echo $stc; ?>"
+                                placeholder="Số tín chỉ">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Điểm số</label>
+                            <input class="info1" type="text" name="txtdiemso" value="<?php echo $ds; ?>"
+                                placeholder="Điểm số">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Điểm chữ</label>
+                            <input class="info1" type="text" name="txtdiemchu" value="<?php echo $dc; ?>"
+                                placeholder="Điểm chữ">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Điểm chuyên cần</label>
+                            <input class="info1" type="text" name="txtdiemcc" value="<?php echo $cc; ?>"
+                                placeholder="Điểm chuyên cần">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Điểm giữa kỳ</label>
+                            <input class="info1" type="text" name="txtdiemgk" value="<?php echo $gk; ?>"
+                                placeholder="Điểm giữa kỳ">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <div class="form-field">
+                            <label>Điểm cuối kỳ</label>
+                            <input class="info1" type="text" name="txtdiemck" value="<?php echo $ck; ?>"
+                                placeholder="Điểm cuối kỳ">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" name="btnLuu"
+                    style="margin-left: 38%; width: 200px; margin-top:10px; margin-bottom: 10px">Lưu</button>
+        </div>
         </form>
+        </div>
     </article>
 </body>
 

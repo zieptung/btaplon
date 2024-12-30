@@ -34,7 +34,7 @@ if (isset($_POST["btnDangnhap"])) {
             if ($checkResult->num_rows == 0) {
                 $insertSql = "INSERT INTO giang_vien (ma, hoten) VALUES (?, ?)";
                 $stmtInsert = $con->prepare($insertSql);
-                $stmtInsert->bind_param("sss", $ma, $hoten, $ns);
+                $stmtInsert->bind_param("ss", $ma, $hoten);
                 $stmtInsert->execute();
             }
 

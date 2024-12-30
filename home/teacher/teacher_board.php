@@ -1,51 +1,24 @@
 <?php
-include_once("connectdb.php");
-$mm='';
-$tm='';
-$stc='';
-$bm='';
-$ds='';
-$dc='';
-$loai='';
-$cc='';
-$gk='';
-$ck='';
-$diemtong='';
-$sql='Select * from mon_hoc';
-$lop_hoc=mysqli_query($con,$sql);
-$data = $lop_hoc;
-if(isset($_POST['timkiem'])){
-    $mm=$_POST['txtmamon'];
-    $tm=$_POST['txttenmon'];
-    $sql="SELECT * FROM mon_hoc WHERE mamon like'%$mm%' and tenmon like'%$tm%'";
-    $data=mysqli_query($con,$sql);
+include_once "../connectdb.php";
+$ht = "";
+$tm = "";
+
+$sql = "SELECT * FROM diem";
+if (isset($_POST['btnTimkiem'])) {
+    $ht = $_POST['txthoten'];
+    $tm = $_POST['txttenmon'];
+    $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%'";
+    $ht = "";
+    $tm = "";
 }
-if(isset($_POST['btnnew'])){
-    $mm = isset($_POST['txtmamon']) ? $_POST['txtmamon'] : '';
-    $tm = isset($_POST['txttenmon']) ? $_POST['txttenmon'] : '';
-    $stc = isset($_POST['txtsotinchi']) ? $_POST['txtsotinchi'] : '';
-    $bm = isset($_POST['txtbomon']) ? $_POST['txtbomon'] : '';
-    $ds = isset($_POST['txtdiemso']) ? $_POST['txtdiemso'] : '';
-    $dc = isset($_POST['txtdiemchu']) ? $_POST['txtdiemchu'] : '';
-    $loai = isset($_POST['txtloai']) ? $_POST['txtloai'] : '';
-    $cc = isset($_POST['txtdiemcc']) ? $_POST['txtdiemcc'] : '';
-    $gk = isset($_POST['txtdiemgk']) ? $_POST['txtdiemgk'] : '';
-    $ck = isset($_POST['txtdiemck']) ? $_POST['txtdiemck'] : '';
-    $diemtong = isset($_POST['txtdiemtong']) ? $_POST['txtdiemtong'] : '';
-    // Thực hiện câu lệnh SQL
-    $sql="INSERT INTO mon_hoc(mamon,tenmon,sotinchi,bomon,diemso,diemcc,loai,diemgk,diemck,diemtong) VALUES('$mm','$tm','$stc','$bm','$ds','$dc','$loai','$cc','$gk','$ck','$diemtong')";
-}
-if(isset($_POST["btnnew"])){
-    header('location:teacher_them.php');
- }
+$data = mysqli_query($con, $sql);
 ?>
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-<link rel="stylesheet" href="teacher_homepage.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
@@ -88,9 +61,9 @@ if(isset($_POST["btnnew"])){
                 </a>
             </li>
             <li>
-                <a href="teacher_fix.php">
+                <a href="teacher_add.php">
                     <span class="icon"><i class="fa-solid fa-wrench"></i></span>
-                    <span class="text">Sửa điểm</span>
+                    <span class="text">Thêm điểm sinh viên</span>
                 </a>
             </li>
             <li>
@@ -109,68 +82,73 @@ if(isset($_POST["btnnew"])){
     </div>
     <!-- content -->
     <article class="content">
-    <form method="post" action="">
-    <div class="form-group">
-            <div>
-                <label for="mamon"style="width: 250px; padding: 10px;">Mã môn</label>
-                <input type="text" class="form-control" id="mamon" name="txtmamon" value="<?php echo $mm ?>">
-            </div>
-         </div>
-        <div class="form-group"style="width: 250px; padding: 10px;">
-            <label for="hoten">Tên môn</label>
-            <input type="text" class="form-control" id="tenmon" name="txttenmon" value="<?php echo $tm ?>">
-        </div>
-        <button type="submit" class="btn btn-primary" name="btnnew"style=" margin:10px ">Thêm </button>
-         &emsp;&emsp;&emsp;
-        <button type="submit" class="btn btn-primary" name="timkiem">Tìm kiếm</button>
-        <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>STT</th>
-                <th>Mã Môn</th>
-                <th>Tên môn</th>
-                <th>Số tín chỉ</th>
-                <th>Bộ môn</th>
-                <th>Điểm số</th>
-                <th>Điểm chữ</th>
-                <th>Loại</th>
-                <th>Điểm chuyên cần</th>
-                <th>Điểm giữa kỳ</th>
-                <th>Điểm cuối kỳ</th>
-                <th>Điểm Tổng</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-            if(isset($data)&&mysqli_num_rows($data)>0){
-               $i=1;
-               while($row = mysqli_fetch_assoc($data)){
-                  ?>
-         <tr>
-            <td><?php echo $i++ ?></td>
-            <td><?php echo $row['mamon'] ?></td>
-            <td><?php echo $row['tenmon'] ?></td>
-            <td><?php echo $row['sotinchi'] ?></td>
-            <td><?php echo $row['bomon'] ?></td>
-            <td><?php echo $row['diemso'] ?></td>
-            <td><?php echo $row['diemchu'] ?></td>
-            <td><?php echo $row['loai'] ?></td>
-            <td><?php echo $row['diemcc'] ?></td>
-            <td><?php echo $row['diemgk'] ?></td>
-            <td><?php echo $row['diemck'] ?></td>
-            <td><?php echo $row['diemtong'] ?></td>
-            <td>
-               <!-- --link chinh sua va xoa --> 
-               <a href="./teacher_fixpoint.php?mamon=<?php echo $row['mamon'] ?>"><i class="bi bi-pencil-square"></i></a>
-               &nbsp;&nbsp;&nbsp;
-               <a href="./teacher_del.php?mamon=<?php echo $row['mamon'] ?>"><i class="bi bi-trash3-fill"></i></a> 
-            <td>
-               
-         </tr>
-         <?php
-               }
-         }
-         ?>
+        <form method="post" action="">
+            <form method="POST" action="" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col" style="margin:10px">
+                        <label>Tên sinh viên</label>
+                        <input type="text" class="form-control" placeholder="Tên sinh viên" name="txthoten"
+                            value="<?php echo $ht ?>">
+                    </div>
+                    <div class="col" style="margin:10px">
+                        <label>Tên học phần</label>
+                        <input type="text" class="form-control" placeholder="Tên học phần" name="txttenmon"
+                            value="<?php echo $tm ?>">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" name="btnTimkiem"
+                    style="margin-left:550px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
+                    kiếm</button>
+                <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
+                    <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã học phần</th>
+                            <th>Tên sinh viên</th>
+                            <th>Tên học phần</th>
+                            <th>Số tín chỉ</th>
+                            <th>Điểm số</th>
+                            <th>Điểm chữ</th>
+                            <th>Điểm chuyên cần</th>
+                            <th>Điểm giữa kỳ</th>
+                            <th>Điểm cuối kỳ</th>
+                            <th>Điểm tổng</th>
+                            <th>Loại</th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                        <?php
+                        if (isset($data) && mysqli_num_rows($data) > 0) {
+                            $i = 1;
+                            while ($row = mysqli_fetch_assoc($data)) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $i++ ?></td>
+                                    <td><?php echo $row['mamon'] ?></td>
+                                    <td><?php echo $row['hoten'] ?></td>
+                                    <td><?php echo $row['tenmon'] ?></td>
+                                    <td><?php echo $row['sotinchi'] ?></td>
+                                    <td><?php echo $row['diemso'] ?></td>
+                                    <td><?php echo $row['diemchu'] ?></td>
+                                    <td><?php echo $row['diemcc'] ?></td>
+                                    <td><?php echo $row['diemgk'] ?></td>
+                                    <td><?php echo $row['diemck'] ?></td>
+                                    <td><?php echo $row['diemtong'] ?></td>
+                                    <td><?php echo $row['loai'] ?></td>
+                                    <td>
+                                        <a href="./manager_diemsv/teacher_fix_diemsv.php?mamon=<?php echo $row['mamon'] ?>"
+                                            class="btn btn-light"><i class=" fa-solid fa-wrench"></i></a>
+                                        <a href="./manager_diemsv/teacher_del_diemsv.php?mamon=<?php echo $row['mamon'] ?>"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')"
+                                            class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
     </article>
 </body>
+
 </html>

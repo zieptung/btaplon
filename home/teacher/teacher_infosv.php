@@ -264,8 +264,8 @@ if (isset($_POST['btnThemmoi'])) {
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['password'] ?></td>
                             <td>
-                                <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>"
-                                    class="btn btn-light""><i class=" fa-solid fa-wrench"></i></a>
+                                <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>" class="btn btn-light"><i
+                                        class=" fa-solid fa-wrench"></i></a>
                                 <a href=" ./manager_sv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
                                     onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i
                                         class="fa-solid fa-trash"></i></a>

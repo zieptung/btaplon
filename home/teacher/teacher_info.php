@@ -56,8 +56,8 @@ if (isset($_POST['btnluu'])) {
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-<link rel="stylesheet" href="teacher_homepage.css">
 <link rel="stylesheet" href="teacher_info.css">
+<link rel="stylesheet" href="teacher_homepage.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
@@ -108,6 +108,12 @@ if (isset($_POST['btnluu'])) {
                 <a href="teacher_board.php">
                     <span class="icon"><i class="fa-solid fa-table"></i></span>
                     <span class="text">Bảng điểm sinh viên</span>
+                </a>
+            </li>
+            <li>
+                <a href="teacher_listgv.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Danh sách quản lý</span>
                 </a>
             </li>
             <li>

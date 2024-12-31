@@ -20,22 +20,24 @@ if (isset($_POST["btnDangnhap"])) {
             $_SESSION['user_id'] = $row['ma'];
             $_SESSION['is_admin'] = $row['is_admin'];
 
-            // Lưu lại mã và họ tên
-            $ma = $row['ma'];
-            $hoten = $row['hoten'];
+            // Lưu lại mã và họ tên nếu người dùng là admin
+            if ($row['is_admin'] == 1) {
+                $ma = $row['ma'];
+                $hoten = $row['hoten'];
 
-            // Kiểm tra xem mã đã tồn tại trong bảng giang_vien chưa
-            $checkSql = "SELECT * FROM giang_vien WHERE ma = ?";
-            $stmtCheck = $con->prepare($checkSql);
-            $stmtCheck->bind_param("s", $ma);
-            $stmtCheck->execute();
-            $checkResult = $stmtCheck->get_result();
+                // Kiểm tra xem mã đã tồn tại trong bảng giang_vien chưa
+                $checkSql = "SELECT * FROM giang_vien WHERE ma = ?";
+                $stmtCheck = $con->prepare($checkSql);
+                $stmtCheck->bind_param("s", $ma);
+                $stmtCheck->execute();
+                $checkResult = $stmtCheck->get_result();
 
-            if ($checkResult->num_rows == 0) {
-                $insertSql = "INSERT INTO giang_vien (ma, hoten) VALUES (?, ?)";
-                $stmtInsert = $con->prepare($insertSql);
-                $stmtInsert->bind_param("ss", $ma, $hoten);
-                $stmtInsert->execute();
+                if ($checkResult->num_rows == 0) {
+                    $insertSql = "INSERT INTO giang_vien (ma, hoten) VALUES (?, ?)";
+                    $stmtInsert = $con->prepare($insertSql);
+                    $stmtInsert->bind_param("ss", $ma, $hoten);
+                    $stmtInsert->execute();
+                }
             }
 
             // Chuyển hướng dựa trên vai trò của người dùng

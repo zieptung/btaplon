@@ -96,11 +96,20 @@ if (isset($_POST['btnTimkiem'])) {
     $ht = $_POST['txthoten'];
     $tm = $_POST['txttenmon'];
     $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%'";
-    $ht = "";
-    $tm = "";
 }
 $data = mysqli_query($con, $sql);
 
+
+$sortOrder = "DESC"; //Biến sắp xếp mặc định
+if (isset($_POST['sortOrder'])) {
+    $sortOrder = $_POST['sortOrder'];
+}
+if (isset($_POST['btnSapxep'])) {
+    $ht = $_POST['txthoten'];
+    $tm = $_POST['txttenmon'];
+    $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' ORDER BY diemtong $sortOrder";
+    $data = mysqli_query($con, $sql);
+}
 ?>
 
 <!DOCTYPE html>
@@ -164,6 +173,12 @@ $data = mysqli_query($con, $sql);
                 </a>
             </li>
             <li>
+                <a href="teacher_listgv.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Danh sách quản lý</span>
+                </a>
+            </li>
+            <li>
                 <a href="teacher_logout.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>
@@ -194,11 +209,26 @@ $data = mysqli_query($con, $sql);
                             </div>
                         </div>
                     </div>
+                    <div class="col" style="margin:10px">
+                        <div class="input-group full-width">
+                            <i class="fa-solid fa-arrow-up-wide-short"></i>
+                            <div class="form-field">
+                                <label for="sortOrder">Sắp xếp</label>
+                                <select class="info1" name="sortOrder">
+                                    <option value="DESC" <?php if ($sortOrder == "DESC")
+                                        echo "selected"; ?>>Tăng dần</option>
+                                    <option value="ASC" <?php if ($sortOrder == "ASC")
+                                        echo "selected"; ?>>Giảm dần</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-info" name="btnTimkiem"
-                    style="margin-left:473px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
+                    style="margin-left:390px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
                     kiếm</button>
                 <button class="btn btn-info" type="submit" name="btnXuat">Xuất file</button>
+                <button class="btn btn-info" type="submit" name="btnSapxep" style="margin-left:60px;">Sắp xếp</button>
                 <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
                     <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">
                         <tr>

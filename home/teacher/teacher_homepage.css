@@ -1,116 +1,107 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "poppins", sans-serif;
 }
 
 .header-username {
-  font-size: 20px;
+    font-size: 20px;
 }
 
 .header {
-  background-color: #222831;
-  padding: 40px;
-  margin-left: 60px;
-  box-shadow: 0 0 5px black;
-  color: #eeeeee;
-  text-align: right;
+    background-color: #222831;
+    padding: 40px;
+    margin-left: 60px;
+    box-shadow: 0 0 5px black;
+    color: #eeeeee;
+    text-align: right;
 }
 
 .header-icon {
-  font-size: 30px;
+    font-size: 30px;
 }
 
 .header-text {
-  position: fixed;
-  right: 590px;
-  top: 40px;
-  height: 60px;
-  font-size: 22px;
-  letter-spacing: 0.6px;
-  font-weight: 55 0;
-  text-transform: uppercase;
-  color: #eeeeee;
+    position: fixed;
+    right: 590px;
+    top: 40px;
+    height: 60px;
+    font-size: 22px;
+    letter-spacing: 0.6px;
+    font-weight: 55 0;
+    text-transform: uppercase;
+    color: #eeeeee;
 }
 
 body {
-  background: #eeeeee;
+    background: #eeeeee;
 }
 
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 290px;
-  background: #222831;
-  padding-top: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 290px;
+    background: #222831;
+    padding-top: 10px;
 }
 
-.sidebar > ul {
-  position: relative;
-  height: 97vh;
+.sidebar>ul {
+    position: relative;
+    height: 97vh;
 }
 
-.sidebar > ul > li {
-  list-style: none;
-  margin: 5px 0;
+.sidebar>ul>li {
+    list-style: none;
+    margin: 5px 0;
 }
 
-.sidebar > ul > li:hover {
-  background: #00adb5;
-  transition: 0.3s ease;
+.sidebar>ul>li:hover {
+    background: #00adb5;
+    transition: 0.3s ease;
 }
 
-.sidebar > ul > li > a {
-  position: relative;
-  display: flex;
-  white-space: nowrap;
-  text-decoration: none;
-  color: #eeeeee;
+.sidebar>ul>li>a {
+    position: relative;
+    display: flex;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #eeeeee;
 }
 
 .logo {
-  margin-bottom: 80px;
+    margin-bottom: 80px;
 }
 
-.sidebar > ul > li:last-child {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+.sidebar>ul>li:last-child {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .icon {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60px;
-  min-width: 75px;
-  font-size: 22px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    min-width: 75px;
+    font-size: 22px;
 }
 
 .text {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 60px;
-  font-size: 17px;
-  letter-spacing: 0.6px;
-  font-weight: 55 0;
-  text-transform: uppercase;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    font-size: 16px;
+    letter-spacing: 0.6px;
+    font-weight: 55 0;
+    text-transform: uppercase;
 }
-.content {
-  background-color: #d6d3d3;
-  height: 628px;
-  margin-left: 290px;
-  box-shadow: 0 0 3px black;
-  overflow: scroll;
-}
-.content::-webkit-scrollbar {
-  display: none;
-}
+
 .content {
     background-color: #d6d3d3;
     height: 640px;

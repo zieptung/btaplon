@@ -176,6 +176,12 @@ if (isset($_POST['btnThemmoi'])) {
                 </a>
             </li>
             <li>
+                <a href="teacher_listgv.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Danh sách quản lý</span>
+                </a>
+            </li>
+            <li>
                 <a href="teacher_logout.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>

@@ -1,18 +1,9 @@
 <?php
-$msv = $_GET['ma'];
+session_start();
 include_once "../connectdb.php";
+$msv = $_GET['ma'];
 
-$mm = '';
-$ht = '';
-$tm = '';
-$stc = '';
-$ds = '';
-$dc = '';
-$cc = '';
-$gk = '';
-$ck = '';
-
-$sql1 = "SELECT * from diem Where ma='$msv'";
+$sql1 = "SELECT * from diem Where ma='$msv' LIMIT 1";
 $data = mysqli_query($con, $sql1);
 
 if (isset($_POST["btnLuu"])) {
@@ -25,10 +16,9 @@ if (isset($_POST["btnLuu"])) {
     $cc = $_POST['txtdiemcc'];
     $gk = $_POST['txtdiemgk'];
     $ck = $_POST['txtdiemck'];
-    $sql = "UPDATE diem SET mamon='$mm',hoten='$ht', tenmon='$tm', sotinchi='$stc', diemso='$ds', diemchu='$dc', diemcc='$cc', diemgk='$gk', diemck='$ck' WHERE ma='$msv'";
+    $sql = "UPDATE diem SET mamon='$mm',hoten='$ht', tenmon='$tm', sotinchi='$stc', diemso='$ds', diemchu='$dc', diemcc='$cc', diemgk='$gk', diemck='$ck' WHERE ma='$msv' LIMIT 1";
 
-    $kq = mysqli_query($con, $sql);
-    if ($kq) {
+    if (mysqli_query($con, $sql)) {
         echo "<script>alert('Cập nhật thành công!'); window.location.href='../teacher_board.php';</script>";
     }
 }
@@ -52,8 +42,6 @@ if (isset($_POST["btnBack"])) {
         <span class="header-text">Thêm điểm sinh viên</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
-        session_start();
-        include_once "../connectdb.php";
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $sql = "SELECT hoten FROM user WHERE ma = '$user_id'";
@@ -98,6 +86,12 @@ if (isset($_POST["btnBack"])) {
                 </a>
             </li>
             <li>
+                <a href="../teacher_listgv.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Danh sách quản lý</span>
+                </a>
+            </li>
+            <li>
                 <a href="../teacher_logout.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>
@@ -117,7 +111,7 @@ if (isset($_POST["btnBack"])) {
                             <div class="form-field">
                                 <label>Mã học phần</label>
                                 <input class="info1" type="text" name="txtmamon" value="<?php echo $r['mamon']; ?>"
-                                    placeholder="Mã học phần">
+                                    placeholder="Mã học phần" readonly>
                             </div>
                         </div>
                         <div class="input-group" style="margin-bottom: 10px;">

@@ -11,16 +11,16 @@ if (isset($_POST['btnLuu'])) {
     $pa = $_POST['txtpassword'];
 
     $sql1 = "UPDATE user SET hoten='$ht', email='$em', password ='$pa' WHERE ma='$ma'";
-    $sql2 = "UPDATE sinh_vien SET hoten='$ht', email='$em' WHERE ma='$ma'";
+    $sql2 = "UPDATE giang_vien SET hoten='$ht', email='$em' WHERE ma='$ma'";
 
     $kq1 = mysqli_query($con, $sql1);
     $kq2 = mysqli_query($con, $sql2);
     if ($kq1 && $kq2) {
-        echo "<script>alert('Sửa thành công!'); window.location.href='../teacher_infosv.php';</script>";
+        echo "<script>alert('Sửa thành công!'); window.location.href='../teacher_listgv.php';</script>";
     }
 }
 if (isset($_POST['btnBack'])) {
-    header("location: ../teacher_infosv.php");
+    header("location: ../teacher_listgv.php");
 }
 ?>
 <!DOCTYPE html>
@@ -114,8 +114,8 @@ if (isset($_POST['btnBack'])) {
                         <div class="input-group" style="margin-bottom: 20px;">
                             <i class="fa-solid fa-arrow-right"></i>
                             <div class="form-field">
-                                <label>Mã sinh viên</label>
-                                <input class="info1" type="text" value="<?php echo $r['ma']; ?>" placeholder="Mã sinh viên"
+                                <label>Mã giảng viên</label>
+                                <input class="info1" type="text" value="<?php echo $r['ma']; ?>" placeholder="Mã giảng viên"
                                     disabled>
                                 <input type="hidden" name="txtma" value="<?php echo $r['ma']; ?>">
                             </div>

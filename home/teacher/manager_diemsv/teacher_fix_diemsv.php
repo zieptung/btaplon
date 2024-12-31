@@ -116,7 +116,8 @@ if (isset($_POST["btnBack"])) {
                      <div class="form-field">
                         <label>Mã học phần</label>
                         <input class="info1" type="text" name="txtmamon" value="<?php echo $r['mamon']; ?>"
-                           placeholder="Mã học phần" readonly>
+                           placeholder="Mã học phần" disabled>
+                        <input type="hidden" name="txtmamon" value="<?php echo $r['mamon']; ?>" placeholder="Mã học phần">
                      </div>
                   </div>
                   <div class="input-group" style="margin-bottom: 10px;">
@@ -132,7 +133,8 @@ if (isset($_POST["btnBack"])) {
                      <div class="form-field">
                         <label>Mã sinh viên</label>
                         <input class="info1" type="text" name="txtma" value="<?php echo $r['ma'] ?>"
-                           placeholder="Mã sinh viên" readonly>
+                           placeholder="Mã sinh viên" disabled>
+                        <input type="hidden" name="txtma" value="<?php echo $r['ma'] ?>" placeholder="Mã sinh viên">
                      </div>
                   </div>
                   <div class="input-group" style="margin-bottom: 10px;">
@@ -140,7 +142,8 @@ if (isset($_POST["btnBack"])) {
                      <div class="form-field">
                         <label>Tên học phần</label>
                         <input class="info1" type="text" name="txttenmon" value="<?php echo $r['tenmon'] ?>"
-                           placeholder="Tên học phần" readonly>
+                           placeholder="Tên học phần" disabled>
+                        <input type="hidden" name="txttenmon" value="<?php echo $r['tenmon'] ?>" placeholder="Tên học phần">
                      </div>
                   </div>
                   <div class="input-group" style="margin-bottom: 10px;">
@@ -148,7 +151,8 @@ if (isset($_POST["btnBack"])) {
                      <div class="form-field">
                         <label>Số tín chỉ</label>
                         <input class="info1" type="text" name="txtstc" value="<?php echo $r['sotinchi'] ?>"
-                           placeholder="Số tín chỉ" readonly>
+                           placeholder="Số tín chỉ" disabled>
+                        <input type="hidden" name="txtstc" value="<?php echo $r['sotinchi'] ?>" placeholder="Số tín chỉ">
                      </div>
                   </div>
                   <div class="input-group" style="margin-bottom: 10px;">

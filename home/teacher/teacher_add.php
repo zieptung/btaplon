@@ -11,7 +11,7 @@ if (isset($_POST['btnGui'])) {
         $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
         $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
 
-        // Move statement preparation inside the file upload condition
+        // Di chuyển việc chuẩn bị câu lệnh vào trong điều kiện tải lên tệp
         if ($stmt = $con->prepare("INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
             for ($row = 2; $row <= $highestRow; $row++) {
                 $mamon = $sheetData[$row]['A'];
@@ -35,7 +35,7 @@ if (isset($_POST['btnGui'])) {
                 }
                 $stmtCheck->close();
             }
-            $stmt->close(); // Only close if statement was created successfully
+            $stmt->close(); // Đóng nếu câu lệnh được tạo thành công
         }
     }
     echo "<script>alert('Thêm thành công!'); window.location.href='teacher_board.php';</script>";
@@ -89,6 +89,16 @@ if (isset($_POST["btnNhap"])) {
     $result = mysqli_query($con, $sql);
     if ($row = mysqli_fetch_assoc($result)) {
         $ht = $row['hoten'];
+    }
+}
+
+if (isset($_POST["txtmamon"])) {
+    $mamon = $_POST['txtmamon'];
+    $sql = "SELECT tenmon, sotinchi FROM mon_hoc WHERE mamon = '$mamon'";
+    $result = mysqli_query($con, $sql);
+    if ($row = mysqli_fetch_assoc($result)) {
+        $tm = $row['tenmon'];
+        $stc = $row['sotinchi'];
     }
 }
 ?>
@@ -189,12 +199,12 @@ if (isset($_POST["btnNhap"])) {
                         <div class="form-field">
                             <label>Mã sinh viên</label>
                             <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>"
-                                placeholder="Mã sinh viên" id="studentIdInput">
+                                placeholder="Mã sinh viên" id="studentIdInput" oninput="showNhapButton()">
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success" name="btnNhap"
-                    style="margin-left: 42%; width: 200px; margin-top:10px; margin-bottom: 10px">Nhập</button>
+                <button type="submit" class="btn btn-success" name="btnNhap" id="btnNhap"
+                    style="margin-left: 42%; width: 200px; margin-top:10px; margin-bottom: 10px; display: <?php echo empty($ma) ? 'block' : 'none'; ?>">Nhập</button>
                 <div class="col" style="margin-top: 10px;">
                     <div class="input-group">
                         <i class="fa-solid fa-arrow-right"></i>
@@ -227,7 +237,6 @@ if (isset($_POST["btnNhap"])) {
                         </div>
                     </div>
                 </div>
-
                 <div class="col" style="margin-top: 10px;">
                     <div class="input-group">
                         <i class="fa-solid fa-arrow-right"></i>
@@ -284,7 +293,23 @@ if (isset($_POST["btnNhap"])) {
         </form>
         </div>
     </article>
-    <script src="../script.js"></script>
+    <script>
+        function showNhapButton() {
+            document.getElementById("btnNhap").style.display = "block";
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("btnNhap").style.display = "none";
+        });
+        document
+            .getElementById("studentIdInput")
+            .addEventListener("input", function () {
+                if (this.value === "") {
+                    document.getElementById("btnNhap").style.display = "none";
+                } else {
+                    document.getElementById("btnNhap").style.display = "block";
+                }
+            });
+    </script>
 </body>
 
 </html>

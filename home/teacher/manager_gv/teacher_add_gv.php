@@ -1,24 +1,28 @@
 <?php
-$ma = $_GET['ma'];
 include_once "../connectdb.php";
-
-$sql3 = "SELECT * from user Where ma='$ma'";
-$data = mysqli_query($con, $sql3);
+$ma = $ht = $em = $pa = "";
 if (isset($_POST['btnLuu'])) {
     $ma = $_POST['txtma'];
     $ht = $_POST['txthoten'];
     $em = $_POST['txtemail'];
     $pa = $_POST['txtpassword'];
 
-    $sql1 = "UPDATE user SET hoten='$ht', email='$em', password ='$pa' WHERE ma='$ma'";
-    $sql2 = "UPDATE sinh_vien SET hoten='$ht', email='$em' WHERE ma='$ma'";
+    $check_sql = "SELECT * FROM user WHERE ma = '$ma'";
+    $check_result = mysqli_query($con, $check_sql);
 
-    $kq1 = mysqli_query($con, $sql1);
-    $kq2 = mysqli_query($con, $sql2);
-    if ($kq1 && $kq2) {
-        echo "<script>alert('Sửa thành công!'); window.location.href='../teacher_infosv.php';</script>";
+    if (mysqli_num_rows($check_result) > 0) {
+        echo "<script> alert('Mã sinh viên đã tồn tại!'); window.location.href = 'teacher_add_gv.php'; </script>";
+    } else {
+        $sql1 = "INSERT INTO user (ma, hoten, email, password, is_admin) VALUES ('$ma', '$ht', '$em', '$pa', 1)";
+        $kq = mysqli_query($con, $sql1);
+        if ($kq) {
+            echo "<script> alert('Thêm thành công!'); window.location.href = '../teacher_listgv.php'; </script>";
+        } else {
+            echo "<script> alert('Thêm thất bại!'); </script>";
+        }
     }
 }
+
 if (isset($_POST['btnBack'])) {
     header("location: ../teacher_infosv.php");
 }
@@ -107,51 +111,42 @@ if (isset($_POST['btnBack'])) {
     <article class="content">
         <form method="post" action="">
             <div class="form-group" style="width: 75%; margin-left: 150px; margin-top: 50px; margin-bottom: 10px;">
-                <?php
-                if (isset($data) && mysqli_num_rows($data) > 0) {
-                    while ($r = mysqli_fetch_array($data)) {
-                        ?>
-                        <div class="input-group" style="margin-bottom: 20px;">
-                            <i class="fa-solid fa-arrow-right"></i>
-                            <div class="form-field">
-                                <label>Mã sinh viên</label>
-                                <input class="info1" type="text" value="<?php echo $r['ma']; ?>" placeholder="Mã sinh viên"
-                                    disabled>
-                                <input type="hidden" name="txtma" value="<?php echo $r['ma']; ?>">
-                            </div>
-                        </div>
-                        <div class="input-group" style="margin-bottom: 20px;">
-                            <i class="fa-solid fa-arrow-right"></i>
-                            <div class="form-field">
-                                <label>Tên sinh viên</label>
-                                <input class="info1" type="text" name="txthoten" value="<?php echo $r['hoten']; ?>"
-                                    placeholder="Họ tên">
-                            </div>
-                        </div>
-                        <div class="input-group" style="margin-bottom: 20px;">
-                            <i class="fa-solid fa-arrow-right"></i>
-                            <div class="form-field">
-                                <label>Email</label>
-                                <input class="info1" type="text" name="txtemail" value="<?php echo $r['email']; ?>"
-                                    placeholder="Email">
-                            </div>
-                        </div>
-                        <div class="input-group" style="margin-bottom: 20px;">
-                            <i class="fa-solid fa-arrow-right"></i>
-                            <div class="form-field">
-                                <label>Mật khẩu</label>
-                                <input class="info1" type="text" name="txtpassword" value="<?php echo $r['password']; ?>"
-                                    placeholder="Email">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-success" name="btnLuu"
-                            style="margin-left:300px; margin-top:10px">Lưu</button>
-                        <button type="submit" class="btn btn-info" name="btnBack" style="margin-left:150px; margin-top:10px">Trở
-                            về</button>
-                        <?php
-                    }
-                }
-                ?>
+                <div class="input-group" style="margin-top: 20px;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <div class="form-field">
+                        <label>Mã giảng viên</label>
+                        <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>"
+                            placeholder="Mã giảng viên">
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top: 20px;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <div class="form-field">
+                        <label>Họ tên</label>
+                        <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>"
+                            placeholder="Họ tên">
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top: 20px;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <div class="form-field">
+                        <label>Email</label>
+                        <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>" placeholder="Email">
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top: 20px;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <div class="form-field">
+                        <label>Mật khẩu</label>
+                        <input class="info1" type="text" name="txtpassword" value="<?php echo $pa; ?>"
+                            placeholder="Mật khẩu">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success" name="btnLuu"
+                    style="margin-left:300px; margin-top:10px">Lưu</button>
+                <button type="submit" class="btn btn-info" name="btnBack" style="margin-left:150px; margin-top:10px">Trở
+                    về</button>
+            </div>
     </article>
 </body>
 

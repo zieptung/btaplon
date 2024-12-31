@@ -9,7 +9,7 @@
 <body>
     <!-- header -->
     <div class="header">
-        <span class="header-text">Danh sách quản lý</span>
+        <span class="header-text">Diễn đàn</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
         session_start();

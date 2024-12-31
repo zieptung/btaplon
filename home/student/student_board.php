@@ -82,9 +82,9 @@ if (isset($_POST['btnSapxep'])) {
                      <label for="sortOrder">Sắp xếp</label>
                      <select class="info1" name="sortOrder">
                         <option value="DESC" <?php if ($sortOrder == "DESC")
-                           echo "selected"; ?>>Tăng dần</option>
-                        <option value="ASC" <?php if ($sortOrder == "ASC")
                            echo "selected"; ?>>Giảm dần</option>
+                        <option value="ASC" <?php if ($sortOrder == "ASC")
+                           echo "selected"; ?>>Tăng dần</option>
                      </select>
                   </div>
                </div>

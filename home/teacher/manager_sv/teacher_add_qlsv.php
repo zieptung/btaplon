@@ -13,7 +13,7 @@ if (isset($_POST['btnLuu'])) {
     if (mysqli_num_rows($check_result) > 0) {
         echo "<script> alert('Mã sinh viên đã tồn tại!'); window.location.href = 'teacher_add_qlsv.php'; </script>";
     } else {
-        $sql1 = "INSERT INTO user (ma, hoten, email, password) VALUES ('$ma', '$ht', '$em', '$pa')";
+        $sql1 = "INSERT INTO user (ma, hoten, email, password, is_admin) VALUES ('$ma', '$ht', '$em', '$pa', 0)";
         $kq = mysqli_query($con, $sql1);
         if ($kq) {
             echo "<script> alert('Thêm thành công!'); window.location.href = '../teacher_infosv.php'; </script>";
@@ -117,21 +117,23 @@ if (isset($_POST['btnBack'])) {
                     <i class="fa-solid fa-arrow-right"></i>
                     <div class="form-field">
                         <label>Họ tên</label>
-                        <input class="info1" type="text" name="txtma" value="<?php echo $ht; ?>" placeholder="Họ tên">
+                        <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>"
+                            placeholder="Họ tên">
                     </div>
                 </div>
                 <div class="input-group" style="margin-top: 20px;">
                     <i class="fa-solid fa-arrow-right"></i>
                     <div class="form-field">
                         <label>Email</label>
-                        <input class="info1" type="text" name="txtma" value="<?php echo $em; ?>" placeholder="Email">
+                        <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>" placeholder="Email">
                     </div>
                 </div>
                 <div class="input-group" style="margin-top: 20px;">
                     <i class="fa-solid fa-arrow-right"></i>
                     <div class="form-field">
                         <label>Mật khẩu</label>
-                        <input class="info1" type="text" name="txtma" value="<?php echo $pa; ?>" placeholder="Mật khẩu">
+                        <input class="info1" type="text" name="txtpassword" value="<?php echo $pa; ?>"
+                            placeholder="Mật khẩu">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success" name="btnLuu"

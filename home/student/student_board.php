@@ -9,17 +9,36 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch student grades from the database
+
+// Truy vấn SQL để chọn tất cả các bản ghi từ bảng 'diem' nơi cột 'ma' khớp với ID người dùng đã cho.
 $sql = "SELECT * FROM diem WHERE ma = '$user_id'";
 $data = mysqli_query($con, $sql);
-?>
 
+$tm = '';
+if (isset($_POST['btnTimkiem'])) {
+   $tm = $_POST['txttenmon'];
+   $sql = "SELECT d.*, mh.tenmon, u.hoten FROM diem d JOIN mon_hoc mh ON d.mamon = mh.mamon JOIN user u ON d.ma = u.ma WHERE d.ma = '$user_id' AND mh.tenmon LIKE '%$tm%'";
+   $tm = '';
+   $data = mysqli_query($con, $sql);
+}
+
+$sortOrder = "DESC"; //Biến sắp xếp mặc định
+if (isset($_POST['sortOrder'])) {
+   $sortOrder = $_POST['sortOrder'];
+}
+if (isset($_POST['btnSapxep'])) {
+   $sql = "SELECT d.*, mh.tenmon, u.hoten FROM diem d JOIN mon_hoc mh ON d.mamon = mh.mamon JOIN user u ON d.ma = u.ma WHERE d.ma = '$user_id' ORDER BY d.diemtong $sortOrder";
+   $data = mysqli_query($con, $sql);
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="student_homepage.css">
+<link rel="stylesheet" href="student_info.css">
 <title>Quản lý điểm sinh viên đại học</title>
 <style>
    .sidebar {
@@ -43,49 +62,39 @@ $data = mysqli_query($con, $sql);
       }
       ?>
    </div>
-   <!-- sidebar -->
-   <div class="sidebar">
-      <ul>
-         <li>
-            <a href="student_homepage.php" class="logo">
-               <span class="icon"><i class="fa-solid fa-house"></i></span>
-               <span class="text">Trang chủ</span>
-            </a>
-         </li>
-         <li>
-            <a href="student_message.php">
-               <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-               <span class="text">Tin nhắn</span>
-            </a>
-         </li>
-         <li>
-            <a href="student_forum.php">
-               <span class="icon"><i class="fa-solid fa-bell"></i></span>
-               <span class="text">Diễn đàn</span>
-            </a>
-         </li>
-         <li>
-            <a href="student_board.php">
-               <span class="icon"><i class="fa-solid fa-table"></i></span>
-               <span class="text">Bảng điểm</span>
-            </a>
-         </li>
-         <li>
-            <a href="student_info.php">
-               <span class="icon"><i class="fa-solid fa-user"></i></span>
-               <span class="text">Thông tin sinh viên</span>
-            </a>
-         </li>
-         <li>
-            <a href="student_logout.php">
-               <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-               <span class="text">Đăng xuất</span>
-            </a>
-         </li>
-      </ul>
-   </div>
    <!-- content -->
    <article class="content">
+      <form action="" method="post">
+         <div class="row">
+            <div class="col" style="margin:10px">
+               <div class="input-group full-width">
+                  <i class="fa-solid fa-book"></i>
+                  <div class="form-field">
+                     <input class="info1" type="text" name="txttenmon" value="<?php echo $tm; ?>"
+                        placeholder="Tên học phần">
+                  </div>
+               </div>
+            </div>
+            <div class="col" style="margin:10px">
+               <div class="input-group full-width">
+                  <i class="fa-solid fa-arrow-up-wide-short"></i>
+                  <div class="form-field">
+                     <label for="sortOrder">Sắp xếp</label>
+                     <select class="info1" name="sortOrder">
+                        <option value="DESC" <?php if ($sortOrder == "DESC")
+                           echo "selected"; ?>>Tăng dần</option>
+                        <option value="ASC" <?php if ($sortOrder == "ASC")
+                           echo "selected"; ?>>Giảm dần</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <button type="submit" class="btn btn-info" name="btnTimkiem"
+            style="margin-left:390px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
+            kiếm</button>
+         <button class="btn btn-info" type="submit" name="btnSapxep" style="margin-left: 360px">Sắp xếp</button>
+      </form>
       <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
          <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">
             <tr>
@@ -132,6 +141,47 @@ $data = mysqli_query($con, $sql);
          </tbody>
       </table>
    </article>
+   <!-- sidebar -->
+   <div class="sidebar">
+      <ul>
+         <li>
+            <a href="student_homepage.php" class="logo">
+               <span class="icon"><i class="fa-solid fa-house"></i></span>
+               <span class="text">Trang chủ</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_message.php">
+               <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+               <span class="text">Tin nhắn</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_forum.php">
+               <span class="icon"><i class="fa-solid fa-bell"></i></span>
+               <span class="text">Diễn đàn</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_board.php">
+               <span class="icon"><i class="fa-solid fa-table"></i></span>
+               <span class="text">Bảng điểm</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_info.php">
+               <span class="icon"><i class="fa-solid fa-user"></i></span>
+               <span class="text">Thông tin sinh viên</span>
+            </a>
+         </li>
+         <li>
+            <a href="student_logout.php">
+               <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+               <span class="text">Đăng xuất</span>
+            </a>
+         </li>
+      </ul>
+   </div>
 </body>
 
 </html>

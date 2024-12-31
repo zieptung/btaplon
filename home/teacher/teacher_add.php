@@ -24,7 +24,7 @@ if (isset($_POST['btnGui'])) {
             $diemck = $sheetData[$row]['J'];
             $loai = $sheetData[$row]['K'];
 
-            // Check for duplicate entry
+            // Kiểm tra mục nhập trùng lặp
             $checkSql = "SELECT * FROM diem WHERE mamon = ? AND hoten = ?";
             $stmtCheck = $con->prepare($checkSql);
             $stmtCheck->bind_param("ss", $mamon, $hoten);
@@ -70,12 +70,21 @@ if (isset($_POST["btnLuu"])) {
     $cc = $_POST['txtdiemcc'];
     $gk = $_POST['txtdiemgk'];
     $ck = $_POST['txtdiemck'];
-    $sql = "INSERT INTO diem (mamon, hoten, ma, tenmon, sotinchi, diemso, diemchu, diemcc, diemgk, diemck)
-    VALUES ('$mm', '$ht', '$msv', '$tm', '$stc', '$ds', '$dc', '$cc', '$gk', '$ck')";
 
-    $kq = mysqli_query($con, $sql);
-    if ($kq) {
-        echo "<script>alert('Thêm mới thành công!'); window.location.href='teacher_board.php';</script>";
+    // Kiểm tra mục nhập trùng lặp
+    $checkSql = "SELECT * FROM diem WHERE mamon = '$mm' AND ma = '$msv'";
+    $result = mysqli_query($con, $checkSql);
+
+    if (mysqli_num_rows($result) > 0) {
+        echo "<script>alert('Điểm của sinh viên này đã tồn tại!'); window.location.href='teacher_add.php';</script>";
+    } else {
+        $sql = "INSERT INTO diem (mamon, hoten, ma, tenmon, sotinchi, diemso, diemchu, diemcc, diemgk, diemck)
+        VALUES ('$mm', '$ht', '$msv', '$tm', '$stc', '$ds', '$dc', '$cc', '$gk', '$ck')";
+
+        $kq = mysqli_query($con, $sql);
+        if ($kq) {
+            echo "<script>alert('Thêm mới thành công!'); window.location.href='teacher_board.php';</script>";
+        }
     }
 }
 

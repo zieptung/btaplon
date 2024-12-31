@@ -89,13 +89,15 @@ if (isset($_POST['btnXuat'])) {
 
 $ht = "";
 $tm = "";
+$msv = "";
 
 $sql = "SELECT * FROM diem";
 
 if (isset($_POST['btnTimkiem'])) {
+    $msv = $_POST['txtma'];
     $ht = $_POST['txthoten'];
     $tm = $_POST['txttenmon'];
-    $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%'";
+    $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$msv%'";
 }
 $data = mysqli_query($con, $sql);
 
@@ -105,9 +107,10 @@ if (isset($_POST['sortOrder'])) {
     $sortOrder = $_POST['sortOrder'];
 }
 if (isset($_POST['btnSapxep'])) {
+    $msv = $_POST['txtma'];
     $ht = $_POST['txthoten'];
     $tm = $_POST['txttenmon'];
-    $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' ORDER BY diemtong $sortOrder";
+    $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$msv%' ORDER BY diemtong $sortOrder";
     $data = mysqli_query($con, $sql);
 }
 ?>
@@ -211,6 +214,14 @@ if (isset($_POST['btnSapxep'])) {
                     </div>
                     <div class="col" style="margin:10px">
                         <div class="input-group full-width">
+                            <i class="fa-solid fa-book"></i>
+                            <div class="form-field">
+                                <input class="info1" type="text" name="txtma" value="<?php echo $msv; ?>" placeholder="Mã sinh viên">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col" style="margin:10px">
+                        <div class="input-group full-width">
                             <i class="fa-solid fa-arrow-up-wide-short"></i>
                             <div class="form-field">
                                 <label for="sortOrder">Sắp xếp</label>
@@ -269,11 +280,8 @@ if (isset($_POST['btnSapxep'])) {
                                     <td><?php echo $row['diemtong'] ?></td>
                                     <td><?php echo $row['loai'] ?></td>
                                     <td>
-                                        <a href="./manager_diemsv/teacher_fix_diemsv.php?ma=<?php echo $row['ma'] ?>"
-                                            class="btn btn-light"><i class=" fa-solid fa-wrench"></i></a>
-                                        <a href="./manager_diemsv/teacher_del_diemsv.php?ma=<?php echo $row['ma'] ?>"
-                                            onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')"
-                                            class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                        <a href="./manager_diemsv/teacher_fix_diemsv.php?ma=<?php echo $row['ma'] ?>&mamon=<?php echo $row['mamon'] ?>" class="btn btn-light"><i class="fa-solid fa-wrench"></i></a>
+                                        <a href="./manager_diemsv/teacher_del_diemsv.php?ma=<?php echo $row['ma'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 <?php

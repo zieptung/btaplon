@@ -2,8 +2,9 @@
 session_start();
 include_once "../connectdb.php";
 $msv = $_GET['ma'];
+$mamon = $_GET['mamon'];
 
-$sql1 = "SELECT * from diem Where ma='$msv' LIMIT 1";
+$sql1 = "SELECT * from diem Where ma='$msv' AND mamon = '$mamon' LIMIT 1";
 $data = mysqli_query($con, $sql1);
 
 if (isset($_POST["btnLuu"])) {
@@ -16,7 +17,7 @@ if (isset($_POST["btnLuu"])) {
     $cc = $_POST['txtdiemcc'];
     $gk = $_POST['txtdiemgk'];
     $ck = $_POST['txtdiemck'];
-    $sql = "UPDATE diem SET mamon='$mm',hoten='$ht', tenmon='$tm', sotinchi='$stc', diemso='$ds', diemchu='$dc', diemcc='$cc', diemgk='$gk', diemck='$ck' WHERE ma='$msv' LIMIT 1";
+    $sql = "UPDATE diem SET hoten='$ht', tenmon='$tm', sotinchi='$stc', diemso='$ds', diemchu='$dc', diemcc='$cc', diemgk='$gk', diemck='$ck' WHERE ma='$msv' AND mamon = '$mamon' LIMIT 1";
 
     if (mysqli_query($con, $sql)) {
         echo "<script>alert('Cập nhật thành công!'); window.location.href='../teacher_board.php';</script>";

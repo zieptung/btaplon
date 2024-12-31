@@ -19,7 +19,7 @@ if (isset($_POST['btnGui'])) {
             $password = $sheetData[$row]['D'];
             $is_admin = $sheetData[$row]['E'];
 
-            // Check for duplicate entry
+            // Kiểm tra mục nhập trùng lặp
             $checkSql = "SELECT * FROM user WHERE ma = ?";
             $stmtCheck = $con->prepare($checkSql);
             $stmtCheck->bind_param("s", $ma);
@@ -83,7 +83,7 @@ if (isset($_POST['btnXuat'])) {
     ];
     $sheet->getStyle("A1:E{$rowCount}")->applyFromArray($styleAray);
     $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
-    $fileName = 'ExportExcel.xlsx';
+    $fileName = 'DStruycap.xlsx';
     $objWriter->save($fileName);
     ob_end_clean(); // Xóa bộ đệm đầu ra
     header("Content-Disposition: attachment; filename=\"{$fileName}\"");

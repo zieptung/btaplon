@@ -9,7 +9,6 @@ if (isset($_POST['btnLuu'])) {
     $ht = $_POST['txthoten'];
     $em = $_POST['txtemail'];
     $pa = $_POST['txtpassword'];
-
     $sql1 = "UPDATE user SET hoten='$ht', email='$em', password ='$pa' WHERE ma='$ma'";
     $sql2 = "UPDATE sinh_vien SET hoten='$ht', email='$em' WHERE ma='$ma'";
 
@@ -126,6 +125,15 @@ if (isset($_POST['btnBack'])) {
                                 <label>Tên sinh viên</label>
                                 <input class="info1" type="text" name="txthoten" value="<?php echo $r['hoten']; ?>"
                                     placeholder="Họ tên">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Tên lớp</label>
+                                <input class="info1" type="text" value="<?php echo $r['tenlop']; ?>" placeholder="Tên lớp"
+                                    disabled>
+                                <input type="hidden" name="txttenlop" value="<?php echo $r['tenlop']; ?>">
                             </div>
                         </div>
                         <div class="input-group" style="margin-bottom: 20px;">

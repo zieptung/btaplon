@@ -8,10 +8,10 @@ $diachi = '';
 $sdt = '';
 $email = '';
 $gioitinh = '';
-$lophoc = '';
+$tenlop = '';
 $khoahoc = '';
 
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id'])) { // Kiểm tra xem biến 'user_id' có tồn tại trong session hay không
     $user_id = $_SESSION['user_id'];
     $sql = "SELECT * FROM sinh_vien WHERE ma = '$user_id'";
     $result = mysqli_query($con, $sql);
@@ -23,32 +23,23 @@ if (isset($_SESSION['user_id'])) {
         $sdt = $row['sdt'];
         $email = $row['email'];
         $gioitinh = $row['gioitinh'];
-        $lophoc = $row['lophoc'];
+        $tenlop = $row['tenlop'];
         $khoahoc = $row['khoahoc'];
     }
 }
 
-if (isset($_POST['btnluu'])) {
-    $ns = $_POST['txtns'];
-    $diachi = $_POST['txtdiachi'];
-    $sdt = $_POST['txtsdt'];
-    $email = $_POST['txtemail'];
-    $gioitinh = $_POST['txtgioitinh'];
-    $lophoc = $_POST['txtlophoc'];
-    $khoahoc = $_POST['txtkhoahoc'];
-
-    $sql = "UPDATE sinh_vien SET 
-            ns = '$ns',
-            diachi = '$diachi',
-            sdt = '$sdt',
-            email = '$email',
-            gioitinh = '$gioitinh',
-            lophoc = '$lophoc',
-            khoahoc = '$khoahoc'
-            WHERE ma = '$ma'";
-    $sql2 = "UPDATE user SET email = '$email' WHERE ma = '$ma'";
-    $stm = mysqli_query($con, $sql);
-    $stm2 = mysqli_query($con, $sql2);
+$sql = "SELECT sv.*, lh.tenlop FROM sinh_vien sv JOIN lop_hoc lh ON sv.tenlop = lh.tenlop WHERE sv.ma = '$user_id'";
+$result = mysqli_query($con, $sql);
+if ($row = mysqli_fetch_assoc($result)) {
+    $ma = $row['ma'];
+    $hoten = $row['hoten'];
+    $ns = $row['ns'];
+    $diachi = $row['diachi'];
+    $sdt = $row['sdt'];
+    $email = $row['email'];
+    $gioitinh = $row['gioitinh'];
+    $tenlop = $row['tenlop'];
+    $khoahoc = $row['khoahoc'];
 }
 ?>
 
@@ -109,7 +100,8 @@ if (isset($_POST['btnluu'])) {
                         <i class="fas fa-envelope"></i>
                         <div class="form-field">
                             <label class="label">Lớp</label>
-                            <input class="info1" type="email" name="txtlophoc" value="<?php echo $lophoc; ?>" disabled>
+
+                            <input class="info1" type="email" name="txttenlop" value="<?php echo $tenlop; ?>" disabled>
                         </div>
                     </div>
                 </div>

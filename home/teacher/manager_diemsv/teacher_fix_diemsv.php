@@ -125,7 +125,8 @@ if (isset($_POST["btnBack"])) {
                      <div class="form-field">
                         <label>Tên sinh viên</label>
                         <input class="info1" type="text" name="txthoten" value="<?php echo $r['hoten'] ?>"
-                           placeholder="Tên sinh viên">
+                           placeholder="Tên sinh viên" disabled>
+                        <input type="hidden" name="txthoten" value="<?php echo $r['hoten'] ?>" placeholder="Tên sinh viên">
                      </div>
                   </div>
                   <div class="input-group" style="margin-bottom: 10px;">

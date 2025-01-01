@@ -1,21 +1,28 @@
 <?php
 include_once "../connectdb.php";
-$ma = $ht = $em = $pa = "";
+$ma = $ht = $em = $pa = $lop = "";
+
+$sql3 = "SELECT tenlop FROM lop_hoc";
+$result1 = mysqli_query($con, $sql3);
+
 if (isset($_POST['btnLuu'])) {
     $ma = $_POST['txtma'];
     $ht = $_POST['txthoten'];
+    $lop = $_POST['txttenlop'];
     $em = $_POST['txtemail'];
     $pa = $_POST['txtpassword'];
 
-    $check_sql = "SELECT * FROM user WHERE ma = '$ma'";
-    $check_result = mysqli_query($con, $check_sql);
+    $sql = "SELECT * FROM user WHERE ma = '$ma'";
+    $result = mysqli_query($con, $sql);
 
-    if (mysqli_num_rows($check_result) > 0) {
+    if (mysqli_num_rows($result) > 0) {
         echo "<script> alert('Mã sinh viên đã tồn tại!'); window.location.href = 'teacher_add_qlsv.php'; </script>";
     } else {
-        $sql1 = "INSERT INTO user (ma, hoten, email, password, is_admin) VALUES ('$ma', '$ht', '$em', '$pa', 0)";
-        $kq = mysqli_query($con, $sql1);
-        if ($kq) {
+        $sql1 = "INSERT INTO user (ma, hoten, tenlop, email, password, is_admin) VALUES ('$ma', '$ht', '$lop', '$em', '$pa', 0)";
+        $sql2 = "INSERT INTO sinh_vien (ma, hoten, tenlop, email) VALUES ('$ma', '$ht', '$lop', '$em')";
+        $kq1 = mysqli_query($con, $sql1);
+        $kq2 = mysqli_query($con, $sql2);
+        if ($kq1 && $kq2) {
             echo "<script> alert('Thêm thành công!'); window.location.href = '../teacher_infosv.php'; </script>";
         } else {
             echo "<script> alert('Thêm thất bại!'); </script>";
@@ -125,6 +132,26 @@ if (isset($_POST['btnBack'])) {
                         <label>Họ tên</label>
                         <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>"
                             placeholder="Họ tên">
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top: 20px;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <div class="form-field">
+                        <label>Tên lớp</label>
+                        <select name="txttenlop" id="" class="info1">
+                            <option value="">---Chọn lớp---</option>
+                            <?php
+                            if (isset($result1) && mysqli_num_rows($result1) > 0) {
+                                while ($row = mysqli_fetch_assoc($result1)) {
+                                    ?>
+                                    <option value="<?php echo $row['tenlop'] ?>">
+                                        <?php echo $row['tenlop'] ?>
+                                    </option>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
                 <div class="input-group" style="margin-top: 20px;">

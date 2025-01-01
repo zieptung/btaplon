@@ -11,27 +11,27 @@ if (isset($_POST['btnGui'])) {
         $objExcel = $objReader->load($file);
         $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
         $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
-        $stmt = $con->prepare("INSERT INTO user(ma, hoten, email, password, is_admin) VALUES (?, ?, ?, ?, ?)");
         for ($row = 2; $row <= $highestRow; $row++) {
             $ma = $sheetData[$row]['A'];
             $hoten = $sheetData[$row]['B'];
-            $email = $sheetData[$row]['C'];
-            $password = $sheetData[$row]['D'];
-            $is_admin = $sheetData[$row]['E'];
+            $tenlop = $sheetData[$row]['C'];
+            $email = $sheetData[$row]['D'];
+            $password = $sheetData[$row]['E'];
+            $is_admin = $sheetData[$row]['F'];
 
-            // Kiểm tra mục nhập trùng lặp
-            $checkSql = "SELECT * FROM user WHERE ma = ?";
-            $stmtCheck = $con->prepare($checkSql);
-            $stmtCheck->bind_param("s", $ma);
-            $stmtCheck->execute();
-            $result = $stmtCheck->get_result();
-            if ($result->num_rows == 0 && !empty($ma)) {
-                $stmt->bind_param("ssssi", $ma, $hoten, $email, $password, $is_admin);
-                $stmt->execute();
+            // Kiểm tra mã sinh viên đã tồn tại trong bảng user chưa
+            $checkSql = "SELECT * FROM user WHERE ma = '$ma'";
+            $result = mysqli_query($con, $checkSql);
+            if (mysqli_num_rows($result) == 0 && !empty($ma)) {
+                // Thêm sinh viên mới vào bảng user
+                $sqlUser = "INSERT INTO user(ma, hoten, tenlop, email, password, is_admin) VALUES ('$ma', '$hoten', '$tenlop', '$email', '$password', '$is_admin')";
+                mysqli_query($con, $sqlUser);
+
+                // Thêm sinh viên mới vào bảng sinhvien
+                $sqlStudent = "INSERT INTO sinh_vien(ma, hoten, tenlop, email) VALUES ('$ma', '$hoten', '$tenlop', '$email')";
+                mysqli_query($con, $sqlStudent);
             }
-            $stmtCheck->close();
         }
-        $stmt->close();
     }
     echo "<script>alert('Thêm thành công')</script>";
 }
@@ -45,19 +45,21 @@ if (isset($_POST['btnXuat'])) {
     //Tạo tiêu đề cho cột trong excel
     $sheet->setCellValue("A1", 'Mã sinh viên');
     $sheet->setCellValue("B1", 'Tên sinh viên');
-    $sheet->setCellValue("C1", 'Email');
-    $sheet->setCellValue("D1", 'Mật khẩu');
-    $sheet->setCellValue("E1", 'Quyền truy cập');
+    $sheet->setCellValue("C1", 'Tên lớp');
+    $sheet->setCellValue("D1", 'Email');
+    $sheet->setCellValue("E1", 'Mật khẩu');
+    $sheet->setCellValue("F1", 'Quyền truy cập');
 
-    $sql = "SELECT ma, hoten, email, password, is_admin FROM user";
+    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin FROM user";
     $result = mysqli_query($con, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
         $rowCount++;
         $sheet->setCellValue("A{$rowCount}", $row['ma']);
         $sheet->setCellValue("B{$rowCount}", $row['hoten']);
-        $sheet->setCellValue("C{$rowCount}", $row['email']);
-        $sheet->setCellValue("D{$rowCount}", $row['password']);
-        $sheet->setCellValue("E{$rowCount}", $row['is_admin']);
+        $sheet->setCellValue("C{$rowCount}", $row['tenlop']);
+        $sheet->setCellValue("D{$rowCount}", $row['email']);
+        $sheet->setCellValue("E{$rowCount}", $row['password']);
+        $sheet->setCellValue("F{$rowCount}", $row['is_admin']);
     }
 
     //định dạng cột tiêu đề
@@ -66,12 +68,13 @@ if (isset($_POST['btnXuat'])) {
     $sheet->getColumnDimension('C')->setAutoSize(true);
     $sheet->getColumnDimension('D')->setAutoSize(true);
     $sheet->getColumnDimension('E')->setAutoSize(true);
+    $sheet->getColumnDimension('F')->setAutoSize(true);
 
     //gán màu nền
-    $sheet->getStyle('A1:E1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
+    $sheet->getStyle('A1:F1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
 
     //căn giữa
-    $sheet->getStyle('A1:E1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
     //Kẻ bảng 
     $styleAray = [
@@ -81,7 +84,7 @@ if (isset($_POST['btnXuat'])) {
             ]
         ]
     ];
-    $sheet->getStyle("A1:E{$rowCount}")->applyFromArray($styleAray);
+    $sheet->getStyle("A1:F{$rowCount}")->applyFromArray($styleAray);
     $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
     $fileName = 'DStruycap.xlsx';
     $objWriter->save($fileName);
@@ -97,24 +100,35 @@ if (isset($_POST['btnXuat'])) {
     exit;
 }
 
+if (isset($_POST['btnXoa'])) {
+    $sql = "DELETE FROM user WHERE is_admin = 0";
+    mysqli_query($con, $sql);
+    echo "<script>alert('Xoá thành công')</script>";
+}
+
 $ma = "";
 $ht = "";
 $em = "";
-$sql = "SELECT * FROM user WHERE is_admin = 0";
+$lop = "";
+$sql = "SELECT user.*, lop_hoc.tenlop FROM user LEFT JOIN lop_hoc ON user.tenlop = lop_hoc.tenlop WHERE user.is_admin = 0";
 if (isset($_POST['btnTimkiem'])) {
     $ma = $_POST['txtma'];
     $ht = $_POST['txthoten'];
+    $lop = $_POST['txttenlop'];
     $em = $_POST['txtemail'];
-    $sql = "SELECT * FROM user WHERE ma LIKE '%$ma%' AND hoten LIKE '%$ht%' AND email LIKE '%$em%' AND is_admin = 0";
+    $sql = "SELECT * FROM user WHERE ma LIKE '%$ma%' AND hoten LIKE '%$ht%' AND email LIKE '%$em%' AND tenlop LIKE '%$lop%' AND is_admin = 0";
     $ma = "";
     $ht = "";
     $em = "";
+    $lop = "";
 }
 $data = mysqli_query($con, $sql);
 if (isset($_POST['btnThemmoi'])) {
     header("location: ./manager_sv/teacher_add_qlsv.php");
 }
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -219,6 +233,15 @@ if (isset($_POST['btnThemmoi'])) {
                 </div>
                 <div class="col" style="margin:10px">
                     <div class="input-group full-width">
+                        <i class="fa-solid fa-clipboard"></i>
+                        <div class="form-field">
+                            <input class="info1" type="text" name="txttenlop" value="<?php echo $lop; ?>"
+                                placeholder="Tên lớp">
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="margin:10px">
+                    <div class="input-group full-width">
                         <i class="fa-solid fa-envelope"></i>
                         <div class="form-field">
                             <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>"
@@ -230,20 +253,29 @@ if (isset($_POST['btnThemmoi'])) {
             <div class="row">
                 <div class="col">
                     <button type="submit" class="btn btn-info" name="btnTimkiem"
-                        style="margin-left:160px; margin-top:20px; margin-bottom: 10px;">Tìm
+                        style="margin-left:70px; margin-top:20px; margin-bottom: 10px;"><i
+                            class="fa-solid fa-magnifying-glass"></i> Tìm
                         kiếm</button>
                 </div>
                 <div class="col">
-                    <div class="input-group" style="width: 400px; margin-top:10px; margin-bottom: 10px;">
-                        <input class="form-control" type="file" id="formFile" name="file">
-                        <button class="btn btn-outline-success" type="submit" name="btnGui">Gửi</button>
-                        <button class="btn btn-outline-info" type="submit" name="btnXuat">Xuất file</button>
-                    </div>
+                    <button type="submit" class="btn btn-info" name="btnThemmoi"
+                        style="margin-top:20px; margin-bottom: 10px; margin-left:20px"><i class="fa-solid fa-plus"></i>
+                        Thêm mới</button>
                 </div>
                 <div class="col">
-                    <button type="submit" class="btn btn-info" name="btnThemmoi"
-                        style="margin-left:100px; margin-top:20px; margin-bottom: 10px">Thêm mới</button>
+                    <div class="col">
+                        <div class="input-group"
+                            style="width: 400px; margin-top:10px; margin-bottom: 10px; margin-right: 100px;">
+                            <input class="form-control" type="file" id="formFile" name="file">
+                            <button class="btn btn-outline-success" type="submit" name="btnGui">Gửi</button>
+                            <button class="btn btn-outline-info" type="submit" name="btnXuat">Xuất file</button>
+                        </div>
+                    </div>
                 </div>
+                <button type="submit" class="btn btn-danger" name="btnXoa"
+                    style="margin-right:50px; margin-top:20px; margin-bottom: 10px; margin-left: 50px;"
+                    onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')">Xoá tất cả <i
+                        class="fa-solid fa-xmark"></i></button>
             </div>
         </form>
         <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
@@ -252,6 +284,7 @@ if (isset($_POST['btnThemmoi'])) {
                     <th>STT</th>
                     <th>Mã sinh viên</th>
                     <th>Họ tên</th>
+                    <th>Lớp</th>
                     <th>Email</th>
                     <th>Mật khẩu</th>
                     <th>Chức năng</th>
@@ -267,6 +300,7 @@ if (isset($_POST['btnThemmoi'])) {
                             <td><?php echo $i++ ?></td>
                             <td><?php echo $row['ma'] ?></td>
                             <td><?php echo $row['hoten'] ?></td>
+                            <td><?php echo $row['tenlop'] ?></td>
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['password'] ?></td>
                             <td>

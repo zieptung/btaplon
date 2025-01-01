@@ -77,7 +77,7 @@ if (isset($_POST['btnSapxep'])) {
             </div>
             <div class="col" style="margin:10px">
                <div class="input-group full-width">
-                  <i class="fa-solid fa-arrow-up-wide-short"></i>
+                  <i class="fa-solid fa-filter"></i>
                   <div class="form-field">
                      <label for="sortOrder">Sắp xếp</label>
                      <select class="info1" name="sortOrder">
@@ -91,9 +91,11 @@ if (isset($_POST['btnSapxep'])) {
             </div>
          </div>
          <button type="submit" class="btn btn-info" name="btnTimkiem"
-            style="margin-left:390px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
+            style="margin-left:390px; margin-top:10px; margin-bottom: 10px; margin-right: 60px"><i
+               class="fa-solid fa-magnifying-glass"></i> Tìm
             kiếm</button>
-         <button class="btn btn-info" type="submit" name="btnSapxep" style="margin-left: 360px">Sắp xếp</button>
+         <button class="btn btn-success" type="submit" name="btnSapxep" style="margin-left: 360px"><i
+               class="fa-solid fa-arrow-up-wide-short"></i> Sắp xếp</button>
       </form>
       <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
          <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">

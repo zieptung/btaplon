@@ -87,6 +87,14 @@ if (isset($_POST['btnXuat'])) {
    exit;
 }
 
+if (isset($_POST['btnXoa'])) {
+   $sql = "DELETE FROM diem";
+   $data = mysqli_query($con, $sql);
+   if ($data) {
+      echo "<script>alert('Xoá thành công')</script>";
+   }
+}
+
 $ht = "";
 $tm = "";
 $ma = "";
@@ -211,6 +219,15 @@ if (isset($_POST['btnSapxep'])) {
                </div>
                <div class="col" style="margin:10px">
                   <div class="input-group full-width">
+                     <i class="fa-solid fa-user"></i>
+                     <div class="form-field">
+                        <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>"
+                           placeholder="Mã sinh viên">
+                     </div>
+                  </div>
+               </div>
+               <div class="col" style="margin:10px">
+                  <div class="input-group full-width">
                      <i class="fa-solid fa-book"></i>
                      <div class="form-field">
                         <input class="info1" type="text" name="txttenmon" value="<?php echo $tm; ?>"
@@ -220,16 +237,7 @@ if (isset($_POST['btnSapxep'])) {
                </div>
                <div class="col" style="margin:10px">
                   <div class="input-group full-width">
-                     <i class="fa-solid fa-book"></i>
-                     <div class="form-field">
-                        <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>"
-                           placeholder="Mã sinh viên">
-                     </div>
-                  </div>
-               </div>
-               <div class="col" style="margin:10px">
-                  <div class="input-group full-width">
-                     <i class="fa-solid fa-arrow-up-wide-short"></i>
+                     <i class="fa-solid fa-filter"></i>
                      <div class="form-field">
                         <label for="sortOrder">Sắp xếp</label>
                         <select class="info1" name="sortOrder">
@@ -243,10 +251,15 @@ if (isset($_POST['btnSapxep'])) {
                </div>
             </div>
             <button type="submit" class="btn btn-info" name="btnTimkiem"
-               style="margin-left:390px; margin-top:10px; margin-bottom: 10px; margin-right: 60px">Tìm
+               style="margin-left:370px; margin-top:10px; margin-bottom: 10px; margin-right: 60px"><i
+                  class="fa-solid fa-magnifying-glass"></i> Tìm
                kiếm</button>
             <button class="btn btn-info" type="submit" name="btnXuat">Xuất file</button>
-            <button class="btn btn-info" type="submit" name="btnSapxep" style="margin-left:60px;">Sắp xếp</button>
+            <button class="btn btn-info" type="submit" name="btnSapxep" style="margin-left:60px;"><i
+                  class="fa-solid fa-arrow-up-wide-short"></i> Sắp xếp</button>
+            <button class="btn btn-danger" type="submit" name="btnXoa" style="margin-left:220px;"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')">Xoá tất cả <i
+                  class="fa-solid fa-xmark"></i></button>
             <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
                <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">
                   <tr>

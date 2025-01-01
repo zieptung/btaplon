@@ -4,7 +4,7 @@ include_once "connectdb.php";
 // Xử lý khi người dùng nhấn "Đăng nhập"
 if (isset($_POST["btnDangnhap"])) {
 
-    // Xác thực đầu vào
+    // Xác thực đầu vào (Kiểm tra phương thức gửi dữ liệu)
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $ma = $_POST['ma'];
         $password = $_POST['password'];
@@ -17,30 +17,6 @@ if (isset($_POST["btnDangnhap"])) {
             // Đăng nhập thành công
             $_SESSION['user_id'] = $row['ma'];
             $_SESSION['is_admin'] = $row['is_admin'];
-
-            // Lưu lại mã và họ tên
-            $ma = $row['ma'];
-            $hoten = $row['hoten'];
-
-            if ($row['is_admin'] == 1) {
-                // Kiểm tra xem mã đã tồn tại trong bảng giang_vien chưa
-                $checkSql = "SELECT * FROM giang_vien WHERE ma = '$ma'";
-                $checkResult = mysqli_query($con, $checkSql);
-
-                if (mysqli_num_rows($checkResult) == 0) {
-                    $insertSql = "INSERT INTO giang_vien (ma, hoten) VALUES ('$ma', '$hoten')";
-                    mysqli_query($con, $insertSql);
-                }
-            } else {
-                // Kiểm tra xem mã đã tồn tại trong bảng sinh_vien chưa
-                $checkSql = "SELECT * FROM sinh_vien WHERE ma = '$ma'";
-                $checkResult = mysqli_query($con, $checkSql);
-
-                if (mysqli_num_rows($checkResult) == 0) {
-                    $insertSql = "INSERT INTO sinh_vien (ma, hoten) VALUES ('$ma', '$hoten')";
-                    mysqli_query($con, $insertSql);
-                }
-            }
 
             // Chuyển hướng dựa trên vai trò của người dùng
             if ($row['is_admin'] == 1) {

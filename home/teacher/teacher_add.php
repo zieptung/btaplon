@@ -4,45 +4,38 @@ if (isset($_POST['btnGui'])) {
     require "../Classes/PHPExcel.php";
     if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
         $file = $_FILES['file']['tmp_name'];
-
         $objReader = PHPExcel_IOFactory::createReaderForFile($file);
         $objReader->setLoadSheetsOnly('Sheet1');
         $objExcel = $objReader->load($file);
         $sheetData = $objExcel->getActiveSheet()->toArray(null, true, true, true);
         $highestRow = $objExcel->setActiveSheetIndex()->getHighestRow();
+        // Chuẩn bị câu lệnh chèn
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $mamon = $sheetData[$row]['A'];
+            $hoten = $sheetData[$row]['B'];
+            $ma = $sheetData[$row]['C'];
+            $tenmon = $sheetData[$row]['D'];
+            $sotinchi = $sheetData[$row]['E'];
+            $diemcc = $sheetData[$row]['F'];
+            $diemgk = $sheetData[$row]['G'];
+            $diemck = $sheetData[$row]['H'];
 
-        // Di chuyển việc chuẩn bị câu lệnh vào trong điều kiện tải lên tệp
-        if ($stmt = $con->prepare("INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
-            for ($row = 2; $row <= $highestRow; $row++) {
-                $mamon = $sheetData[$row]['A'];
-                $hoten = $sheetData[$row]['B'];
-                $ma = $sheetData[$row]['C'];
-                $tenmon = $sheetData[$row]['D'];
-                $sotinchi = $sheetData[$row]['E'];
-                $diemcc = $sheetData[$row]['F'];
-                $diemgk = $sheetData[$row]['G'];
-                $diemck = $sheetData[$row]['H'];
+            // Kiểm tra sinh viên có tồn tại trong bảng sinh_vien không
+            $sql5 = "SELECT ma FROM sinh_vien WHERE ma = '$ma'";
+            $result = mysqli_query($con, $sql5);
 
-                // Kiểm tra mục nhập trùng lặp
-                $checkSql = "SELECT * FROM diem WHERE mamon = ? AND hoten = ?";
-                $stmtCheck = $con->prepare($checkSql);
-                $stmtCheck->bind_param("ss", $mamon, $hoten);
-                $stmtCheck->execute();
-                $result = $stmtCheck->get_result();
-                if ($result->num_rows == 0 && !empty($mamon)) {
-                    $stmt->bind_param("ssssiddd", $mamon, $hoten, $ma, $tenmon, $sotinchi, $diemcc, $diemgk, $diemck);
-                    $stmt->execute();
-                }
-                $stmtCheck->close();
+            if (mysqli_num_rows($result) > 0) {
+                // Sinh viên tồn tại, chèn dữ liệu vào bảng diem
+                $sql6 = "INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck) 
+                      VALUES ('$mamon', '$hoten', '$ma', '$tenmon', '$sotinchi', '$diemcc', '$diemgk', '$diemck')";
+                mysqli_query($con, $sql6);
             }
-            $stmt->close(); // Đóng nếu câu lệnh được tạo thành công
         }
     }
-    echo "<script>alert('Thêm thành công!'); window.location.href='teacher_board.php';</script>";
+    echo "<script>alert('Thêm thành công'); window.location.href = 'teacher_board.php';</script>";
 }
 
 $ma = '';
-$id = '';
 $mm = '';
 $ht = '';
 $tm = '';
@@ -83,22 +76,15 @@ if (isset($_POST["btnLuu"])) {
         }
     }
 }
+
 if (isset($_POST["btnNhap"])) {
     $ma = $_POST['txtma'];
     $sql = "SELECT hoten FROM sinh_vien WHERE ma = '$ma'";
     $result = mysqli_query($con, $sql);
     if ($row = mysqli_fetch_assoc($result)) {
         $ht = $row['hoten'];
-    }
-}
-
-if (isset($_POST["txtmamon"])) {
-    $mamon = $_POST['txtmamon'];
-    $sql = "SELECT tenmon, sotinchi FROM mon_hoc WHERE mamon = '$mamon'";
-    $result = mysqli_query($con, $sql);
-    if ($row = mysqli_fetch_assoc($result)) {
-        $tm = $row['tenmon'];
-        $stc = $row['sotinchi'];
+    } else {
+        echo "<script>alert('Mã sinh viên không tồn tại!'); window.location.href='teacher_add.php';</script>";
     }
 }
 ?>

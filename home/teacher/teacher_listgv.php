@@ -134,12 +134,14 @@ if (isset($_POST['btnThemmoi'])) {
             <div class="row">
                 <div class="col">
                     <button type="submit" class="btn btn-info" name="btnTimkiem"
-                        style="margin-left:345px; margin-top:20px; margin-bottom: 10px;">Tìm
+                        style="margin-left:335px; margin-top:20px; margin-bottom: 10px;"><i
+                            class="fa-solid fa-magnifying-glass"></i> Tìm
                         kiếm</button>
                 </div>
                 <div class="col">
                     <button type="submit" class="btn btn-info" name="btnThemmoi"
-                        style="margin-left:140px; margin-top:20px; margin-bottom: 10px">Thêm mới</button>
+                        style="margin-left:130px; margin-top:20px; margin-bottom: 10px"><i class="fa-solid fa-plus"></i>
+                        Thêm mới</button>
                 </div>
             </div>
         </form>

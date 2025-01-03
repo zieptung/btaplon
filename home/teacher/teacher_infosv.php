@@ -50,7 +50,7 @@ if (isset($_POST['btnXuat'])) {
     $sheet->setCellValue("E1", 'Mật khẩu');
     $sheet->setCellValue("F1", 'Quyền truy cập');
 
-    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin FROM user";
+    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin FROM user WHERE is_admin = 0";
     $result = mysqli_query($con, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
         $rowCount++;
@@ -163,18 +163,6 @@ if (isset($_POST['btnThemmoi'])) {
                 <a href="teacher_info.php">
                     <span class="icon"><i class="fa-solid fa-user"></i></span>
                     <span class="text">Thông tin cá nhân</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_message.php">
-                    <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-                    <span class="text">Tin nhắn</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_forum.php">
-                    <span class="icon"><i class="fa-solid fa-bell"></i></span>
-                    <span class="text">Diễn đàn</span>
                 </a>
             </li>
             <li>

@@ -153,18 +153,6 @@ if (isset($_POST['btnSapxep'])) {
             </a>
          </li>
          <li>
-            <a href="student_message.php">
-               <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-               <span class="text">Tin nhắn</span>
-            </a>
-         </li>
-         <li>
-            <a href="student_forum.php">
-               <span class="icon"><i class="fa-solid fa-bell"></i></span>
-               <span class="text">Diễn đàn</span>
-            </a>
-         </li>
-         <li>
             <a href="student_board.php">
                <span class="icon"><i class="fa-solid fa-table"></i></span>
                <span class="text">Bảng điểm</span>

@@ -167,13 +167,13 @@ if (isset($_POST['btnSapxep'])) {
          </li>
          <li>
             <a href="./manager_class/teacher_class.php">
-               <span class="icon"><i class="fa-solid fa-list"></i></span>
+               <span class="icon"><i class="fa-solid fa-landmark"></i></span>
                <span class="text">Quản lý lớp học</span>
             </a>
          </li>
          <li>
             <a href="./manager_course/teacher_course.php">
-               <span class="icon"><i class="fa-solid fa-list"></i></span>
+               <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
                <span class="text">Quản lý môn học</span>
             </a>
          </li>
@@ -197,7 +197,7 @@ if (isset($_POST['btnSapxep'])) {
          </li>
          <li>
             <a href="./manager_scholarship/teacher_scholarship.php">
-               <span class="icon"><i class="fa-solid fa-list"></i></span>
+               <span class="icon"><i class="fa-solid fa-user-graduate"></i></span>
                <span class="text">Danh sách học bổng</span>
             </a>
          </li>

@@ -126,21 +126,21 @@ if (isset($_POST["btnNhap"])) {
                 </a>
             </li>
             <li>
-                <a href="teacher_message.php">
-                    <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-                    <span class="text">Tin nhắn</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_forum.php">
-                    <span class="icon"><i class="fa-solid fa-bell"></i></span>
-                    <span class="text">Diễn đàn</span>
-                </a>
-            </li>
-            <li>
                 <a href="teacher_infosv.php">
                     <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
                     <span class="text">Quản lý sinh viên</span>
+                </a>
+            </li>
+            <li>
+                <a href="./manager_class/teacher_class.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Quản lý lớp học</span>
+                </a>
+            </li>
+            <li>
+                <a href="./manager_course/teacher_course.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Quản lý môn học</span>
                 </a>
             </li>
             <li>
@@ -159,6 +159,12 @@ if (isset($_POST["btnNhap"])) {
                 <a href="teacher_listgv.php">
                     <span class="icon"><i class="fa-solid fa-list"></i></span>
                     <span class="text">Danh sách quản lý</span>
+                </a>
+            </li>
+            <li>
+                <a href="./manager_scholarship/teacher_scholarship.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Danh sách học bổng</span>
                 </a>
             </li>
             <li>

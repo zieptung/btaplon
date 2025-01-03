@@ -50,7 +50,7 @@ if (isset($_POST['btnXuat'])) {
     $sheet->setCellValue("E1", 'Mật khẩu');
     $sheet->setCellValue("F1", 'Quyền truy cập');
 
-    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin FROM user";
+    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin FROM user WHERE is_admin = 0";
     $result = mysqli_query($con, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
         $rowCount++;
@@ -166,21 +166,21 @@ if (isset($_POST['btnThemmoi'])) {
                 </a>
             </li>
             <li>
-                <a href="teacher_message.php">
-                    <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-                    <span class="text">Tin nhắn</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_forum.php">
-                    <span class="icon"><i class="fa-solid fa-bell"></i></span>
-                    <span class="text">Diễn đàn</span>
-                </a>
-            </li>
-            <li>
                 <a href="teacher_infosv.php">
                     <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
                     <span class="text">Quản lý sinh viên</span>
+                </a>
+            </li>
+            <li>
+                <a href="./manager_class/teacher_class.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Quản lý lớp học</span>
+                </a>
+            </li>
+            <li>
+                <a href="./manager_course/teacher_course.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Quản lý môn học</span>
                 </a>
             </li>
             <li>
@@ -199,6 +199,12 @@ if (isset($_POST['btnThemmoi'])) {
                 <a href="teacher_listgv.php">
                     <span class="icon"><i class="fa-solid fa-list"></i></span>
                     <span class="text">Danh sách quản lý</span>
+                </a>
+            </li>
+            <li>
+                <a href="./manager_scholarship/teacher_scholarship.php">
+                    <span class="icon"><i class="fa-solid fa-list"></i></span>
+                    <span class="text">Danh sách học bổng</span>
                 </a>
             </li>
             <li>

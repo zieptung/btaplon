@@ -1,6 +1,6 @@
 <?php
 include_once "connectdb.php";
-require "../Classes/PHPExcel.php";
+require "./Classes/PHPExcel.php";
 if (isset($_POST['btnGui'])) {
     $file = $_FILES['file']['tmp_name'];
 
@@ -18,17 +18,18 @@ if (isset($_POST['btnGui'])) {
             $email = $sheetData[$row]['D'];
             $password = $sheetData[$row]['E'];
             $is_admin = $sheetData[$row]['F'];
+            $kh = $sheetData[$row]['G'];
 
             // Kiểm tra mã sinh viên đã tồn tại trong bảng user chưa
             $checkSql = "SELECT * FROM user WHERE ma = '$ma'";
             $result = mysqli_query($con, $checkSql);
             if (mysqli_num_rows($result) == 0 && !empty($ma)) {
                 // Thêm sinh viên mới vào bảng user
-                $sqlUser = "INSERT INTO user(ma, hoten, tenlop, email, password, is_admin) VALUES ('$ma', '$hoten', '$tenlop', '$email', '$password', '$is_admin')";
+                $sqlUser = "INSERT INTO user(ma, hoten, tenlop, email, password, is_admin, khoahoc) VALUES ('$ma', '$hoten', '$tenlop', '$email', '$password', '$is_admin', '$kh')";
                 mysqli_query($con, $sqlUser);
 
                 // Thêm sinh viên mới vào bảng sinhvien
-                $sqlStudent = "INSERT INTO sinh_vien(ma, hoten, tenlop, email) VALUES ('$ma', '$hoten', '$tenlop', '$email')";
+                $sqlStudent = "INSERT INTO sinh_vien(ma, hoten, tenlop, email, khoahoc) VALUES ('$ma', '$hoten', '$tenlop', '$email', '$kh')";
                 mysqli_query($con, $sqlStudent);
             }
         }
@@ -49,8 +50,9 @@ if (isset($_POST['btnXuat'])) {
     $sheet->setCellValue("D1", 'Email');
     $sheet->setCellValue("E1", 'Mật khẩu');
     $sheet->setCellValue("F1", 'Quyền truy cập');
+    $sheet->setCellValue("G1", 'Khóa học');
 
-    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin FROM user WHERE is_admin = 0";
+    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin, khoahoc FROM user WHERE is_admin = 0";
     $result = mysqli_query($con, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
         $rowCount++;
@@ -60,6 +62,7 @@ if (isset($_POST['btnXuat'])) {
         $sheet->setCellValue("D{$rowCount}", $row['email']);
         $sheet->setCellValue("E{$rowCount}", $row['password']);
         $sheet->setCellValue("F{$rowCount}", $row['is_admin']);
+        $sheet->setCellValue("G{$rowCount}", $row['khoahoc']);
     }
 
     //định dạng cột tiêu đề
@@ -69,12 +72,13 @@ if (isset($_POST['btnXuat'])) {
     $sheet->getColumnDimension('D')->setAutoSize(true);
     $sheet->getColumnDimension('E')->setAutoSize(true);
     $sheet->getColumnDimension('F')->setAutoSize(true);
+    $sheet->getColumnDimension('G')->setAutoSize(true);
 
     //gán màu nền
-    $sheet->getStyle('A1:F1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
+    $sheet->getStyle('A1:G1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
 
     //căn giữa
-    $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
     //Kẻ bảng 
     $styleAray = [
@@ -84,7 +88,7 @@ if (isset($_POST['btnXuat'])) {
             ]
         ]
     ];
-    $sheet->getStyle("A1:F{$rowCount}")->applyFromArray($styleAray);
+    $sheet->getStyle("A1:G{$rowCount}")->applyFromArray($styleAray);
     $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
     $fileName = 'DStruycap.xlsx';
     $objWriter->save($fileName);
@@ -110,7 +114,9 @@ $ma = "";
 $ht = "";
 $em = "";
 $lop = "";
+
 $sql = "SELECT user.*, lop_hoc.tenlop FROM user LEFT JOIN lop_hoc ON user.tenlop = lop_hoc.tenlop WHERE user.is_admin = 0";
+
 if (isset($_POST['btnTimkiem'])) {
     $ma = $_POST['txtma'];
     $ht = $_POST['txthoten'];
@@ -123,6 +129,9 @@ if (isset($_POST['btnTimkiem'])) {
     $lop = "";
 }
 $data = mysqli_query($con, $sql);
+
+
+
 if (isset($_POST['btnThemmoi'])) {
     header("location: ./manager_sv/teacher_add_qlsv.php");
 }
@@ -209,8 +218,8 @@ if (isset($_POST['btnThemmoi'])) {
             </li>
             <li>
                 <a href="teacher_logout.php">
-                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-                    <span class="text">Đăng xuất</span>
+                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></sp< /a>an>
+                        <span class="text">Đăng xuất</span>
                 </a>
             </li>
         </ul>

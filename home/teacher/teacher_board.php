@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 include_once "../connectdb.php";
-require_once '../Classes/PHPExcel.php';
+require_once './Classes/PHPExcel.php';
 if (isset($_POST['btnXuat'])) {
    ob_start();
 
@@ -260,7 +260,8 @@ if (isset($_POST['btnSapxep'])) {
                style="margin-left:370px; margin-top:10px; margin-bottom: 10px; margin-right: 60px"><i
                   class="fa-solid fa-magnifying-glass"></i> Tìm
                kiếm</button>
-            <button class="btn btn-info" type="submit" name="btnXuat">Xuất file</button>
+            <button class="btn btn-info" type="submit" name="btnXuat"><i class="fa-solid fa-file-export"></i> Xuất
+               file</button>
             <button class="btn btn-info" type="submit" name="btnSapxep" style="margin-left:60px;"><i
                   class="fa-solid fa-arrow-up-wide-short"></i> Sắp xếp</button>
             <button class="btn btn-danger" type="submit" name="btnXoa" style="margin-left:220px;"

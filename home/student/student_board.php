@@ -15,10 +15,21 @@ $sql = "SELECT * FROM diem WHERE ma = '$user_id'";
 $data = mysqli_query($con, $sql);
 
 $tm = '';
+$sql = "SELECT DISTINCT khoahoc, hocky FROM mon_hoc ORDER BY khoahoc ASC, hocky ASC";
+$sql_khoahoc_hocky = mysqli_query($con, $sql);
 if (isset($_POST['btnTimkiem'])) {
    $tm = $_POST['txttenmon'];
    $sql = "SELECT d.*, mh.tenmon, u.hoten FROM diem d JOIN mon_hoc mh ON d.mamon = mh.mamon JOIN user u ON d.ma = u.ma WHERE d.ma = '$user_id' AND mh.tenmon LIKE '%$tm%'";
-   $tm = '';
+
+   $khoahoc_hocky = $_POST['khoahoc_hocky'];
+   if (!empty($khoahoc_hocky)) {
+      $parts = explode('-Học kỳ:', $khoahoc_hocky);
+      if (count($parts) == 2) {
+         $khoahoc = trim($parts[0]);
+         $hocky = trim($parts[1]);
+         $sql .= " AND mh.khoahoc = '$khoahoc' AND mh.hocky = '$hocky'";
+      }
+   }
    $data = mysqli_query($con, $sql);
 }
 
@@ -85,6 +96,30 @@ if (isset($_POST['btnSapxep'])) {
                            echo "selected"; ?>>Giảm dần</option>
                         <option value="ASC" <?php if ($sortOrder == "ASC")
                            echo "selected"; ?>>Tăng dần</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col" style="margin:10px">
+               <div class="input-group full-width">
+                  <div class="form-field">
+                     <label for="khoahoc_hocky">Khóa học và học kỳ:</label>
+                     <select class="form-control" id="khoahoc_hocky" name="khoahoc_hocky">
+                        <option value="">Chọn Khoá học và học kỳ</option>
+                        <?php
+                        if (isset($sql_khoahoc_hocky) && mysqli_num_rows($sql_khoahoc_hocky) > 0) {
+                           while ($row = mysqli_fetch_assoc($sql_khoahoc_hocky)) {
+                              $selected = (isset($_POST['khoahoc_hocky']) && $_POST['khoahoc_hocky'] == $row['khoahoc'] . '-Học kỳ:' . $row['hocky']) ? 'selected' : '';
+                              ?>
+                              <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>" <?php echo $selected; ?>>
+                                 <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
+                              </option>
+                              <?php
+                           }
+                        }
+                        ?>
                      </select>
                   </div>
                </div>

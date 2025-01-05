@@ -4,6 +4,6 @@ include_once "../connectdb.php";
 $sql = "DELETE from user where ma='$ma'";
 $kq = mysqli_query($con, $sql);
 if ($kq) {
-    echo "<script> alert('Xoá thành công!'); window.location.href = '../teacher_infosv.php'; </script>";
+    echo "<script> alert('Xoá thành công!'); window.location.href = 'admin_control.php'; </script>";
 }
 ?>

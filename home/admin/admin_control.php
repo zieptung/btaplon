@@ -1,6 +1,7 @@
 <?php
-include_once "connectdb.php";
-require "./Classes/PHPExcel.php";
+session_start();
+include_once "../connectdb.php";
+require "../teacher/Classes/PHPExcel.php";
 if (isset($_POST['btnGui'])) {
     $file = $_FILES['file']['tmp_name'];
 
@@ -52,7 +53,11 @@ if (isset($_POST['btnXuat'])) {
     $sheet->setCellValue("F1", 'Quyền truy cập');
     $sheet->setCellValue("G1", 'Khóa học');
 
-    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin, khoahoc FROM user WHERE is_admin = 0";
+    $tc = $_POST['txttruycap'];
+    $sql = "SELECT ma, hoten, tenlop, email, password, is_admin, khoahoc FROM user";
+    if ($tc !== '') {
+        $sql .= " WHERE is_admin = '$tc'";
+    }
     $result = mysqli_query($con, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
         $rowCount++;
@@ -104,38 +109,48 @@ if (isset($_POST['btnXuat'])) {
     exit;
 }
 
+$ma = "";
+$ht = "";
+$em = "";
+$tc = "";
+
+$sql = "SELECT * FROM user WHERE 1=1";
+if (isset($_POST['btnTimkiem'])) {
+    $ma = $_POST['txtma'];
+    $ht = $_POST['txthoten'];
+    $em = $_POST['txtemail'];
+    $tc = $_POST['txttruycap'];
+
+    if (!empty($ma)) {
+        $sql .= " AND ma = '$ma'";
+    }
+    if (!empty($ht)) {
+        $sql .= " AND hoten = '$ht'";
+    }
+    if (!empty($em)) {
+        $sql .= " AND email = '$em'";
+    }
+    if ($tc !== '') {
+        $sql .= " AND is_admin = '$tc'";
+    }
+}
+$data = mysqli_query($con, $sql);
+
 if (isset($_POST['btnXoa'])) {
-    $sql = "DELETE FROM user WHERE is_admin = 0";
+    $sql = "DELETE FROM user WHERE is_admin = 1 OR is_admin = 0";
     mysqli_query($con, $sql);
     echo "<script>alert('Xoá thành công')</script>";
 }
 
-$ma = "";
-$ht = "";
-$em = "";
-$lop = "";
-
-$sql = "SELECT user.*, lop_hoc.tenlop FROM user LEFT JOIN lop_hoc ON user.tenlop = lop_hoc.tenlop WHERE user.is_admin = 0";
-
-if (isset($_POST['btnTimkiem'])) {
-    $ma = $_POST['txtma'];
-    $ht = $_POST['txthoten'];
-    $lop = $_POST['txttenlop'];
-    $em = $_POST['txtemail'];
-    $sql = "SELECT * FROM user WHERE ma LIKE '%$ma%' AND hoten LIKE '%$ht%' AND email LIKE '%$em%' AND tenlop LIKE '%$lop%' AND is_admin = 0";
-    $ma = "";
-    $ht = "";
-    $em = "";
-    $lop = "";
-}
-$data = mysqli_query($con, $sql);
-
-
-
 if (isset($_POST['btnThemmoi'])) {
-    header("location: ./manager_sv/teacher_add_qlsv.php");
+    echo "<script>
+        if (confirm('Bạn muốn thêm mới Giảng viên?')) {
+            window.location.href = 'admin_add_gv.php';
+        } else {
+            window.location.href = 'admin_add_sv.php';
+        }
+    </script>";
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -143,18 +158,21 @@ if (isset($_POST['btnThemmoi'])) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="teacher_info.css">
-<link rel="stylesheet" href="teacher_homepage.css">
+<link rel="stylesheet" href="../teacher/teacher_homepage.css">
+<link rel="stylesheet" href="../teacher/teacher_info.css">
 <title>Quản lý điểm sinh viên đại học</title>
+<style>
+    .sidebar {
+        overflow: hidden;
+    }
+</style>
 
 <body>
     <!-- header -->
     <div class="header">
-        <span class="header-text">Quản lý sinh viên</span>
+        <span class="header-text">Quản lý người dùng</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
-        session_start();
-        include_once "connectdb.php";
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $sql = "SELECT hoten FROM user WHERE ma = '$user_id'";
@@ -169,55 +187,19 @@ if (isset($_POST['btnThemmoi'])) {
     <div class="sidebar">
         <ul>
             <li>
-                <a href="teacher_info.php">
-                    <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin cá nhân</span>
+                <a href="admin_dashboard.php" class="logo">
+                    <span class="icon"><i class="fa-solid fa-house"></i></span>
+                    <span class="text">Trang chủ</span>
                 </a>
             </li>
             <li>
-                <a href="teacher_infosv.php">
-                    <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-                    <span class="text">Quản lý sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="./manager_class/teacher_class.php">
-                    <span class="icon"><i class="fa-solid fa-landmark"></i></span>
-                    <span class="text">Quản lý lớp học</span>
-                </a>
-            </li>
-            <li>
-                <a href="./manager_course/teacher_course.php">
-                    <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                    <span class="text">Quản lý môn học</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_add.php">
-                    <span class="icon"><i class="fa-solid fa-wrench"></i></span>
-                    <span class="text">Thêm điểm sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_board.php">
+                <a href="admin_control.php">
                     <span class="icon"><i class="fa-solid fa-table"></i></span>
-                    <span class="text">Bảng điểm sinh viên</span>
+                    <span class="text">Quản lý người dùng</span>
                 </a>
             </li>
             <li>
-                <a href="teacher_listgv.php">
-                    <span class="icon"><i class="fa-solid fa-list"></i></span>
-                    <span class="text">Danh sách quản lý</span>
-                </a>
-            </li>
-            <li>
-                <a href="./manager_scholarship/teacher_scholarship.php">
-                    <span class="icon"><i class="fa-solid fa-user-graduate"></i></span>
-                    <span class="text">Danh sách học bổng</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_logout.php">
+                <a href="admin_logout.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>
                 </a>
@@ -248,19 +230,22 @@ if (isset($_POST['btnThemmoi'])) {
                 </div>
                 <div class="col" style="margin:10px">
                     <div class="input-group full-width">
-                        <i class="fa-solid fa-clipboard"></i>
+                        <i class="fa-solid fa-envelope"></i>
                         <div class="form-field">
-                            <input class="info1" type="text" name="txttenlop" value="<?php echo $lop; ?>"
-                                placeholder="Tên lớp">
+                            <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>"
+                                placeholder="Email">
                         </div>
                     </div>
                 </div>
                 <div class="col" style="margin:10px">
                     <div class="input-group full-width">
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fa-solid fa-clipboard"></i>
                         <div class="form-field">
-                            <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>"
-                                placeholder="Email">
+                            <select class="info1" name="txttruycap">
+                                <option value="">Quyền truy cập</option>
+                                <option value="1" <?php echo ($tc == '1') ? 'selected' : ''; ?>>Giảng viên</option>
+                                <option value="0" <?php echo ($tc == '0') ? 'selected' : ''; ?>>Sinh viên</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -297,11 +282,11 @@ if (isset($_POST['btnThemmoi'])) {
             <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">
                 <tr>
                     <th>STT</th>
-                    <th>Mã sinh viên</th>
+                    <th>Mã</th>
                     <th>Họ tên</th>
-                    <th>Lớp</th>
                     <th>Email</th>
                     <th>Mật khẩu</th>
+                    <th>Quyền truy cập</th>
                     <th>Chức năng</th>
                 </tr>
             </thead>
@@ -315,13 +300,14 @@ if (isset($_POST['btnThemmoi'])) {
                             <td><?php echo $i++ ?></td>
                             <td><?php echo $row['ma'] ?></td>
                             <td><?php echo $row['hoten'] ?></td>
-                            <td><?php echo $row['tenlop'] ?></td>
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['password'] ?></td>
+                            <td><?php echo $row['is_admin'] == 1 ? 'Giảng viên' : ($row['is_admin'] == 0 ? 'Sinh viên' : 'Admin'); ?>
+                            </td>
                             <td>
-                                <a href="./manager_sv/teacher_fix_qlsv.php?ma=<?php echo $row['ma'] ?>" class="btn btn-light"><i
-                                        class=" fa-solid fa-wrench"></i></a>
-                                <a href=" ./manager_sv/teacher_del_qlsv.php?ma=<?php echo $row['ma'] ?>"
+                                <a href="<?php echo ($row['is_admin'] == 1 || $row['is_admin'] == 2) ? 'admin_fix_gv.php' : 'admin_fix_sv.php'; ?>?ma=<?php echo $row['ma'] ?>"
+                                    class="btn btn-light"><i class="fa-solid fa-wrench"></i></a>
+                                <a href="admin_del.php?ma=<?php echo $row['ma'] ?>"
                                     onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i
                                         class="fa-solid fa-trash"></i></a>
                             </td>

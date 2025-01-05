@@ -87,12 +87,6 @@ if (isset($_POST['btnluu'])) {
                 </a>
             </li>
             <li>
-                <a href="teacher_infosv.php">
-                    <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-                    <span class="text">Quản lý sinh viên</span>
-                </a>
-            </li>
-            <li>
                 <a href="./manager_class/teacher_class.php">
                     <span class="icon"><i class="fa-solid fa-landmark"></i></span>
                     <span class="text">Quản lý lớp học</span>
@@ -114,12 +108,6 @@ if (isset($_POST['btnluu'])) {
                 <a href="teacher_board.php">
                     <span class="icon"><i class="fa-solid fa-table"></i></span>
                     <span class="text">Bảng điểm sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_listgv.php">
-                    <span class="icon"><i class="fa-solid fa-list"></i></span>
-                    <span class="text">Danh sách quản lý</span>
                 </a>
             </li>
             <li>

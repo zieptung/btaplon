@@ -306,6 +306,7 @@ if (isset($_POST['btnThemmoi'])) {
       </table>
 
    </article>
+   </article>
 </body>
 
 </html>

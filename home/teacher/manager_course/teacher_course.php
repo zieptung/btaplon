@@ -56,9 +56,9 @@ if (isset($_POST['btnThemmoi'])) {
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="../teacher_homepage.css">
 <link rel="stylesheet" href="../teacher_info.css">
+<link rel="stylesheet" href="../teacher_homepage.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>

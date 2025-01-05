@@ -77,7 +77,7 @@ if ($row = mysqli_fetch_assoc($result)) {
     <article class="content">
         <div class="container">
             <form method="POST" action="">
-                <div class="form-row" style="margin-top: 10px;">
+                <div class="form-row">
                     <div class="input-group">
                         <i class="fas fa-id-card"></i>
                         <div class="form-field">

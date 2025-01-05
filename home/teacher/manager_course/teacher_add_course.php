@@ -1,40 +1,32 @@
 <?php
 include_once "../connectdb.php";
-$ma = $ht = $em = $pa = $lop = $khoahoc = "";
-
-$sql3 = "SELECT tenlop FROM lop_hoc";
-$result1 = mysqli_query($con, $sql3);
-
+$mm = $tm = $stc = $khoahoc = $hocky = "";
 if (isset($_POST['btnLuu'])) {
-    $ma = $_POST['txtma'];
-    $ht = $_POST['txthoten'];
-    $lop = $_POST['txttenlop'];
-    $em = $_POST['txtemail'];
-    $pa = $_POST['txtpassword'];
+    $mm = $_POST['txtmamon'];
+    $tm = $_POST['txttenmon'];
+    $stc = $_POST['txtstc'];
     $khoahoc = $_POST['txtkhoahoc'];
+    $hocky = $_POST['txthocky'];
 
-    $sql = "SELECT * FROM user WHERE ma = '$ma'";
-    $result = mysqli_query($con, $sql);
+    $sql_insert = "INSERT INTO mon_hoc (mamon, tenmon, sotinchi, khoahoc, hocky) VALUES ('$mm', '$tm', '$stc', '$khoahoc', '$hocky')";
 
-    if (mysqli_num_rows($result) > 0) {
-        echo "<script> alert('Mã sinh viên đã tồn tại!'); window.location.href = 'teacher_add_qlsv.php'; </script>";
+    $sql_check = "SELECT * FROM mon_hoc WHERE mamon = '$mm'";
+    $result_check = mysqli_query($con, $sql_check);
+
+    if (mysqli_num_rows($result_check) > 0) {
+        echo "<script>alert('Môn học đã tồn tại');</script>";
     } else {
-        $sql1 = "INSERT INTO user (ma, hoten, tenlop, email, password, khoahoc, is_admin) VALUES ('$ma', '$ht', '$lop', '$em', '$pa','$khoahoc', 0)";
-        $sql2 = "INSERT INTO sinh_vien (ma, hoten, tenlop, email, khoahoc) VALUES ('$ma', '$ht', '$lop', '$em', '$khoahoc')";
-        $kq1 = mysqli_query($con, $sql1);
-        $kq2 = mysqli_query($con, $sql2);
-        if ($kq1 && $kq2) {
-            echo "<script> alert('Thêm thành công!'); window.location.href = '../teacher_infosv.php'; </script>";
-        } else {
-            echo "<script> alert('Thêm thất bại!'); </script>";
+        if (mysqli_query($con, $sql_insert)) {
+            echo "<script>alert('Thêm môn học thành công'); window.location.href = './teacher_course.php'; </script>";
+
         }
     }
 }
-
 if (isset($_POST['btnBack'])) {
-    header("location: ../teacher_infosv.php");
+    header("location: teacher_course.php");
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,11 +39,9 @@ if (isset($_POST['btnBack'])) {
 <body>
     <!-- header -->
     <div class="header">
-        <span class="header-text">Quản lý sinh viên</span>
+        <span class="header-text">Quản lý môn học</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
-        session_start();
-        include_once "../connectdb.php";
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $sql = "SELECT hoten FROM user WHERE ma = '$user_id'";
@@ -84,13 +74,13 @@ if (isset($_POST['btnBack'])) {
                 </a>
             </li>
             <li>
-                <a href="../manager_course/teacher_course.php">
+                <a href="teacher_course.php">
                     <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
                     <span class="text">Quản lý môn học</span>
                 </a>
             </li>
             <li>
-                <a href="../teacher_fix.php">
+                <a href="../teacher_add.php">
                     <span class="icon"><i class="fa-solid fa-wrench"></i></span>
                     <span class="text">Thêm điểm sinh viên</span>
                 </a>
@@ -128,37 +118,25 @@ if (isset($_POST['btnBack'])) {
                 <div class="input-group" style="margin-top: 20px;">
                     <i class="fa-solid fa-arrow-right"></i>
                     <div class="form-field">
-                        <label>Mã sinh viên</label>
-                        <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>"
-                            placeholder="Mã sinh viên">
+                        <label>Mã học phần</label>
+                        <input class="info1" type="text" name="txtmamon" value="<?php echo $mm; ?>"
+                            placeholder="Mã học phần">
                     </div>
                 </div>
                 <div class="input-group" style="margin-top: 20px;">
                     <i class="fa-solid fa-arrow-right"></i>
                     <div class="form-field">
-                        <label>Họ tên</label>
-                        <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>"
-                            placeholder="Họ tên">
+                        <label>Tên học phần</label>
+                        <input class="info1" type="text" name="txttenmon" value="<?php echo $tm; ?>"
+                            placeholder="Tên học phần">
                     </div>
                 </div>
                 <div class="input-group" style="margin-top: 20px;">
                     <i class="fa-solid fa-arrow-right"></i>
                     <div class="form-field">
-                        <label>Tên lớp</label>
-                        <select name="txttenlop" id="" class="info1">
-                            <option value="">---Chọn lớp---</option>
-                            <?php
-                            if (isset($result1) && mysqli_num_rows($result1) > 0) {
-                                while ($row = mysqli_fetch_assoc($result1)) {
-                                    ?>
-                                    <option value="<?php echo $row['tenlop'] ?>">
-                                        <?php echo $row['tenlop'] ?>
-                                    </option>
-                                    <?php
-                                }
-                            }
-                            ?>
-                        </select>
+                        <label>Số tín chỉ</label>
+                        <input class="info1" type="text" name="txtstc" value="<?php echo $stc; ?>"
+                            placeholder="Số tín chỉ">
                     </div>
                 </div>
                 <div class="input-group" style="margin-top: 20px;">
@@ -172,16 +150,9 @@ if (isset($_POST['btnBack'])) {
                 <div class="input-group" style="margin-top: 20px;">
                     <i class="fa-solid fa-arrow-right"></i>
                     <div class="form-field">
-                        <label>Email</label>
-                        <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>" placeholder="Email">
-                    </div>
-                </div>
-                <div class="input-group" style="margin-top: 20px;">
-                    <i class="fa-solid fa-arrow-right"></i>
-                    <div class="form-field">
-                        <label>Mật khẩu</label>
-                        <input class="info1" type="text" name="txtpassword" value="<?php echo $pa; ?>"
-                            placeholder="Mật khẩu">
+                        <label>Học kỳ</label>
+                        <input class="info1" type="text" name="txthocky" value="<?php echo $hocky; ?>"
+                            placeholder="Học kỳ">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success" name="btnLuu"
@@ -189,7 +160,6 @@ if (isset($_POST['btnBack'])) {
                 <button type="submit" class="btn btn-info" name="btnBack" style="margin-left:150px; margin-top:10px">Trở
                     về</button>
             </div>
+            </div>
     </article>
 </body>
-
-</html>

@@ -1,89 +1,11 @@
 <?php
+ob_start();
 include_once "../connectdb.php";
-require './Classes/PHPExcel.php';
-if (isset($_POST['btnXuat'])) {
-   ob_start();
-   //code xuất excel
-   $objExcel = new PHPExcel();
-   $objExcel->setActiveSheetIndex(0);
-   $sheet = $objExcel->getActiveSheet()->setTitle('Diem');
-   $rowCount = 1;
-   //Tạo tiêu đề cho cột trong excel
+$ht = "";
+$tm = "";
+$ma = "";
 
-   $sheet->setCellValue("A$rowCount", 'Mã Học Phần');
-   $sheet->setCellValue("B$rowCount", 'Tên Sinh Viên');
-   $sheet->setCellValue("C$rowCount", 'Mã Sinh Viên');
-   $sheet->setCellValue("D$rowCount", 'Tên Học Phần');
-   $sheet->setCellValue("E$rowCount", 'Số Tín Chỉ');
-   $sheet->setCellValue("F$rowCount", 'Điểm Số');
-   $sheet->setCellValue("G$rowCount", 'Điểm Chữ');
-   $sheet->setCellValue("H$rowCount", 'Điểm Chuyên Cần');
-   $sheet->setCellValue("I$rowCount", 'Điểm Giữa Kỳ');
-   $sheet->setCellValue("J$rowCount", 'Điểm Cuối Kỳ');
-   $sheet->setCellValue("K$rowCount", 'Điểm Tổng');
-   $sheet->setCellValue("L$rowCount", 'Loại');
-
-   $sql1 = "SELECT * FROM diem";
-   $data = mysqli_query($con, $sql1);
-   while ($row = mysqli_fetch_array($data)) {
-      $rowCount++;
-      $sheet->setCellValue("A{$rowCount}", $row['mamon']);
-      $sheet->setCellValue("B{$rowCount}", $row['hoten']);
-      $sheet->setCellValue("C{$rowCount}", $row['ma']);
-      $sheet->setCellValue("D{$rowCount}", $row['tenmon']);
-      $sheet->setCellValue("E{$rowCount}", $row['sotinchi']);
-      $sheet->setCellValue("F{$rowCount}", $row['diemso']);
-      $sheet->setCellValue("G{$rowCount}", $row['diemchu']);
-      $sheet->setCellValue("H{$rowCount}", $row['diemcc']);
-      $sheet->setCellValue("I{$rowCount}", $row['diemgk']);
-      $sheet->setCellValue("J{$rowCount}", $row['diemck']);
-      $sheet->setCellValue("K{$rowCount}", $row['diemtong']);
-      $sheet->setCellValue("L{$rowCount}", $row['loai']);
-   }
-
-   //định dạng cột tiêu đề
-   $sheet->getColumnDimension('A')->setAutoSize(true);
-   $sheet->getColumnDimension('B')->setAutoSize(true);
-   $sheet->getColumnDimension('C')->setAutoSize(true);
-   $sheet->getColumnDimension('D')->setAutoSize(true);
-   $sheet->getColumnDimension('E')->setAutoSize(true);
-   $sheet->getColumnDimension('F')->setAutoSize(true);
-   $sheet->getColumnDimension('G')->setAutoSize(true);
-   $sheet->getColumnDimension('H')->setAutoSize(true);
-   $sheet->getColumnDimension('I')->setAutoSize(true);
-   $sheet->getColumnDimension('J')->setAutoSize(true);
-   $sheet->getColumnDimension('K')->setAutoSize(true);
-   $sheet->getColumnDimension('L')->setAutoSize(true);
-   //gán màu nền
-   $sheet->getStyle('A1:L1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
-   //căn giữa
-   $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-
-   // Thực hiện truy vấn để lấy dữ liệu từ cơ sở dữ liệu
-   //Kẻ bảng 
-   $styleAray = [
-      'borders' => [
-         'allborders' => [
-            'style' => PHPExcel_Style_Border::BORDER_THIN
-         ]
-      ]
-   ];
-   $sheet->getStyle("A1:L$rowCount")->applyFromArray($styleAray);
-   $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
-   ob_end_flush(); // Xóa bộ đệm đầu ra
-   $fileName = 'Diem.xlsx';
-   $objWriter->save($fileName);
-   ob_end_clean(); // Xóa bộ đệm đầu ra
-   header("Content-Disposition: attachment; filename=\"{$fileName}\"");
-   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-   header('Content-Length: ' . filesize($fileName));
-   header('Content-Transfer-Encoding: binary');
-   header('Cache-Control: must-revalidate');
-   header('Pragma: no-cache');
-   readfile($fileName);
-   unlink($fileName); // Xóa tệp sau khi tải xuống
-   exit;
-}
+$sql = "SELECT * FROM diem";
 
 if (isset($_POST['btnXoa'])) {
    $sql = "DELETE FROM diem";
@@ -93,11 +15,6 @@ if (isset($_POST['btnXoa'])) {
    }
 }
 
-$ht = "";
-$tm = "";
-$ma = "";
-
-$sql = "SELECT * FROM diem";
 
 if (isset($_POST['btnTimkiem'])) {
    $ma = $_POST['txtma'];
@@ -119,13 +36,114 @@ if (isset($_POST['btnSapxep'])) {
    $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%' ORDER BY diemtong $sortOrder";
    $data = mysqli_query($con, $sql);
 }
+
+$sql = "SELECT DISTINCT khoahoc, hocky FROM mon_hoc ORDER BY khoahoc ASC, hocky ASC";
+$sql_khoahoc_hocky = mysqli_query($con, $sql);
+
+if (isset($_POST['btnTimkiem'])) {
+   $ma = $_POST['txtma'];
+   $ht = $_POST['txthoten'];
+   $tm = $_POST['txttenmon'];
+   $khoahoc_hocky = $_POST['khoahoc_hocky'];
+   $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%'";
+   if (!empty($khoahoc_hocky)) {
+      $parts = explode('-Học kỳ:', $khoahoc_hocky);
+      if (count($parts) == 2) {
+         $khoahoc = trim($parts[0]);
+         $hocky = trim($parts[1]);
+         $sql .= " AND khoahoc = '$khoahoc' AND hocky = '$hocky'";
+      }
+   }
+   $data = mysqli_query($con, $sql);
+}
+if (isset($_POST['btnXuat'])) {
+   //code xuất excel
+   require './Classes/PHPExcel.php';
+   $objExcel = new PHPExcel();
+   $objExcel->setActiveSheetIndex(0);
+   $sheet = $objExcel->getActiveSheet()->setTitle('Diem');
+   $rowCount = 1;
+   //Tạo tiêu đề cho cột trong excel
+   $sheet->setCellValue("A$rowCount", 'Mã Học Phần');
+   $sheet->setCellValue("B$rowCount", 'Tên Sinh Viên');
+   $sheet->setCellValue("C$rowCount", 'Mã Sinh Viên');
+   $sheet->setCellValue("D$rowCount", 'Tên Học Phần');
+   $sheet->setCellValue("E$rowCount", 'Số Tín Chỉ');
+   $sheet->setCellValue("F$rowCount", 'Điểm Số');
+   $sheet->setCellValue("G$rowCount", 'Điểm Chữ');
+   $sheet->setCellValue("H$rowCount", 'Điểm Chuyên Cần');
+   $sheet->setCellValue("I$rowCount", 'Điểm Giữa Kỳ');
+   $sheet->setCellValue("J$rowCount", 'Điểm Cuối Kỳ');
+   $sheet->setCellValue("K$rowCount", 'Điểm Tổng');
+   $sheet->setCellValue("L$rowCount", 'Loại');
+
+   // Lấy dữ liệu từ bảng diem với điều kiện tìm kiếm
+   $query = "SELECT * FROM diem WHERE diemtong >= 4";
+   $data = mysqli_query($con, $query);
+   while ($row = mysqli_fetch_array($data)) {
+      $rowCount++;
+      $sheet->setCellValue("A{$rowCount}", $row['mamon']);
+      $sheet->setCellValue("B{$rowCount}", $row['hoten']);
+      $sheet->setCellValue("C{$rowCount}", $row['ma']);
+      $sheet->setCellValue("D{$rowCount}", $row['tenmon']);
+      $sheet->setCellValue("E{$rowCount}", $row['sotinchi']);
+      $sheet->setCellValue("F{$rowCount}", (string)$row['diemso']);
+      $sheet->setCellValue("G{$rowCount}", (string)$row['diemchu']);
+      $sheet->setCellValue("H{$rowCount}", (string)$row['diemcc']);
+      $sheet->setCellValue("I{$rowCount}", (string)$row['diemgk']);
+      $sheet->setCellValue("J{$rowCount}", (string)$row['diemck']);
+      $sheet->setCellValue("K{$rowCount}", (float)$row['diemtong']);
+      $sheet->setCellValue("L{$rowCount}", $row['loai']);
+   }
+
+   //định dạng cột tiêu đề
+   $sheet->getColumnDimension('A')->setAutoSize(true);
+   $sheet->getColumnDimension('B')->setAutoSize(true);
+   $sheet->getColumnDimension('C')->setAutoSize(true);
+   $sheet->getColumnDimension('D')->setAutoSize(true);
+   $sheet->getColumnDimension('E')->setAutoSize(true);
+   $sheet->getColumnDimension('F')->setAutoSize(true);
+   $sheet->getColumnDimension('G')->setAutoSize(true);
+   $sheet->getColumnDimension('H')->setAutoSize(true);
+   $sheet->getColumnDimension('I')->setAutoSize(true);
+   $sheet->getColumnDimension('J')->setAutoSize(true);
+   $sheet->getColumnDimension('K')->setAutoSize(true);
+   $sheet->getColumnDimension('L')->setAutoSize(true);
+   //gán màu nền
+   $sheet->getStyle('A1:L1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
+   //căn giữa
+   $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+   // Kẻ bảng 
+   $styleArray = [
+      'borders' => [
+         'allborders' => [
+            'style' => PHPExcel_Style_Border::BORDER_THIN
+         ]
+      ]
+   ];
+   $sheet->getStyle("A1:L$rowCount")->applyFromArray($styleArray);
+   $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
+   ob_end_clean(); // Xóa bộ đệm đầu ra
+   $fileName = 'Diem.xlsx';
+   $objWriter->save($fileName);
+   header("Content-Disposition: attachment; filename=\"{$fileName}\"");
+   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+   header('Content-Length: ' . filesize($fileName));
+   header('Content-Transfer-Encoding: binary');
+   header('Cache-Control: must-revalidate');
+   header('Pragma: no-cache');
+   readfile($fileName);
+   unlink($fileName); // Xóa tệp sau khi tải xuống
+   exit;
+}
 ?>
 
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="teacher_info.css">
 <link rel="stylesheet" href="teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
@@ -253,6 +271,30 @@ if (isset($_POST['btnSapxep'])) {
                      </div>
                   </div>
                </div>
+            </div>
+            <div class="row">
+                               <div class="col" style="margin:10px">
+                    <div class="input-group full-width">
+                        <div class="form-field">
+                            <label for="khoahoc_hocky">Khóa học và học kỳ:</label>
+                            <select class="form-control" id="khoahoc_hocky" name="khoahoc_hocky">
+                                <option value="">Chọn Khoá học và học kỳ</option>
+                                <?php
+                                          if (isset($sql_khoahoc_hocky) && mysqli_num_rows($sql_khoahoc_hocky) > 0) {
+                                             while ($row = mysqli_fetch_assoc($sql_khoahoc_hocky)) {
+                                                $selected = (isset($_POST['khoahoc_hocky']) && $_POST['khoahoc_hocky'] == $row['khoahoc'] . '-Học kỳ:' . $row['hocky']) ? 'selected' : '';
+                                                ?>
+                                                <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>" <?php echo $selected; ?>>
+                                                   <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
+                                                </option>
+                                                <?php
+                                             }
+                                          }
+                                          ?>
+                                       </select>
+                                    </div>
+                                 </div>
+                              </div>
             </div>
             <button type="submit" class="btn btn-info" name="btnTimkiem"
                style="margin-left:370px; margin-top:10px; margin-bottom: 10px; margin-right: 60px"><i

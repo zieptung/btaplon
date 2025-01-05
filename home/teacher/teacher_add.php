@@ -19,6 +19,8 @@ if (isset($_POST['btnGui'])) {
             $diemcc = $sheetData[$row]['F'];
             $diemgk = $sheetData[$row]['G'];
             $diemck = $sheetData[$row]['H'];
+            $khoahoc = $sheetData[$row]['I'];
+            $hocky = $sheetData[$row]['J'];
 
             // Kiểm tra sinh viên có tồn tại trong bảng sinh_vien không
             $sql5 = "SELECT ma FROM sinh_vien WHERE ma = '$ma'";
@@ -26,8 +28,8 @@ if (isset($_POST['btnGui'])) {
 
             if (mysqli_num_rows($result) > 0) {
                 // Sinh viên tồn tại, chèn dữ liệu vào bảng diem
-                $sql6 = "INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck) 
-                      VALUES ('$mamon', '$hoten', '$ma', '$tenmon', '$sotinchi', '$diemcc', '$diemgk', '$diemck')";
+                $sql6 = "INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck, khoahoc, hocky) 
+                      VALUES ('$mamon', '$hoten', '$ma', '$tenmon', '$sotinchi', '$diemcc', '$diemgk', '$diemck', '$khoahoc', '$hocky')";
                 mysqli_query($con, $sql6);
             }
         }
@@ -58,12 +60,14 @@ if (isset($_POST["btnLuu"])) {
     $gk = $_POST['txtdiemgk'];
     $ck = $_POST['txtdiemck'];
 
-    // Lấy tên môn và số tín chỉ từ bảng mon_hoc dựa trên mã môn
-    $sqlMonHoc = "SELECT tenmon, sotinchi FROM mon_hoc WHERE mamon = '$mm'";
+    // Lấy tên môn, số tín chỉ, khóa học và học kỳ từ bảng mon_hoc dựa trên mã môn
+    $sqlMonHoc = "SELECT tenmon, sotinchi, khoahoc, hocky FROM mon_hoc WHERE mamon = '$mm'";
     $resultMonHoc = mysqli_query($con, $sqlMonHoc);
     if ($rowMonHoc = mysqli_fetch_assoc($resultMonHoc)) {
         $tm = $rowMonHoc['tenmon'];
         $stc = $rowMonHoc['sotinchi'];
+        $khoahoc = $rowMonHoc['khoahoc'];
+        $hocky = $rowMonHoc['hocky'];
     } else {
         echo "<script>alert('Mã môn không tồn tại!'); window.location.href='teacher_add.php';</script>";
         exit;
@@ -76,8 +80,8 @@ if (isset($_POST["btnLuu"])) {
     if (mysqli_num_rows($result) > 0) {
         echo "<script>alert('Điểm của sinh viên này đã tồn tại!'); window.location.href='teacher_add.php';</script>";
     } else {
-        $sql = "INSERT INTO diem (mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck)
-        VALUES ('$mm', '$ht', '$ma', '$tm', '$stc', '$cc', '$gk', '$ck')";
+        $sql = "INSERT INTO diem (mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck, khoahoc, hocky)
+        VALUES ('$mm', '$ht', '$ma', '$tm', '$stc', '$cc', '$gk', '$ck', '$khoahoc', '$hocky')";
 
         $kq = mysqli_query($con, $sql);
         if ($kq) {

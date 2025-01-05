@@ -87,12 +87,12 @@ if (isset($_POST['btnXuat'])) {
       $sheet->setCellValue("C{$rowCount}", $row['ma']);
       $sheet->setCellValue("D{$rowCount}", $row['tenmon']);
       $sheet->setCellValue("E{$rowCount}", $row['sotinchi']);
-      $sheet->setCellValue("F{$rowCount}", (string)$row['diemso']);
-      $sheet->setCellValue("G{$rowCount}", (string)$row['diemchu']);
-      $sheet->setCellValue("H{$rowCount}", (string)$row['diemcc']);
-      $sheet->setCellValue("I{$rowCount}", (string)$row['diemgk']);
-      $sheet->setCellValue("J{$rowCount}", (string)$row['diemck']);
-      $sheet->setCellValue("K{$rowCount}", (float)$row['diemtong']);
+      $sheet->setCellValue("F{$rowCount}", (string) $row['diemso']);
+      $sheet->setCellValue("G{$rowCount}", (string) $row['diemchu']);
+      $sheet->setCellValue("H{$rowCount}", (string) $row['diemcc']);
+      $sheet->setCellValue("I{$rowCount}", (string) $row['diemgk']);
+      $sheet->setCellValue("J{$rowCount}", (string) $row['diemck']);
+      $sheet->setCellValue("K{$rowCount}", (float) $row['diemtong']);
       $sheet->setCellValue("L{$rowCount}", $row['loai']);
    }
 
@@ -141,9 +141,9 @@ if (isset($_POST['btnXuat'])) {
 
 <!DOCTYPE html>
 <html>
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="teacher_info.css">
 <link rel="stylesheet" href="teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
@@ -176,12 +176,6 @@ if (isset($_POST['btnXuat'])) {
             </a>
          </li>
          <li>
-            <a href="teacher_infosv.php">
-               <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-               <span class="text">Quản lý sinh viên</span>
-            </a>
-         </li>
-         <li>
             <a href="./manager_class/teacher_class.php">
                <span class="icon"><i class="fa-solid fa-landmark"></i></span>
                <span class="text">Quản lý lớp học</span>
@@ -203,12 +197,6 @@ if (isset($_POST['btnXuat'])) {
             <a href="teacher_board.php">
                <span class="icon"><i class="fa-solid fa-table"></i></span>
                <span class="text">Bảng điểm sinh viên</span>
-            </a>
-         </li>
-         <li>
-            <a href="teacher_listgv.php">
-               <span class="icon"><i class="fa-solid fa-list"></i></span>
-               <span class="text">Danh sách quản lý</span>
             </a>
          </li>
          <li>
@@ -273,28 +261,28 @@ if (isset($_POST['btnXuat'])) {
                </div>
             </div>
             <div class="row">
-                               <div class="col" style="margin:10px">
-                    <div class="input-group full-width">
-                        <div class="form-field">
-                            <label for="khoahoc_hocky">Khóa học và học kỳ:</label>
-                            <select class="form-control" id="khoahoc_hocky" name="khoahoc_hocky">
-                                <option value="">Chọn Khoá học và học kỳ</option>
-                                <?php
-                                          if (isset($sql_khoahoc_hocky) && mysqli_num_rows($sql_khoahoc_hocky) > 0) {
-                                             while ($row = mysqli_fetch_assoc($sql_khoahoc_hocky)) {
-                                                $selected = (isset($_POST['khoahoc_hocky']) && $_POST['khoahoc_hocky'] == $row['khoahoc'] . '-Học kỳ:' . $row['hocky']) ? 'selected' : '';
-                                                ?>
-                                                <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>" <?php echo $selected; ?>>
-                                                   <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
-                                                </option>
-                                                <?php
-                                             }
-                                          }
-                                          ?>
-                                       </select>
-                                    </div>
-                                 </div>
-                              </div>
+               <div class="col" style="margin:10px">
+                  <div class="input-group full-width">
+                     <div class="form-field">
+                        <label for="khoahoc_hocky">Khóa học và học kỳ:</label>
+                        <select class="form-control" id="khoahoc_hocky" name="khoahoc_hocky">
+                           <option value="">Chọn Khoá học và học kỳ</option>
+                           <?php
+                           if (isset($sql_khoahoc_hocky) && mysqli_num_rows($sql_khoahoc_hocky) > 0) {
+                              while ($row = mysqli_fetch_assoc($sql_khoahoc_hocky)) {
+                                 $selected = (isset($_POST['khoahoc_hocky']) && $_POST['khoahoc_hocky'] == $row['khoahoc'] . '-Học kỳ:' . $row['hocky']) ? 'selected' : '';
+                                 ?>
+                                 <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>" <?php echo $selected; ?>>
+                                    <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
+                                 </option>
+                                 <?php
+                              }
+                           }
+                           ?>
+                        </select>
+                     </div>
+                  </div>
+               </div>
             </div>
             <button type="submit" class="btn btn-info" name="btnTimkiem"
                style="margin-left:370px; margin-top:10px; margin-bottom: 10px; margin-right: 60px"><i

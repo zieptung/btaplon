@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once "connectdb.php";
+include_once "./connectdb.php";
 // Xử lý khi người dùng nhấn "Đăng nhập"
 if (isset($_POST["btnDangnhap"])) {
 
@@ -21,6 +21,8 @@ if (isset($_POST["btnDangnhap"])) {
             // Chuyển hướng dựa trên vai trò của người dùng
             if ($row['is_admin'] == 1) {
                 header("Location: ./teacher/teacher_info.php");
+            } elseif ($row['is_admin'] == 2) {
+                header("Location: ./admin/admin_dashboard.php");
             } else {
                 header("Location: ./student/student_homepage.php");
             }

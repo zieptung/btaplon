@@ -9,18 +9,17 @@ if (isset($_POST['btnLuu'])) {
     $ht = $_POST['txthoten'];
     $em = $_POST['txtemail'];
     $pa = $_POST['txtpassword'];
-
     $sql1 = "UPDATE user SET hoten='$ht', email='$em', password ='$pa' WHERE ma='$ma'";
-    $sql2 = "UPDATE giang_vien SET hoten='$ht', email='$em' WHERE ma='$ma'";
+    $sql2 = "UPDATE sinh_vien SET hoten='$ht', email='$em' WHERE ma='$ma'";
 
     $kq1 = mysqli_query($con, $sql1);
     $kq2 = mysqli_query($con, $sql2);
     if ($kq1 && $kq2) {
-        echo "<script>alert('Sửa thành công!'); window.location.href='../teacher_listgv.php';</script>";
+        echo "<script>alert('Sửa thành công!'); window.location.href='admin_control.php';</script>";
     }
 }
 if (isset($_POST['btnBack'])) {
-    header("location: ../teacher_listgv.php");
+    header("location: admin_control.php");
 }
 ?>
 <!DOCTYPE html>
@@ -28,8 +27,8 @@ if (isset($_POST['btnBack'])) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="../teacher_info.css">
-<link rel="stylesheet" href="../teacher_homepage.css">
+<link rel="stylesheet" href="../teacher/teacher_homepage.css">
+<link rel="stylesheet" href="../teacher/teacher_info.css">
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
@@ -54,55 +53,19 @@ if (isset($_POST['btnBack'])) {
     <div class="sidebar">
         <ul>
             <li>
-                <a href="../teacher_info.php">
-                    <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin cá nhân</span>
+                <a href="admin_dashboard.php" class="logo">
+                    <span class="icon"><i class="fa-solid fa-house"></i></span>
+                    <span class="text">Trang chủ</span>
                 </a>
             </li>
             <li>
-                <a href="../teacher_infosv.php">
-                    <span class="icon"><i class="fa-solid fa-circle-exclamation"></i></span>
-                    <span class="text">Quản lý sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="../manager_class/teacher_class.php">
-                    <span class="icon"><i class="fa-solid fa-landmark"></i></span>
-                    <span class="text">Quản lý lớp học</span>
-                </a>
-            </li>
-            <li>
-                <a href="../manager_course/teacher_course.php">
-                    <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                    <span class="text">Quản lý môn học</span>
-                </a>
-            </li>
-            <li>
-                <a href="../teacher_fix.php">
-                    <span class="icon"><i class="fa-solid fa-wrench"></i></span>
-                    <span class="text">Thêm điểm sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="../teacher_board.php">
+                <a href="admin_control.php">
                     <span class="icon"><i class="fa-solid fa-table"></i></span>
-                    <span class="text">Bảng điểm sinh viên</span>
+                    <span class="text">Quản lý người dùng</span>
                 </a>
             </li>
             <li>
-                <a href="../teacher_listgv.php">
-                    <span class="icon"><i class="fa-solid fa-list"></i></span>
-                    <span class="text">Danh sách quản lý</span>
-                </a>
-            </li>
-            <li>
-                <a href="../manager_scholarship/teacher_scholarship.php">
-                    <span class="icon"><i class="fa-solid fa-user-graduate"></i></span>
-                    <span class="text">Danh sách học bổng</span>
-                </a>
-            </li>
-            <li>
-                <a href="../teacher_logout.php">
+                <a href="admin_logout.php">
                     <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                     <span class="text">Đăng xuất</span>
                 </a>
@@ -120,8 +83,8 @@ if (isset($_POST['btnBack'])) {
                         <div class="input-group" style="margin-bottom: 20px;">
                             <i class="fa-solid fa-arrow-right"></i>
                             <div class="form-field">
-                                <label>Mã giảng viên</label>
-                                <input class="info1" type="text" value="<?php echo $r['ma']; ?>" placeholder="Mã giảng viên"
+                                <label>Mã sinh viên</label>
+                                <input class="info1" type="text" value="<?php echo $r['ma']; ?>" placeholder="Mã sinh viên"
                                     disabled>
                                 <input type="hidden" name="txtma" value="<?php echo $r['ma']; ?>">
                             </div>
@@ -132,6 +95,15 @@ if (isset($_POST['btnBack'])) {
                                 <label>Tên sinh viên</label>
                                 <input class="info1" type="text" name="txthoten" value="<?php echo $r['hoten']; ?>"
                                     placeholder="Họ tên">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <div class="form-field">
+                                <label>Tên lớp</label>
+                                <input class="info1" type="text" value="<?php echo $r['tenlop']; ?>" placeholder="Tên lớp"
+                                    disabled>
+                                <input type="hidden" name="txttenlop" value="<?php echo $r['tenlop']; ?>">
                             </div>
                         </div>
                         <div class="input-group" style="margin-bottom: 20px;">

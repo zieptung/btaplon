@@ -218,8 +218,8 @@ if (isset($_POST['btnThemmoi'])) {
             </li>
             <li>
                 <a href="teacher_logout.php">
-                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></sp< /a>an>
-                        <span class="text">Đăng xuất</span>
+                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+                    <span class="text">Đăng xuất</span>
                 </a>
             </li>
         </ul>

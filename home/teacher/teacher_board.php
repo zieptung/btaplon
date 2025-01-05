@@ -1,10 +1,8 @@
 <?php
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 include_once "../connectdb.php";
-require_once './Classes/PHPExcel.php';
+require './Classes/PHPExcel.php';
 if (isset($_POST['btnXuat'])) {
    ob_start();
-
    //code xuất excel
    $objExcel = new PHPExcel();
    $objExcel->setActiveSheetIndex(0);

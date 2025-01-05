@@ -1,7 +1,7 @@
 <?php
 include_once "connectdb.php";
 if (isset($_POST['btnGui'])) {
-    require "../Classes/PHPExcel.php";
+    require "./Classes/PHPExcel.php";
     if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
         $file = $_FILES['file']['tmp_name'];
         $objReader = PHPExcel_IOFactory::createReaderForFile($file);
@@ -54,11 +54,20 @@ if (isset($_POST["btnLuu"])) {
     $mm = $_POST['txtmamon'];
     $ht = $_POST['txthoten'];
     $ma = $_POST['txtma'];
-    $tm = $_POST['txttenmon'];
-    $stc = $_POST['txtstc'];
     $cc = $_POST['txtdiemcc'];
     $gk = $_POST['txtdiemgk'];
     $ck = $_POST['txtdiemck'];
+
+    // Lấy tên môn và số tín chỉ từ bảng mon_hoc dựa trên mã môn
+    $sqlMonHoc = "SELECT tenmon, sotinchi FROM mon_hoc WHERE mamon = '$mm'";
+    $resultMonHoc = mysqli_query($con, $sqlMonHoc);
+    if ($rowMonHoc = mysqli_fetch_assoc($resultMonHoc)) {
+        $tm = $rowMonHoc['tenmon'];
+        $stc = $rowMonHoc['sotinchi'];
+    } else {
+        echo "<script>alert('Mã môn không tồn tại!'); window.location.href='teacher_add.php';</script>";
+        exit;
+    }
 
     // Kiểm tra mục nhập trùng lặp
     $checkSql = "SELECT * FROM diem WHERE mamon = '$mm' AND ma = '$ma'";
@@ -219,33 +228,13 @@ if (isset($_POST["btnNhap"])) {
                                     while ($row = mysqli_fetch_assoc($mon_hoc)) {
                                         ?>
                                         <option value="<?php echo $row['mamon'] ?>">
-                                            <?php echo $row['mamon'] ?>
+                                            <?php echo "Mã môn: " . $row['mamon'] . " - Tên môn: " . $row['tenmon'] . " - Số tín chỉ: " . $row['sotinchi']; ?>
                                         </option>
                                         <?php
                                     }
                                 }
                                 ?>
                             </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Tên học phần</label>
-                            <input class="info1" type="text" name="txttenmon" value="<?php echo $tm; ?>"
-                                placeholder="Tên học phần">
-                        </div>
-                    </div>
-                </div>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Số tín chỉ</label>
-                            <input class="info1" type="text" name="txtstc" value="<?php echo $stc; ?>"
-                                placeholder="Số tín chỉ">
                         </div>
                     </div>
                 </div>

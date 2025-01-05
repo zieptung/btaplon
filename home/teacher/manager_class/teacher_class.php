@@ -2,10 +2,11 @@
 include_once "../connectdb.php";
 require '../Classes/PHPExcel.php';
 
+session_start();
+
 $kh = "";
 $ma = "";
 $ht = "";
-$em = "";
 $lop = "";
 $sql2 = "SELECT * FROM lop_hoc";
 $lophoc = mysqli_query($con, $sql2);
@@ -14,19 +15,31 @@ $sql1 = "SELECT DISTINCT khoahoc FROM khoa_hoc";
 $khoahoc = mysqli_query($con, $sql1);
 
 $sql = "SELECT user.*, lop_hoc.tenlop FROM user LEFT JOIN lop_hoc ON user.tenlop = lop_hoc.tenlop WHERE user.is_admin = 0";
+$data = mysqli_query($con, $sql);
 
+// Kiểm tra nếu có câu truy vấn tìm kiếm trong session
+if (isset($_SESSION['search_sql'])) {
+    $search_sql = $_SESSION['search_sql'];
+    $data = mysqli_query($con, $search_sql);
+} else {
+    $search_sql = $sql;
+}
 
 if (isset($_POST['btnTimkiem'])) {
     $ma = $_POST['txtma'];
     $ht = $_POST['txthoten'];
     $lop = $_POST['lophoc'];
     $kh = $_POST['khoahoc'];
-    $sql = "SELECT * FROM user WHERE ma LIKE '%$ma%' AND hoten LIKE '%$ht%' AND email LIKE '%$em%' AND tenlop LIKE '%$lop%' AND khoahoc LIKE '%$kh%' AND is_admin = 0";
+    $search_sql = "SELECT user.*, lop_hoc.tenlop FROM user LEFT JOIN lop_hoc ON user.tenlop = lop_hoc.tenlop WHERE user.ma LIKE '%$ma%' AND user.hoten LIKE '%$ht%' AND user.tenlop LIKE '%$lop%' AND user.khoahoc LIKE '%$kh%' AND user.is_admin = 0";
+    $data = mysqli_query($con, $search_sql);
 
+    // Lưu câu truy vấn tìm kiếm vào session
+    $_SESSION['search_sql'] = $search_sql;
 }
 
-$data = mysqli_query($con, $sql);
 if (isset($_POST['btnXuat'])) {
+    $result = mysqli_query($con, $search_sql);
+
     $objExcel = new PHPExcel();
     $objExcel->setActiveSheetIndex(0);
     $sheet = $objExcel->getActiveSheet()->setTitle('Danh sách sinh viên');
@@ -39,7 +52,6 @@ if (isset($_POST['btnXuat'])) {
     $sheet->setCellValue("D1", 'Khóa học');
 
     // Sử dụng câu truy vấn đã tìm kiếm
-    $result = mysqli_query($con, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
         $rowCount++;
         $sheet->setCellValue("A{$rowCount}", $row['ma']);
@@ -87,7 +99,6 @@ if (isset($_POST['btnXuat'])) {
 if (isset($_POST['btnThemmoi'])) {
     header("location:teacher_add_class.php");
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +116,6 @@ if (isset($_POST['btnThemmoi'])) {
         <span class="header-text">Quản lý lớp học</span>
         <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
         <?php
-        session_start();
         include_once "../connectdb.php";
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
@@ -170,8 +180,8 @@ if (isset($_POST['btnThemmoi'])) {
             </li>
             <li>
                 <a href="../teacher_logout.php">
-                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></sp< /a>an>
-                        <span class="text">Đăng xuất</span>
+                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+                    <span class="text">Đăng xuất</span>
                 </a>
             </li>
         </ul>

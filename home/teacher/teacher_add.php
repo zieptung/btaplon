@@ -13,14 +13,15 @@ if (isset($_POST['btnGui'])) {
         for ($row = 2; $row <= $highestRow; $row++) {
             $mamon = $sheetData[$row]['A'];
             $hoten = $sheetData[$row]['B'];
-            $ma = $sheetData[$row]['C'];
-            $tenmon = $sheetData[$row]['D'];
-            $sotinchi = $sheetData[$row]['E'];
-            $diemcc = $sheetData[$row]['F'];
-            $diemgk = $sheetData[$row]['G'];
-            $diemck = $sheetData[$row]['H'];
-            $khoahoc = $sheetData[$row]['I'];
-            $hocky = $sheetData[$row]['J'];
+            $lop = $sheetData[$row]['C'];
+            $ma = $sheetData[$row]['D'];
+            $tenmon = $sheetData[$row]['E'];
+            $sotinchi = $sheetData[$row]['F'];
+            $diemcc = $sheetData[$row]['G'];
+            $diemgk = $sheetData[$row]['H'];
+            $diemck = $sheetData[$row]['I'];
+            $khoahoc = $sheetData[$row]['J'];
+            $hocky = $sheetData[$row]['K'];
 
             // Kiểm tra sinh viên có tồn tại trong bảng sinh_vien không
             $sql5 = "SELECT ma FROM sinh_vien WHERE ma = '$ma'";
@@ -28,8 +29,8 @@ if (isset($_POST['btnGui'])) {
 
             if (mysqli_num_rows($result) > 0) {
                 // Sinh viên tồn tại, chèn dữ liệu vào bảng diem
-                $sql6 = "INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck, khoahoc, hocky) 
-                      VALUES ('$mamon', '$hoten', '$ma', '$tenmon', '$sotinchi', '$diemcc', '$diemgk', '$diemck', '$khoahoc', '$hocky')";
+                $sql6 = "INSERT INTO diem(mamon, hoten, ma, tenmon, sotinchi, diemcc, diemgk, diemck, khoahoc, hocky, tenlop) 
+                  VALUES ('$mamon', '$hoten', '$ma', '$tenmon', '$sotinchi', '$diemcc', '$diemgk', '$diemck', '$khoahoc', '$hocky', '$lop')";
                 mysqli_query($con, $sql6);
             }
         }

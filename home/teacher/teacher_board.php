@@ -4,7 +4,10 @@ include_once "../connectdb.php";
 $ht = "";
 $tm = "";
 $ma = "";
+$lop = "";
 
+$sql_lop = "SELECT tenlop FROM lop_hoc";
+$result_lop = mysqli_query($con, $sql_lop);
 $sql = "SELECT * FROM diem";
 
 if (isset($_POST['btnXoa'])) {
@@ -14,16 +17,7 @@ if (isset($_POST['btnXoa'])) {
       echo "<script>alert('Xoá thành công')</script>";
    }
 }
-
-
-if (isset($_POST['btnTimkiem'])) {
-   $ma = $_POST['txtma'];
-   $ht = $_POST['txthoten'];
-   $tm = $_POST['txttenmon'];
-   $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%'";
-}
 $data = mysqli_query($con, $sql);
-
 
 $sortOrder = "DESC"; //Biến sắp xếp mặc định
 if (isset($_POST['sortOrder'])) {
@@ -33,7 +27,9 @@ if (isset($_POST['btnSapxep'])) {
    $ma = $_POST['txtma'];
    $ht = $_POST['txthoten'];
    $tm = $_POST['txttenmon'];
-   $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%' ORDER BY diemtong $sortOrder";
+   $lop = $_POST['txtlop'];
+   $sql = "SELECT diem.*, lop_hoc.tenlop FROM diem JOIN lop_hoc ON diem.tenlop = lop_hoc.tenlop 
+           WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%' AND lop_hoc.tenlop LIKE '%$lop%' ORDER BY diemtong $sortOrder";
    $data = mysqli_query($con, $sql);
 }
 
@@ -44,8 +40,11 @@ if (isset($_POST['btnTimkiem'])) {
    $ma = $_POST['txtma'];
    $ht = $_POST['txthoten'];
    $tm = $_POST['txttenmon'];
+   $lop = $_POST['txtlop'];
    $khoahoc_hocky = $_POST['khoahoc_hocky'];
-   $sql = "SELECT * FROM diem WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%'";
+   $sql = "SELECT diem.*, lop_hoc.tenlop FROM diem 
+           JOIN lop_hoc ON diem.tenlop = lop_hoc.tenlop 
+           WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%' AND lop_hoc.tenlop LIKE '%$lop%'";
    if (!empty($khoahoc_hocky)) {
       $parts = explode('-Học kỳ:', $khoahoc_hocky);
       if (count($parts) == 2) {
@@ -56,30 +55,47 @@ if (isset($_POST['btnTimkiem'])) {
    }
    $data = mysqli_query($con, $sql);
 }
+
 if (isset($_POST['btnXuat'])) {
-   //code xuất excel
-   require './Classes/PHPExcel.php';
+   require_once '../teacher/Classes/PHPExcel.php';
    $objExcel = new PHPExcel();
    $objExcel->setActiveSheetIndex(0);
    $sheet = $objExcel->getActiveSheet()->setTitle('Diem');
    $rowCount = 1;
+
    //Tạo tiêu đề cho cột trong excel
-   $sheet->setCellValue("A$rowCount", 'Mã Học Phần');
-   $sheet->setCellValue("B$rowCount", 'Tên Sinh Viên');
-   $sheet->setCellValue("C$rowCount", 'Mã Sinh Viên');
-   $sheet->setCellValue("D$rowCount", 'Tên Học Phần');
-   $sheet->setCellValue("E$rowCount", 'Số Tín Chỉ');
-   $sheet->setCellValue("F$rowCount", 'Điểm Số');
-   $sheet->setCellValue("G$rowCount", 'Điểm Chữ');
-   $sheet->setCellValue("H$rowCount", 'Điểm Chuyên Cần');
-   $sheet->setCellValue("I$rowCount", 'Điểm Giữa Kỳ');
-   $sheet->setCellValue("J$rowCount", 'Điểm Cuối Kỳ');
-   $sheet->setCellValue("K$rowCount", 'Điểm Tổng');
-   $sheet->setCellValue("L$rowCount", 'Loại');
+   $sheet->setCellValue("A1", 'Mã Học Phần');
+   $sheet->setCellValue("B1", 'Tên Sinh Viên');
+   $sheet->setCellValue("C1", 'Mã Sinh Viên');
+   $sheet->setCellValue("D1", 'Tên Học Phần');
+   $sheet->setCellValue("E1", 'Số Tín Chỉ');
+   $sheet->setCellValue("F1", 'Điểm Số');
+   $sheet->setCellValue("G1", 'Điểm Chữ');
+   $sheet->setCellValue("H1", 'Điểm Chuyên Cần');
+   $sheet->setCellValue("I1", 'Điểm Giữa Kỳ');
+   $sheet->setCellValue("J1", 'Điểm Cuối Kỳ');
+   $sheet->setCellValue("K1", 'Điểm Tổng');
+   $sheet->setCellValue("L1", 'Loại');
 
    // Lấy dữ liệu từ bảng diem với điều kiện tìm kiếm
-   $query = "SELECT * FROM diem WHERE diemtong >= 4";
-   $data = mysqli_query($con, $query);
+   $ma = $_POST['txtma'];
+   $ht = $_POST['txthoten'];
+   $tm = $_POST['txttenmon'];
+   $lop = $_POST['txtlop'];
+   $khoahoc_hocky = $_POST['khoahoc_hocky'];
+
+   $sql = "SELECT diem.*, lop_hoc.tenlop FROM diem 
+           JOIN lop_hoc ON diem.tenlop = lop_hoc.tenlop 
+           WHERE hoten LIKE '%$ht%' AND tenmon LIKE '%$tm%' AND ma LIKE '%$ma%' AND lop_hoc.tenlop LIKE '%$lop%'";
+   if (!empty($khoahoc_hocky)) {
+      $parts = explode('-Học kỳ:', $khoahoc_hocky);
+      if (count($parts) == 2) {
+         $khoahoc = trim($parts[0]);
+         $hocky = trim($parts[1]);
+         $sql .= " AND khoahoc = '$khoahoc' AND hocky = '$hocky'";
+      }
+   }
+   $data = mysqli_query($con, $sql);
    while ($row = mysqli_fetch_array($data)) {
       $rowCount++;
       $sheet->setCellValue("A{$rowCount}", $row['mamon']);
@@ -109,8 +125,10 @@ if (isset($_POST['btnXuat'])) {
    $sheet->getColumnDimension('J')->setAutoSize(true);
    $sheet->getColumnDimension('K')->setAutoSize(true);
    $sheet->getColumnDimension('L')->setAutoSize(true);
+
    //gán màu nền
    $sheet->getStyle('A1:L1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
+
    //căn giữa
    $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
@@ -122,11 +140,11 @@ if (isset($_POST['btnXuat'])) {
          ]
       ]
    ];
-   $sheet->getStyle("A1:L$rowCount")->applyFromArray($styleArray);
+   $sheet->getStyle("A1:L{$rowCount}")->applyFromArray($styleArray);
    $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
-   ob_end_clean(); // Xóa bộ đệm đầu ra
    $fileName = 'Diem.xlsx';
    $objWriter->save($fileName);
+   ob_end_clean(); // Xóa bộ đệm đầu ra
    header("Content-Disposition: attachment; filename=\"{$fileName}\"");
    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
    header('Content-Length: ' . filesize($fileName));
@@ -264,7 +282,7 @@ if (isset($_POST['btnXuat'])) {
                <div class="col" style="margin:10px">
                   <div class="input-group full-width">
                      <div class="form-field">
-                        <label for="khoahoc_hocky">Khóa học và học kỳ:</label>
+                        <label for="khoahoc_hocky">Khóa học và học kỳ</label>
                         <select class="form-control" id="khoahoc_hocky" name="khoahoc_hocky">
                            <option value="">Chọn Khoá học và học kỳ</option>
                            <?php
@@ -274,6 +292,28 @@ if (isset($_POST['btnXuat'])) {
                                  ?>
                                  <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>" <?php echo $selected; ?>>
                                     <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
+                                 </option>
+                                 <?php
+                              }
+                           }
+                           ?>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="col" style="margin:10px">
+                  <div class="input-group full-width">
+                     <i class="fa-solid fa-school"></i>
+                     <div class="form-field">
+                        <label for="txtlop">Lớp</label>
+                        <select class="form-control" id="txtlop" name="txtlop">
+                           <option value="">Chọn lớp</option>
+                           <?php
+                           if (isset($result_lop) && mysqli_num_rows($result_lop) > 0) {
+                              while ($row = mysqli_fetch_assoc($result_lop)) {
+                                 ?>
+                                 <option value="<?php echo $row['tenlop'] ?>" <?php echo ($lop == $row['tenlop']) ? 'selected' : ''; ?>>
+                                    <?php echo $row['tenlop'] ?>
                                  </option>
                                  <?php
                               }
@@ -316,7 +356,7 @@ if (isset($_POST['btnXuat'])) {
                </thead>
                <tbody style="text-align: center;">
                   <?php
-                  if (isset($data) && mysqli_num_rows($data) > 0) {
+                  if ($data && mysqli_num_rows($data) > 0) {
                      $i = 1;
                      while ($row = mysqli_fetch_assoc($data)) {
                         ?>

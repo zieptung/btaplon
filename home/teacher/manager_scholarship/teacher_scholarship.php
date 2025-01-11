@@ -64,19 +64,8 @@ $sql_khoahoc_hocky = "SELECT DISTINCT khoahoc, hocky FROM hoc_bong ORDER BY khoa
 $result = $con->query($sql_khoahoc_hocky);
 $sql_hoc_bong = "SELECT * FROM hoc_bong ORDER BY khoahoc, hocky";
 $data = $con->query($sql_hoc_bong);
-// Xử lý sắp xếp
-$sortOrder = isset($_POST['sortOrder']) ? $_POST['sortOrder'] : 'DESC';
-$orderBy = "gpa $sortOrder"; // Mặc định sắp xếp theo GPA
 
-if (isset($_POST['btnSapxep'])) {
-    $selectedSortField = isset($_POST['sortField']) ? $_POST['sortField'] : 'gpa';
-    $sortOrder = isset($_POST['sortOrder']) ? $_POST['sortOrder'] : 'DESC';
-    $orderBy = "$selectedSortField $sortOrder";
-}
 
-// Lấy dữ liệu từ bảng hoc_bong
-$sql = "SELECT * FROM hoc_bong ORDER BY $orderBy";
-$data = $con->query($sql);
 // Đếm tổng số học sinh trong bảng hoc_bong
 $sql_count = "SELECT COUNT(*) AS total_students FROM hoc_bong";
 $result_count = $con->query($sql_count);
@@ -89,6 +78,7 @@ $top_5_percent = ceil($total_students * 0.05);
 $sql_top_students = "
     SELECT * 
     FROM hoc_bong 
+    WHERE gpa >= 2.5
     ORDER BY gpa DESC 
     LIMIT $top_5_percent";
 $result_top_students = $con->query($sql_top_students);
@@ -200,28 +190,12 @@ $con->close();
                   </div>
                </div>
             </div>
-            <div class="col" style="margin:10px">
-               <div class="input-group full-width">
-                  <i class="fa-solid fa-filter"></i>
-                  <div class="form-field">
-                     <label for="sortOrder">Sắp xếp</label>
-                     <select class="info1" name="sortOrder">
-                        <option value="DESC" <?php if ($sortOrder == "DESC")
-                                    echo "selected"; ?>>Giảm dần</option>
-                        <option value="ASC" <?php if ($sortOrder == "ASC")
-                                    echo "selected"; ?>>Tăng dần</option>
-                     </select>
-                  </div>
-               </div>
-            </div>
          </div>
          <button type="submit" class="btn btn-info" name="btnTimkiem"
             style="margin-left:370px; margin-top:10px; margin-bottom: 10px; margin-right: 60px"><i
                class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
          <button class="btn btn-info" type="submit" name="btnXuat"><i class="fa-solid fa-file-export"></i> Xuất
             file</button>
-         <button class="btn btn-info" type="submit" name="btnSapxep" style="margin-left:60px;"><i
-               class="fa-solid fa-arrow-up-wide-short"></i> Sắp xếp</button>
          <button class="btn btn-danger" type="submit" name="btnXoa" style="margin-left:220px;"
             onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')">Xoá tất cả <i
                class="fa-solid fa-xmark"></i></button>

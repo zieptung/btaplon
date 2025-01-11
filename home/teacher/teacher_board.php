@@ -290,10 +290,11 @@ if (isset($_POST['btnXuat'])) {
                               while ($row = mysqli_fetch_assoc($sql_khoahoc_hocky)) {
                                  $selected = (isset($_POST['khoahoc_hocky']) && $_POST['khoahoc_hocky'] == $row['khoahoc'] . '-Học kỳ:' . $row['hocky']) ? 'selected' : '';
                                  ?>
-                                 <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>" <?php echo $selected; ?>>
-                                    <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
-                                 </option>
-                                 <?php
+                           <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>"
+                              <?php echo $selected; ?>>
+                              <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
+                           </option>
+                           <?php
                               }
                            }
                            ?>
@@ -312,10 +313,11 @@ if (isset($_POST['btnXuat'])) {
                            if (isset($result_lop) && mysqli_num_rows($result_lop) > 0) {
                               while ($row = mysqli_fetch_assoc($result_lop)) {
                                  ?>
-                                 <option value="<?php echo $row['tenlop'] ?>" <?php echo ($lop == $row['tenlop']) ? 'selected' : ''; ?>>
-                                    <?php echo $row['tenlop'] ?>
-                                 </option>
-                                 <?php
+                           <option value="<?php echo $row['tenlop'] ?>"
+                              <?php echo ($lop == $row['tenlop']) ? 'selected' : ''; ?>>
+                              <?php echo $row['tenlop'] ?>
+                           </option>
+                           <?php
                               }
                            }
                            ?>
@@ -356,36 +358,43 @@ if (isset($_POST['btnXuat'])) {
                </thead>
                <tbody style="text-align: center;">
                   <?php
-                  if ($data && mysqli_num_rows($data) > 0) {
-                     $i = 1;
-                     while ($row = mysqli_fetch_assoc($data)) {
-                        ?>
-                        <tr>
-                           <td><?php echo $i++ ?></td>
-                           <td><?php echo $row['mamon'] ?></td>
-                           <td><?php echo $row['hoten'] ?></td>
-                           <td><?php echo $row['ma'] ?></td>
-                           <td><?php echo $row['tenmon'] ?></td>
-                           <td><?php echo $row['sotinchi'] ?></td>
-                           <td><?php echo $row['diemso'] ?></td>
-                           <td><?php echo $row['diemchu'] ?></td>
-                           <td><?php echo $row['diemcc'] ?></td>
-                           <td><?php echo $row['diemgk'] ?></td>
-                           <td><?php echo $row['diemck'] ?></td>
-                           <td><?php echo $row['diemtong'] ?></td>
-                           <td><?php echo $row['loai'] ?></td>
-                           <td>
-                              <a href="./manager_diemsv/teacher_fix_diemsv.php?ma=<?php echo $row['ma'] ?>&mamon=<?php echo $row['mamon'] ?>"
-                                 class="btn btn-light"><i class="fa-solid fa-wrench"></i></a>
-                              <a href="./manager_diemsv/teacher_del_diemsv.php?ma=<?php echo $row['ma'] ?>"
-                                 onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i
-                                    class="fa-solid fa-trash"></i></a>
-                           </td>
-                        </tr>
-                        <?php
-                     }
-                  }
-                  ?>
+      $result = mysqli_query($con, $sql);
+      // Kiểm tra nếu truy vấn thành công và có dữ liệu
+      if ($result && mysqli_num_rows($result) > 0) {
+         $i = 1;
+         while ($row = mysqli_fetch_assoc($result)) {
+   ?>
+                  <tr>
+                     <td><?php echo $i++ ?></td>
+                     <td><?php echo $row['mamon'] ?></td>
+                     <td><?php echo $row['hoten'] ?></td>
+                     <td><?php echo $row['ma'] ?></td>
+                     <td><?php echo $row['tenmon'] ?></td>
+                     <td><?php echo $row['sotinchi'] ?></td>
+                     <td><?php echo $row['diemso'] ?></td>
+                     <td><?php echo $row['diemchu'] ?></td>
+                     <td><?php echo $row['diemcc'] ?></td>
+                     <td><?php echo $row['diemgk'] ?></td>
+                     <td><?php echo $row['diemck'] ?></td>
+                     <td><?php echo $row['diemtong'] ?></td>
+                     <td><?php echo $row['loai'] ?></td>
+                     <td>
+                        <a href="./manager_diemsv/teacher_fix_diemsv.php?ma=<?php echo $row['ma'] ?>&mamon=<?php echo $row['mamon'] ?>"
+                           class="btn btn-light"><i class="fa-solid fa-wrench"></i></a>
+                        <a href="./manager_diemsv/teacher_del_diemsv.php?ma=<?php echo $row['ma'] ?>"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i
+                              class="fa-solid fa-trash"></i></a>
+                     </td>
+                  </tr>
+                  <?php
+         }
+      } else {
+         // Trường hợp không có dữ liệu
+         echo "<tr><td colspan='13'>Không có dữ liệu.</td></tr>";
+      }
+   ?>
+               </tbody>
+
    </article>
 </body>
 

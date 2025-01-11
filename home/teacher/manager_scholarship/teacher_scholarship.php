@@ -1,24 +1,34 @@
 <?php
 include_once "../connectdb.php";
+session_start();
 
-// Truy vấn để lấy danh sách sinh viên đạt học bổng từ bảng diem và mon_hoc
-$search_sql = "SELECT user.ma, user.hoten, SUM(mon_hoc.sotinchi) AS tong_tc, 
-                AVG(diem.diemso * mon_hoc.sotinchi) / SUM(mon_hoc.sotinchi) AS diem_tb, 
-                khoa_hoc.hocky, khoa_hoc.khoahoc
-               FROM user
-               LEFT JOIN diem ON user.ma = diem.ma
-               LEFT JOIN mon_hoc ON diem.mamon = mon_hoc.mamon
-               LEFT JOIN lop_hoc ON user.tenlop = lop_hoc.tenlop
-               LEFT JOIN khoa_hoc ON user.khoahoc = khoa_hoc.khoahoc
-               WHERE user.is_admin = 0
-               GROUP BY user.ma, khoa_hoc.hocky, khoa_hoc.khoahoc
-               HAVING diem_tb >= 3.2
-               ORDER BY khoa_hoc.hocky, khoa_hoc.khoahoc, diem_tb DESC";
+// Khởi tạo giá trị mặc định
+$hocky = isset($_POST['hocky']) ? $_POST['hocky'] : '';
+$khoahoc = isset($_POST['khoahoc']) ? $_POST['khoahoc'] : '';
 
-$data = mysqli_query($con, $search_sql);
+// Truy vấn để lấy danh sách sinh viên đạt học bổng từ bảng diem và mon_hoc nếu đã chọn kỳ và niên khóa
+$data = null;
+if ($hocky && $khoahoc) {
+    $search_sql = "SELECT user.ma, user.hoten, SUM(mon_hoc.sotinchi) AS tong_tc, 
+                    AVG(diem.diemso * mon_hoc.sotinchi) / SUM(mon_hoc.sotinchi) AS diem_tb, 
+                    khoa_hoc.hocky, khoa_hoc.khoahoc
+                   FROM user
+                   LEFT JOIN diem ON user.ma = diem.ma
+                   LEFT JOIN mon_hoc ON diem.mamon = mon_hoc.mamon
+                   LEFT JOIN lop_hoc ON user.tenlop = lop_hoc.tenlop
+                   LEFT JOIN khoa_hoc ON user.khoahoc = khoa_hoc.khoahoc
+                   WHERE user.is_admin = 0
+                     AND khoa_hoc.hocky = '$hocky'
+                     AND khoa_hoc.khoahoc = '$khoahoc'
+                   GROUP BY user.ma, khoa_hoc.hocky, khoa_hoc.khoahoc
+                   HAVING diem_tb >= 3.2
+                   ORDER BY khoa_hoc.hocky, khoa_hoc.khoahoc, diem_tb DESC";
 
-if (!$data) {
-    die("Lỗi truy vấn: " . mysqli_error($con));
+    $data = mysqli_query($con, $search_sql);
+
+    if (!$data) {
+        die("Lỗi truy vấn: " . mysqli_error($con));
+    }
 }
 
 ?>
@@ -41,7 +51,6 @@ if (!$data) {
       <span class="header-text">Danh sách học bổng</span>
       <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
       <?php
-        session_start();
         if (isset($_SESSION['user_id'])) {
             $user_id = $_SESSION['user_id'];
             $sql = "SELECT hoten FROM user WHERE ma = '$user_id'";
@@ -113,7 +122,45 @@ if (!$data) {
    </div>
    <!-- content -->
    <article class="content">
-      <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7; margin-left: 15px;">
+      <!-- Form chọn kỳ và niên khóa -->
+      <form method="POST" action="">
+         <div class="form-group">
+            <label for="hocky">Chọn kỳ:</label>
+            <select class="form-control" id="hocky" name="hocky">
+               <option value="">Chọn kỳ</option>
+               <?php
+                    // Truy vấn để lấy danh sách học kỳ từ bảng khoa_hoc
+                    $hocky_sql = "SELECT DISTINCT hocky FROM khoa_hoc ORDER BY hocky";
+                    $hocky_data = mysqli_query($con, $hocky_sql);
+                    if ($hocky_data && mysqli_num_rows($hocky_data) > 0) {
+                        while ($row = mysqli_fetch_assoc($hocky_data)) {
+                            echo "<option value='{$row['hocky']}' " . (($hocky == $row['hocky']) ? 'selected' : '') . ">{$row['hocky']}</option>";
+                        }
+                    }
+                    ?>
+            </select>
+         </div>
+         <div class="form-group">
+            <label for="khoahoc">Chọn niên khóa:</label>
+            <select class="form-control" id="khoahoc" name="khoahoc">
+               <option value="">Chọn niên khóa</option>
+               <?php
+                    // Truy vấn để lấy danh sách niên khóa từ bảng khoa_hoc
+                    $khoahoc_sql = "SELECT DISTINCT khoahoc FROM khoa_hoc ORDER BY khoahoc";
+                    $khoahoc_data = mysqli_query($con, $khoahoc_sql);
+                    if ($khoahoc_data && mysqli_num_rows($khoahoc_data) > 0) {
+                        while ($row = mysqli_fetch_assoc($khoahoc_data)) {
+                            echo "<option value='{$row['khoahoc']}' " . (($khoahoc == $row['khoahoc']) ? 'selected' : '') . ">{$row['khoahoc']}</option>";
+                        }
+                    }
+                    ?>
+            </select>
+         </div>
+         <button type="submit" class="btn btn-primary">Xem danh sách</button>
+      </form>
+
+      <!-- Bảng hiển thị danh sách học bổng -->
+      <table class="table table-bordered" style="background-color: #3F72AF; color: #F9F7F7;">
          <thead style="background-color: #1B262C; color: #FADA7A; text-align: center;">
             <tr>
                <th>STT</th>
@@ -126,7 +173,7 @@ if (!$data) {
          </thead>
          <tbody style="text-align: center;">
             <?php
-                if (isset($data) && mysqli_num_rows($data) > 0) {
+                if ($data && mysqli_num_rows($data) > 0) {
                     $i = 1;
                     while ($row = mysqli_fetch_assoc($data)) {
                         $loai_hb = ($row['diem_tb'] > 3.6) ? 'Xuất sắc' : 'Giỏi';

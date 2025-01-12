@@ -356,7 +356,7 @@ if (isset($_POST['btnXuat'])) {
                </thead>
                <tbody style="text-align: center;">
                   <?php
-                  if ($data !== false && mysqli_num_rows($data) > 0) {
+                  if (isset($data) && mysqli_num_rows($data) > 0) {
                      $i = 1;
                      while ($row = mysqli_fetch_assoc($data)) {
                         ?>

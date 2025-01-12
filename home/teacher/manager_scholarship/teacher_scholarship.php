@@ -1,6 +1,17 @@
    <?php
    include_once "../connectdb.php";
    session_start();
+   // Xử lý khi người dùng ấn nút "Xoá tất cả"
+   if (isset($_POST['btnXoa'])) {
+      $sql_delete = "DELETE FROM hoc_bong";
+      if($con->query($sql_delete)) {
+          echo "<script>
+              alert('Xóa thành công!');
+              window.location.replace('teacher_scholarship.php');
+          </script>";
+          exit();
+      }
+  }
    $sql = "
    SELECT 
    d.ma, 
@@ -83,61 +94,109 @@
 
    $sql = "SELECT DISTINCT khoahoc, hocky FROM hoc_bong ORDER BY khoahoc ASC, hocky ASC";
    $sql_khoahoc_hocky = mysqli_query($con, $sql);
-//Xử lý khi người dùng ấn nút "Tìm kiếm"
    if (isset($_POST['btnTimkiem'])) {
-      $khoahoc_hocky = $_POST['khoahoc'];
-      if (!empty($khoahoc_hocky)) {
-          $parts = explode('-Học kỳ:', $khoahoc_hocky);
-          if (count($parts) == 2) {
-              $khoahoc = trim($parts[0]);
-              $hocky = trim($parts[1]);
-   $sql_count = "SELECT COUNT(*) as total_students 
-               FROM hoc_bong 
-               WHERE khoahoc = '$khoahoc' 
-               AND hocky = '$hocky'";
-   $result_count = $con->query($sql_count);
-   $total_students = $result_count->fetch_assoc()['total_students'];
+      $ma = isset($_POST['ma']) ? trim($_POST['ma']) : '';
+      $khoahoc_hocky = isset($_POST['khoahoc']) ? $_POST['khoahoc'] : '';
+      
+      // Xử lý tìm kiếm theo mã sinh viên
+      if (!empty($ma)) {
+          if (!empty($khoahoc_hocky)) {
+              // Nếu có cả mã sinh viên và học kỳ
+              $parts = explode('-Học kỳ:', $khoahoc_hocky);
+              if (count($parts) == 2) {
+                  $khoahoc = trim($parts[0]);
+                  $hocky = trim($parts[1]);
+                  
+                  // Đếm tổng số sinh viên trong học kỳ đó
+                  $sql_count = "SELECT COUNT(*) as total_students 
+                              FROM hoc_bong 
+                              WHERE khoahoc = '$khoahoc' 
+                              AND hocky = '$hocky'";
+                  $result_count = $con->query($sql_count);
+                  $total_students = $result_count->fetch_assoc()['total_students'];
+                  $top_5_percent = ceil($total_students * 0.05);
    
-
-   // Tính 5% số lượng học sinh
-   $top_5_percent = ceil($total_students * 0.05);
-
-   // Lấy 5% học sinh có GPA cao nhất
-   $sql_top_students = "SELECT * 
-                        FROM hoc_bong 
-                        WHERE khoahoc = '$khoahoc' 
-                        AND hocky = '$hocky' 
-                        AND gpa >= 2.5 
-                        ORDER BY gpa DESC 
-                        LIMIT $top_5_percent";
-   // Lưu điều kiện tìm kiếm vào session
-   $_SESSION['search_condition'] = array(
-      'khoahoc' => $khoahoc,
-      'hocky' => $hocky
-   );
+                  // Kiểm tra xem sinh viên có trong top 5% không
+                  $sql_top_students = "
+                  SELECT * FROM (
+                      SELECT *, 
+                      ROW_NUMBER() OVER (ORDER BY gpa DESC) as rank_num
+                      FROM hoc_bong
+                      WHERE khoahoc = '$khoahoc' 
+                      AND hocky = '$hocky'
+                      AND gpa >= 2.5
+                  ) ranked
+                  WHERE ma = '$ma' 
+                  AND rank_num <= $top_5_percent";
+              }
+          } else {
+              // Nếu chỉ có mã sinh viên, kiểm tra trong tất cả các học kỳ
+              $sql_count = "SELECT COUNT(*) AS total_students FROM hoc_bong";
+              $result_count = $con->query($sql_count);
+              $total_students = $result_count->fetch_assoc()['total_students'];
+              $top_5_percent = ceil($total_students * 0.05);
+   
+              $sql_top_students = "
+              SELECT * FROM (
+                  SELECT *, 
+                  ROW_NUMBER() OVER (PARTITION BY hocky ORDER BY gpa DESC) as rank_num
+                  FROM hoc_bong
+                  WHERE gpa >= 2.5
+              ) ranked
+              WHERE ma = '$ma' 
+              AND rank_num <= $top_5_percent
+              ORDER BY hocky";
           }
       } else {
-          // Nếu không chọn học kỳ, hiển thị tất cả (giữ nguyên code cũ)
-          // Đếm tổng số học sinh trong bảng hoc_bong
-   $sql_count = "SELECT COUNT(*) AS total_students FROM hoc_bong";
-   $result_count = $con->query($sql_count);
-   $total_students = $result_count->fetch_assoc()['total_students'];
-
-   // Tính 5% số lượng học sinh
-   $top_5_percent = ceil($total_students * 0.05);
-
-   // Lấy 5% học sinh có GPA cao nhất
-   $sql_top_students = "
-   SELECT * 
-   FROM hoc_bong 
-   WHERE gpa >= 2.5
-   ORDER BY gpa DESC 
-   LIMIT $top_5_percent";
-   // Xóa điều kiện tìm kiếm trong session
-   unset($_SESSION['search_condition']);
-            }
+          // Nếu không có mã sinh viên, thực hiện tìm top 5% theo học kỳ
+          if (!empty($khoahoc_hocky)) {
+              $parts = explode('-Học kỳ:', $khoahoc_hocky);
+              if (count($parts) == 2) {
+                  $khoahoc = trim($parts[0]);
+                  $hocky = trim($parts[1]);
+                  
+                  $sql_count = "SELECT COUNT(*) as total_students 
+                              FROM hoc_bong 
+                              WHERE khoahoc = '$khoahoc' 
+                              AND hocky = '$hocky'";
+                  $result_count = $con->query($sql_count);
+                  $total_students = $result_count->fetch_assoc()['total_students'];
+                  $top_5_percent = ceil($total_students * 0.05);
+   
+                  $sql_top_students = "
+                  SELECT * 
+                  FROM hoc_bong 
+                  WHERE khoahoc = '$khoahoc' 
+                  AND hocky = '$hocky' 
+                  AND gpa >= 2.5 
+                  ORDER BY gpa DESC 
+                  LIMIT $top_5_percent";
+              }
+          } else {
+              // Nếu không có điều kiện tìm kiếm nào
+              $sql_count = "SELECT COUNT(*) AS total_students FROM hoc_bong";
+              $result_count = $con->query($sql_count);
+              $total_students = $result_count->fetch_assoc()['total_students'];
+              $top_5_percent = ceil($total_students * 0.05);
+   
+              $sql_top_students = "
+              SELECT * 
+              FROM hoc_bong 
+              WHERE gpa >= 2.5
+              ORDER BY gpa DESC 
+              LIMIT $top_5_percent";
+          }
+      }
+   
+      // Lưu điều kiện tìm kiếm vào session
+      $_SESSION['search_condition'] = array(
+          'ma' => $ma,
+          'khoahoc' => isset($khoahoc) ? $khoahoc : '',
+          'hocky' => isset($hocky) ? $hocky : ''
+      );
+   
       $result_top_students = $con->query($sql_top_students);
-  }
+   }
   // Sửa phần xử lý xuất Excel
 if (isset($_POST['btnXuat'])) {
    require_once '../Classes/PHPExcel.php';
@@ -326,7 +385,7 @@ if (isset($_POST['btnXuat'])) {
       <article class="content">
          <form method="post" action="">
             <div class="row">
-               <div class="col" style="margin:10px">
+               <div class="col" style="margin:10px;">
                   <div class="input-group full-width">
                      <i class="fa-solid fa-user"></i>
                      <div class="form-field">
@@ -348,6 +407,18 @@ if (isset($_POST['btnXuat'])) {
                                  }
                                  ?>
                         </select>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col" style="margin:10px;">
+                  <div class="input-group full-width">
+                     <i class="fa-solid fa-id-card"></i>
+                     <div class="form-field">
+                        <label for="ma" class="form-label">Mã sinh viên</label>
+                        <input type="text" name="ma" placeholder="Nhập mã sinh viên" class="form-control"
+                           value="<?php echo isset($_POST['ma']) ? $_POST['ma'] : ''; ?>">
                      </div>
                   </div>
                </div>

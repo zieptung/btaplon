@@ -6,17 +6,17 @@ $tm = "";
 $ma = "";
 $lop = "";
 
+if (isset($_POST['btnXoa'])) {
+   $sql = "DELETE FROM diem";
+   $data1 = mysqli_query($con, $sql);
+   if ($data1) {
+      echo "<script>alert('Xoá thành công')</script>";
+   }
+}
 $sql_lop = "SELECT tenlop FROM lop_hoc";
 $result_lop = mysqli_query($con, $sql_lop);
 $sql = "SELECT * FROM diem";
 
-if (isset($_POST['btnXoa'])) {
-   $sql = "DELETE FROM diem";
-   $data = mysqli_query($con, $sql);
-   if ($data) {
-      echo "<script>alert('Xoá thành công')</script>";
-   }
-}
 $data = mysqli_query($con, $sql);
 
 $sortOrder = "DESC"; //Biến sắp xếp mặc định
@@ -358,43 +358,37 @@ if (isset($_POST['btnXuat'])) {
                </thead>
                <tbody style="text-align: center;">
                   <?php
-      $result = mysqli_query($con, $sql);
-      // Kiểm tra nếu truy vấn thành công và có dữ liệu
-      if ($result && mysqli_num_rows($result) > 0) {
-         $i = 1;
-         while ($row = mysqli_fetch_assoc($result)) {
-   ?>
-                  <tr>
-                     <td><?php echo $i++ ?></td>
-                     <td><?php echo $row['mamon'] ?></td>
-                     <td><?php echo $row['hoten'] ?></td>
-                     <td><?php echo $row['ma'] ?></td>
-                     <td><?php echo $row['tenmon'] ?></td>
-                     <td><?php echo $row['sotinchi'] ?></td>
-                     <td><?php echo $row['diemso'] ?></td>
-                     <td><?php echo $row['diemchu'] ?></td>
-                     <td><?php echo $row['diemcc'] ?></td>
-                     <td><?php echo $row['diemgk'] ?></td>
-                     <td><?php echo $row['diemck'] ?></td>
-                     <td><?php echo $row['diemtong'] ?></td>
-                     <td><?php echo $row['loai'] ?></td>
-                     <td>
-                        <a href="./manager_diemsv/teacher_fix_diemsv.php?ma=<?php echo $row['ma'] ?>&mamon=<?php echo $row['mamon'] ?>"
-                           class="btn btn-light"><i class="fa-solid fa-wrench"></i></a>
-                        <a href="./manager_diemsv/teacher_del_diemsv.php?ma=<?php echo $row['ma'] ?>"
-                           onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i
-                              class="fa-solid fa-trash"></i></a>
-                     </td>
-                  </tr>
-                  <?php
-         }
-      } else {
-         // Trường hợp không có dữ liệu
-         echo "<tr><td colspan='13'>Không có dữ liệu.</td></tr>";
-      }
-   ?>
-               </tbody>
-
+                  if ($data && mysqli_num_rows($data) > 0) {
+                     $i = 1;
+                     while ($row = mysqli_fetch_assoc($data)) {
+                        ?>
+                        <tr>
+                           <td><?php echo $i++ ?></td>
+                           <td><?php echo $row['mamon'] ?></td>
+                           <td><?php echo $row['hoten'] ?></td>
+                           <td><?php echo $row['ma'] ?></td>
+                           <td><?php echo $row['tenmon'] ?></td>
+                           <td><?php echo $row['sotinchi'] ?></td>
+                           <td><?php echo $row['diemso'] ?></td>
+                           <td><?php echo $row['diemchu'] ?></td>
+                           <td><?php echo $row['diemcc'] ?></td>
+                           <td><?php echo $row['diemgk'] ?></td>
+                           <td><?php echo $row['diemck'] ?></td>
+                           <td><?php echo $row['diemtong'] ?></td>
+                           <td><?php echo $row['loai'] ?></td>
+                           <td>
+                              <a href="./manager_diemsv/teacher_fix_diemsv.php?ma=<?php echo $row['ma'] ?>&mamon=<?php echo $row['mamon'] ?>"
+                                 class="btn btn-light"><i class="fa-solid fa-wrench"></i></a>
+                              <a href="./manager_diemsv/teacher_del_diemsv.php?ma=<?php echo $row['ma'] ?>"
+                                 onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-danger"><i
+                                    class="fa-solid fa-trash"></i></a>
+                           </td>
+                        </tr>
+                        <?php
+                     }
+                  }
+                  ?>
+              </tbody>
    </article>
 </body>
 

@@ -83,7 +83,7 @@
 
    $sql = "SELECT DISTINCT khoahoc, hocky FROM hoc_bong ORDER BY khoahoc ASC, hocky ASC";
    $sql_khoahoc_hocky = mysqli_query($con, $sql);
-
+//Xử lý khi người dùng ấn nút "Tìm kiếm"
    if (isset($_POST['btnTimkiem'])) {
       $khoahoc_hocky = $_POST['khoahoc'];
       if (!empty($khoahoc_hocky)) {
@@ -97,6 +97,7 @@
                AND hocky = '$hocky'";
    $result_count = $con->query($sql_count);
    $total_students = $result_count->fetch_assoc()['total_students'];
+   
 
    // Tính 5% số lượng học sinh
    $top_5_percent = ceil($total_students * 0.05);
@@ -109,7 +110,11 @@
                         AND gpa >= 2.5 
                         ORDER BY gpa DESC 
                         LIMIT $top_5_percent";
-   $result_top_students = $con->query($sql_top_students);
+   // Lưu điều kiện tìm kiếm vào session
+   $_SESSION['search_condition'] = array(
+      'khoahoc' => $khoahoc,
+      'hocky' => $hocky
+   );
           }
       } else {
           // Nếu không chọn học kỳ, hiển thị tất cả (giữ nguyên code cũ)
@@ -128,9 +133,122 @@
    WHERE gpa >= 2.5
    ORDER BY gpa DESC 
    LIMIT $top_5_percent";
-   $result_top_students = $con->query($sql_top_students);
-      }
+   // Xóa điều kiện tìm kiếm trong session
+   unset($_SESSION['search_condition']);
+            }
+      $result_top_students = $con->query($sql_top_students);
   }
+  // Sửa phần xử lý xuất Excel
+if (isset($_POST['btnXuat'])) {
+   require_once '../Classes/PHPExcel.php';
+   $objExcel = new PHPExcel();
+   $objExcel->setActiveSheetIndex(0);
+   $sheet = $objExcel->getActiveSheet()->setTitle('Danh sách học bổng');
+   $rowCount = 1;
+
+   // Tạo tiêu đề cho cột trong excel
+   $sheet->setCellValue("A1", 'Tên Sinh Viên');
+   $sheet->setCellValue("B1", 'Mã Sinh Viên');
+   $sheet->setCellValue("C1", 'Lớp');
+   $sheet->setCellValue("D1", 'Tổng Số Tín Chỉ');
+   $sheet->setCellValue("E1", 'Điểm TB hệ số 4');
+   $sheet->setCellValue("F1", 'Loại Học Bổng');
+   $sheet->setCellValue("G1", 'Khóa học - Học kỳ');
+
+   // Xây dựng câu query dựa trên điều kiện tìm kiếm
+   if (isset($_SESSION['search_condition'])) {
+       $khoahoc = $_SESSION['search_condition']['khoahoc'];
+       $hocky = $_SESSION['search_condition']['hocky'];
+       
+       $sql_count = "SELECT COUNT(*) as total_students 
+                    FROM hoc_bong 
+                    WHERE khoahoc = '$khoahoc' 
+                    AND hocky = '$hocky'";
+       $result_count = $con->query($sql_count);
+       $total_students = $result_count->fetch_assoc()['total_students'];
+       $top_5_percent = ceil($total_students * 0.05);
+
+       $sql_export = "SELECT * 
+                     FROM hoc_bong 
+                     WHERE khoahoc = '$khoahoc' 
+                     AND hocky = '$hocky' 
+                     AND gpa >= 2.5 
+                     ORDER BY gpa DESC 
+                     LIMIT $top_5_percent";
+   } else {
+       $sql_count = "SELECT COUNT(*) AS total_students FROM hoc_bong";
+       $result_count = $con->query($sql_count);
+       $total_students = $result_count->fetch_assoc()['total_students'];
+       $top_5_percent = ceil($total_students * 0.05);
+
+       $sql_export = "SELECT * 
+                     FROM hoc_bong 
+                     WHERE gpa >= 2.5
+                     ORDER BY gpa DESC 
+                     LIMIT $top_5_percent";
+   }
+
+   $data = mysqli_query($con, $sql_export);
+   while ($row = mysqli_fetch_array($data)) {
+       $loai_hoc_bong = '';
+       if ($row['gpa'] >= 3.6) {
+           $loai_hoc_bong = 'Xuất sắc';
+       } elseif ($row['gpa'] >= 3.2) {
+           $loai_hoc_bong = 'Giỏi';
+       } elseif ($row['gpa'] >= 2.5) {
+           $loai_hoc_bong = 'Khá';
+       } else {
+           $loai_hoc_bong = 'Không đạt học bổng';
+       }
+
+       $rowCount++;
+       $sheet->setCellValue("A{$rowCount}", $row['hoten']);
+       $sheet->setCellValue("B{$rowCount}", $row['ma']);
+       $sheet->setCellValue("C{$rowCount}", $row['tenlop']);
+       $sheet->setCellValue("D{$rowCount}", $row['stc_hk']);
+       $sheet->setCellValue("E{$rowCount}", $row['gpa']);
+       $sheet->setCellValue("F{$rowCount}", $loai_hoc_bong);
+       $sheet->setCellValue("G{$rowCount}", $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']);
+   }
+
+   //định dạng cột tiêu đề
+   $sheet->getColumnDimension('A')->setAutoSize(true);
+   $sheet->getColumnDimension('B')->setAutoSize(true);
+   $sheet->getColumnDimension('C')->setAutoSize(true);
+   $sheet->getColumnDimension('D')->setAutoSize(true);
+   $sheet->getColumnDimension('E')->setAutoSize(true);
+   $sheet->getColumnDimension('F')->setAutoSize(true);
+   $sheet->getColumnDimension('G')->setAutoSize(true);
+
+   //gán màu nền
+   $sheet->getStyle('A1:G1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
+
+   //căn giữa
+   $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+   // Kẻ bảng 
+   $styleArray = [
+      'borders' => [
+         'allborders' => [
+            'style' => PHPExcel_Style_Border::BORDER_THIN
+         ]
+      ]
+   ];
+   $sheet->getStyle("A1:L{$rowCount}")->applyFromArray($styleArray);
+   $objWriter = new PHPExcel_Writer_Excel2007($objExcel);
+   $fileName = 'Diem.xlsx';
+   $objWriter->save($fileName);
+   ob_end_clean(); // Xóa bộ đệm đầu ra
+   header("Content-Disposition: attachment; filename=\"{$fileName}\"");
+   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+   header('Content-Length: ' . filesize($fileName));
+   header('Content-Transfer-Encoding: binary');
+   header('Cache-Control: must-revalidate');
+   header('Pragma: no-cache');
+   readfile($fileName);
+   unlink($fileName); // Xóa tệp sau khi tải xuống
+   exit;
+}
    ?>
    <!DOCTYPE html>
    <html>

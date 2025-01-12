@@ -290,10 +290,11 @@ if (isset($_POST['btnXuat'])) {
                               while ($row = mysqli_fetch_assoc($sql_khoahoc_hocky)) {
                                  $selected = (isset($_POST['khoahoc_hocky']) && $_POST['khoahoc_hocky'] == $row['khoahoc'] . '-Học kỳ:' . $row['hocky']) ? 'selected' : '';
                                  ?>
-                                 <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>" <?php echo $selected; ?>>
-                                    <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
-                                 </option>
-                                 <?php
+                           <option value="<?php echo $row['khoahoc'] . '-Học kỳ:' . $row['hocky']; ?>"
+                              <?php echo $selected; ?>>
+                              <?php echo $row['khoahoc'] . ' - Học kỳ: ' . $row['hocky']; ?>
+                           </option>
+                           <?php
                               }
                            }
                            ?>
@@ -312,10 +313,11 @@ if (isset($_POST['btnXuat'])) {
                            if (isset($result_lop) && mysqli_num_rows($result_lop) > 0) {
                               while ($row = mysqli_fetch_assoc($result_lop)) {
                                  ?>
-                                 <option value="<?php echo $row['tenlop'] ?>" <?php echo ($lop == $row['tenlop']) ? 'selected' : ''; ?>>
-                                    <?php echo $row['tenlop'] ?>
-                                 </option>
-                                 <?php
+                           <option value="<?php echo $row['tenlop'] ?>"
+                              <?php echo ($lop == $row['tenlop']) ? 'selected' : ''; ?>>
+                              <?php echo $row['tenlop'] ?>
+                           </option>
+                           <?php
                               }
                            }
                            ?>
@@ -386,6 +388,7 @@ if (isset($_POST['btnXuat'])) {
                      }
                   }
                   ?>
+              </tbody>
    </article>
 </body>
 

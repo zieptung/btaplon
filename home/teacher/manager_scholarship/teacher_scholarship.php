@@ -98,6 +98,9 @@ if (isset($_POST['btnTimkiem'])) {
    $data = mysqli_query($con, $sql);
 }
 ?>
+
+
+
 <!DOCTYPE html>
 <html>
    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -205,6 +208,7 @@ if (isset($_POST['btnTimkiem'])) {
                class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
          <button class="btn btn-info" type="submit" name="btnXuat"><i class="fa-solid fa-file-export"></i> Xuất
             file</button>
+
          <button class="btn btn-danger" type="submit" name="btnXoa" style="margin-left:380px;"
             onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')">Xoá tất cả <i
                class="fa-solid fa-xmark"></i></button>

@@ -113,11 +113,11 @@ if (isset($_POST["btnNhap"])) {
 <title>Quản lý điểm sinh viên đại học</title>
 
 <body>
-    <!-- header -->
-    <div class="header">
-        <span class="header-text">Thêm điểm sinh viên</span>
-        <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
-        <?php
+   <!-- header -->
+   <div class="header">
+      <span class="header-text">Thêm điểm sinh viên</span>
+      <span class="header-icon"><i class="fa-solid fa-circle-user"></i></span>
+      <?php
         session_start();
         include_once "connectdb.php";
         if (isset($_SESSION['user_id'])) {
@@ -129,161 +129,160 @@ if (isset($_POST["btnNhap"])) {
             }
         }
         ?>
-    </div>
-    <!-- sidebar -->
-    <div class="sidebar">
-        <ul>
-            <li>
-                <a href="teacher_info.php">
-                    <span class="icon"><i class="fa-solid fa-user"></i></span>
-                    <span class="text">Thông tin cá nhân</span>
-                </a>
-            </li>
-            <li>
-                <a href="./manager_class/teacher_class.php">
-                    <span class="icon"><i class="fa-solid fa-landmark"></i></span>
-                    <span class="text">Quản lý lớp học</span>
-                </a>
-            </li>
-            <li>
-                <a href="./manager_course/teacher_course.php">
-                    <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                    <span class="text">Quản lý môn học</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_add.php">
-                    <span class="icon"><i class="fa-solid fa-wrench"></i></span>
-                    <span class="text">Thêm điểm sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_board.php">
-                    <span class="icon"><i class="fa-solid fa-table"></i></span>
-                    <span class="text">Bảng điểm sinh viên</span>
-                </a>
-            </li>
-            <li>
-                <a href="./manager_scholarship/teacher_scholarship.php">
-                    <span class="icon"><i class="fa-solid fa-user-graduate"></i></span>
-                    <span class="text">Danh sách học bổng</span>
-                </a>
-            </li>
-            <li>
-                <a href="teacher_logout.php">
-                    <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-                    <span class="text">Đăng xuất</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <article class="content">
-        <div class="container mt-4">
-            <form action="teacher_add.php" method="POST" enctype="multipart/form-data" id="myForm">
-                <div class="col">
-                    <div class="input-group"
-                        style="width: 400px; margin-top:10px; margin-bottom: 10px; margin-left: 350px;">
-                        <input class="form-control" type="file" id="formFile" name="file">
-                        <button class="btn btn-outline-success" type="submit" name="btnGui">Gửi</button>
-                    </div>
-                </div>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Mã sinh viên</label>
-                            <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>"
-                                placeholder="Mã sinh viên" id="studentIdInput" oninput="showNhapButton()">
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-success" name="btnNhap" id="btnNhap"
-                    style="margin-left: 42%; width: 200px; margin-top:10px; margin-bottom: 10px; display: <?php echo empty($ma) ? 'block' : 'none'; ?>">Nhập</button>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Tên sinh viên</label>
-                            <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>"
-                                placeholder="Họ và tên" id="studentNameInput" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Mã học phần</label>
-                            <select name="txtmamon" id="" class="info1">
-                                <option value="">---Chọn mã học phần---</option>
-                                <?php
+   </div>
+   <!-- sidebar -->
+   <div class="sidebar">
+      <ul>
+         <li>
+            <a href="teacher_info.php">
+               <span class="icon"><i class="fa-solid fa-user"></i></span>
+               <span class="text">Thông tin cá nhân</span>
+            </a>
+         </li>
+         <li>
+            <a href="./manager_class/teacher_class.php">
+               <span class="icon"><i class="fa-solid fa-landmark"></i></span>
+               <span class="text">Quản lý lớp học</span>
+            </a>
+         </li>
+         <li>
+            <a href="./manager_course/teacher_course.php">
+               <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+               <span class="text">Quản lý môn học</span>
+            </a>
+         </li>
+         <li>
+            <a href="teacher_add.php">
+               <span class="icon"><i class="fa-solid fa-wrench"></i></span>
+               <span class="text">Thêm điểm sinh viên</span>
+            </a>
+         </li>
+         <li>
+            <a href="teacher_board.php">
+               <span class="icon"><i class="fa-solid fa-table"></i></span>
+               <span class="text">Bảng điểm sinh viên</span>
+            </a>
+         </li>
+         <li>
+            <a href="./manager_scholarship/teacher_scholarship.php">
+               <span class="icon"><i class="fa-solid fa-user-graduate"></i></span>
+               <span class="text">Danh sách học bổng</span>
+            </a>
+         </li>
+         <li>
+            <a href="teacher_logout.php">
+               <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+               <span class="text">Đăng xuất</span>
+            </a>
+         </li>
+      </ul>
+   </div>
+   <article class="content">
+      <div class="container mt-4">
+         <form action="teacher_add.php" method="POST" enctype="multipart/form-data" id="myForm">
+            <div class="col">
+               <div class="input-group" style="width: 400px; margin-top:10px; margin-bottom: 10px; margin-left: 350px;">
+                  <input class="form-control" type="file" id="formFile" name="file">
+                  <button class="btn btn-outline-success" type="submit" name="btnGui">Gửi</button>
+               </div>
+            </div>
+            <div class="col" style="margin-top: 10px;">
+               <div class="input-group">
+                  <i class="fa-solid fa-arrow-right"></i>
+                  <div class="form-field">
+                     <label>Mã sinh viên</label>
+                     <input class="info1" type="text" name="txtma" value="<?php echo $ma; ?>" placeholder="Mã sinh viên"
+                        id="studentIdInput" oninput="showNhapButton()">
+                  </div>
+               </div>
+            </div>
+            <button type="submit" class="btn btn-success" name="btnNhap" id="btnNhap"
+               style="margin-left: 42%; width: 200px; margin-top:10px; margin-bottom: 10px; display: <?php echo empty($ma) ? 'block' : 'none'; ?>">Nhập</button>
+            <div class="col" style="margin-top: 10px;">
+               <div class="input-group">
+                  <i class="fa-solid fa-arrow-right"></i>
+                  <div class="form-field">
+                     <label>Tên sinh viên</label>
+                     <input class="info1" type="text" name="txthoten" value="<?php echo $ht; ?>" placeholder="Họ và tên"
+                        id="studentNameInput" readonly>
+                  </div>
+               </div>
+            </div>
+            <div class="col" style="margin-top: 10px;">
+               <div class="input-group">
+                  <i class="fa-solid fa-arrow-right"></i>
+                  <div class="form-field">
+                     <label>Mã học phần</label>
+                     <select name="txtmamon" id="" class="info1">
+                        <option value="">---Chọn mã học phần---</option>
+                        <?php
                                 if (isset($mon_hoc) && mysqli_num_rows($mon_hoc) > 0) {
                                     while ($row = mysqli_fetch_assoc($mon_hoc)) {
                                         ?>
-                                        <option value="<?php echo $row['mamon'] ?>">
-                                            <?php echo "Mã môn: " . $row['mamon'] . " - Tên môn: " . $row['tenmon'] . " - Số tín chỉ: " . $row['sotinchi']; ?>
-                                        </option>
-                                        <?php
+                        <option value="<?php echo $row['mamon'] ?>">
+                           <?php echo "Mã môn: " . $row['mamon'] . " - Tên môn: " . $row['tenmon'] . " - Số tín chỉ: " . $row['sotinchi']; ?>
+                        </option>
+                        <?php
                                     }
                                 }
                                 ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Điểm chuyên cần</label>
-                            <input class="info1" type="text" name="txtdiemcc" value="<?php echo $cc; ?>"
-                                placeholder="Điểm chuyên cần">
-                        </div>
-                    </div>
-                </div>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Điểm giữa kỳ</label>
-                            <input class="info1" type="text" name="txtdiemgk" value="<?php echo $gk; ?>"
-                                placeholder="Điểm giữa kỳ">
-                        </div>
-                    </div>
-                </div>
-                <div class="col" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <i class="fa-solid fa-arrow-right"></i>
-                        <div class="form-field">
-                            <label>Điểm cuối kỳ</label>
-                            <input class="info1" type="text" name="txtdiemck" value="<?php echo $ck; ?>"
-                                placeholder="Điểm cuối kỳ">
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-success" name="btnLuu"
-                    style="margin-left: 41%; width: 200px; margin-top:10px; margin-bottom: 10px">Lưu</button>
-        </div>
-        </form>
-        </div>
-    </article>
-    <script>
-        function showNhapButton() {
-            document.getElementById("btnNhap").style.display = "block";
-        }
-        document.addEventListener("DOMContentLoaded", function () {
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="col" style="margin-top: 10px;">
+               <div class="input-group">
+                  <i class="fa-solid fa-arrow-right"></i>
+                  <div class="form-field">
+                     <label>Điểm chuyên cần</label>
+                     <input class="info1" type="text" name="txtdiemcc" value="<?php echo $cc; ?>"
+                        placeholder="Điểm chuyên cần">
+                  </div>
+               </div>
+            </div>
+            <div class="col" style="margin-top: 10px;">
+               <div class="input-group">
+                  <i class="fa-solid fa-arrow-right"></i>
+                  <div class="form-field">
+                     <label>Điểm giữa kỳ</label>
+                     <input class="info1" type="text" name="txtdiemgk" value="<?php echo $gk; ?>"
+                        placeholder="Điểm giữa kỳ">
+                  </div>
+               </div>
+            </div>
+            <div class="col" style="margin-top: 10px;">
+               <div class="input-group">
+                  <i class="fa-solid fa-arrow-right"></i>
+                  <div class="form-field">
+                     <label>Điểm cuối kỳ</label>
+                     <input class="info1" type="text" name="txtdiemck" value="<?php echo $ck; ?>"
+                        placeholder="Điểm cuối kỳ">
+                  </div>
+               </div>
+            </div>
+            <button type="submit" class="btn btn-success" name="btnLuu"
+               style="margin-left: 41%; width: 200px; margin-top:10px; margin-bottom: 10px">Lưu</button>
+      </div>
+      </form>
+      </div>
+   </article>
+   <script>
+   function showNhapButton() {
+      document.getElementById("btnNhap").style.display = "block";
+   }
+   document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("btnNhap").style.display = "none";
+   });
+   document
+      .getElementById("studentIdInput")
+      .addEventListener("input", function() {
+         if (this.value === "") {
             document.getElementById("btnNhap").style.display = "none";
-        });
-        document
-            .getElementById("studentIdInput")
-            .addEventListener("input", function () {
-                if (this.value === "") {
-                    document.getElementById("btnNhap").style.display = "none";
-                } else {
-                    document.getElementById("btnNhap").style.display = "block";
-                }
-            });
-    </script>
+         } else {
+            document.getElementById("btnNhap").style.display = "block";
+         }
+      });
+   </script>
 </body>
 
 </html>

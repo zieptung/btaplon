@@ -111,14 +111,21 @@ if (isset($_POST['btnXuat'])) {
 
 $ma = "";
 $ht = "";
-$em = "";
+$lop = "";
 $tc = "";
+if (isset($_POST['btnXoa'])) {
+    $sql = "DELETE FROM user WHERE is_admin = 1 OR is_admin = 0";
+    mysqli_query($con, $sql);
+    echo "<script>alert('Xoá thành công')</script>";
+}
+$sql_lop = "SELECT tenlop FROM lop_hoc";
+$result_lop = mysqli_query($con, $sql_lop);
 
 $sql = "SELECT * FROM user WHERE 1=1";
 if (isset($_POST['btnTimkiem'])) {
     $ma = $_POST['txtma'];
     $ht = $_POST['txthoten'];
-    $em = $_POST['txtemail'];
+    $lop = $_POST['txtlop'];
     $tc = $_POST['txttruycap'];
 
     if (!empty($ma)) {
@@ -127,8 +134,8 @@ if (isset($_POST['btnTimkiem'])) {
     if (!empty($ht)) {
         $sql .= " AND hoten = '$ht'";
     }
-    if (!empty($em)) {
-        $sql .= " AND email = '$em'";
+    if (!empty($lop)) {
+        $sql .= " AND tenlop = '$lop'";
     }
     if ($tc !== '') {
         $sql .= " AND is_admin = '$tc'";
@@ -136,11 +143,6 @@ if (isset($_POST['btnTimkiem'])) {
 }
 $data = mysqli_query($con, $sql);
 
-if (isset($_POST['btnXoa'])) {
-    $sql = "DELETE FROM user WHERE is_admin = 1 OR is_admin = 0";
-    mysqli_query($con, $sql);
-    echo "<script>alert('Xoá thành công')</script>";
-}
 
 if (isset($_POST['btnThemmoi'])) {
     echo "<script>
@@ -158,8 +160,8 @@ if (isset($_POST['btnThemmoi'])) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="../teacher/teacher_homepage.css">
 <link rel="stylesheet" href="../teacher/teacher_info.css">
+<link rel="stylesheet" href="../teacher/teacher_homepage.css">
 <title>Quản lý điểm sinh viên đại học</title>
 <style>
     .sidebar {
@@ -230,10 +232,23 @@ if (isset($_POST['btnThemmoi'])) {
                 </div>
                 <div class="col" style="margin:10px">
                     <div class="input-group full-width">
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fa-solid fa-school"></i>
                         <div class="form-field">
-                            <input class="info1" type="text" name="txtemail" value="<?php echo $em; ?>"
-                                placeholder="Email">
+                            <label for="txtlop">Lớp</label>
+                            <select class="form-control" id="txtlop" name="txtlop">
+                                <option value="">Chọn lớp</option>
+                                <?php
+                                if (isset($result_lop) && mysqli_num_rows($result_lop) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result_lop)) {
+                                        ?>
+                                        <option value="<?php echo $row['tenlop'] ?>" <?php echo ($lop == $row['tenlop']) ? 'selected' : ''; ?>>
+                                            <?php echo $row['tenlop'] ?>
+                                        </option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
                 </div>

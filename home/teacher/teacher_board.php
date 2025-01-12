@@ -6,17 +6,17 @@ $tm = "";
 $ma = "";
 $lop = "";
 
+if (isset($_POST['btnXoa'])) {
+   $sql = "DELETE FROM diem";
+   $data1 = mysqli_query($con, $sql);
+   if ($data1) {
+      echo "<script>alert('Xoá thành công')</script>";
+   }
+}
 $sql_lop = "SELECT tenlop FROM lop_hoc";
 $result_lop = mysqli_query($con, $sql_lop);
 $sql = "SELECT * FROM diem";
 
-if (isset($_POST['btnXoa'])) {
-   $sql = "DELETE FROM diem";
-   $data = mysqli_query($con, $sql);
-   if ($data) {
-      echo "<script>alert('Xoá thành công')</script>";
-   }
-}
 $data = mysqli_query($con, $sql);
 
 $sortOrder = "DESC"; //Biến sắp xếp mặc định
@@ -356,7 +356,7 @@ if (isset($_POST['btnXuat'])) {
                </thead>
                <tbody style="text-align: center;">
                   <?php
-                  if ($data && mysqli_num_rows($data) > 0) {
+                  if ($data !== false && mysqli_num_rows($data) > 0) {
                      $i = 1;
                      while ($row = mysqli_fetch_assoc($data)) {
                         ?>

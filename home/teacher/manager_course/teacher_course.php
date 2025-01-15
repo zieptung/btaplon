@@ -50,6 +50,21 @@ if (isset($_POST['submit'])) {
 if (isset($_POST['btnThemmoi'])) {
     header("Location: teacher_add_course.php");
 }
+//tim kiem ma va ten mon hoc
+if (isset($_POST['submit'])) {
+    $mamon = $_POST['mamon'];
+    $tenmon = $_POST['tenmon'];
+    if (!empty($mamon) && empty($tenmon)) {
+        $sql = "SELECT * FROM mon_hoc WHERE mamon = '$mamon'";
+        $monhoc_result = mysqli_query($con, $sql);
+    } else if (empty($mamon) && !empty($tenmon)) {
+        $sql = "SELECT * FROM mon_hoc WHERE tenmon = '$tenmon'";
+        $monhoc_result = mysqli_query($con, $sql);
+    } else if (!empty($mamon) && !empty($tenmon)) {
+        $sql = "SELECT * FROM mon_hoc WHERE mamon = '$mamon' AND tenmon = '$tenmon'";
+        $monhoc_result = mysqli_query($con, $sql);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -153,6 +168,26 @@ if (isset($_POST['btnThemmoi'])) {
                 </div>
             </div>
             <div class="row">
+                <div class="col" style="margin:10px">
+                    <div class="input-group full-width">
+                        <div class="form-field">
+                            <label for="mamon">Mã môn học:</label>
+                            <input type="text" class="form-control" id="mamon" name="mamon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="margin:10px">
+                    <div class="input-group full-width">
+                        <div class="form-field">
+                            <label for="mamon">Tên học phần:</label>
+                            <input type="text" class="form-control" id="tenmon" name="tenmon">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col">
                     <button type="submit" name="submit" class="btn btn-info"
                         style="margin-left: 50px; margin-top:20px">Xem thông tin môn
@@ -203,6 +238,7 @@ if (isset($_POST['btnThemmoi'])) {
                     ?>
                 </tbody>
             </table>
+
     </article>
 </body>
 
